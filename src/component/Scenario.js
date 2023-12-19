@@ -1,0 +1,43 @@
+import React from 'react';
+import styles from './Scenario.module.css';
+import dup from '../img/dup.svg';
+import bin from '../img/bin.svg';
+
+function Scenario(props) {
+  return (
+    <div>
+        <li className="list-group-item" style={{width:"23em",borderRadius: "50px", margin: "0.5em 0em 0em 0em ", padding:"0em 1em"}}>
+          <div className={styles.inside}>
+            <div className='scenarioName' style={{margin:"auto", marginLeft:"0em"}}>
+              <span>{props.data.name}</span>
+            </div>
+            <div className="btn-group">
+              <button className="button-2" type="button" data-bs-toggle="dropdown" aria-expanded="false" style={{paddingTop:"0.4em", paddingBottom:"0.4em", marginTop:"0.25em", marginBottom:"0.25em"}}>
+                <span style={{fontSize:"1.5em"}}>&#x22EE;</span>
+              </button>
+              <ul className="dropdown-menu">
+                <li><a className="dropdown-item" href="#">
+                  <div>
+                    <svg style={{width:"20",height:"20",marginRight:"0.5em"}}>
+                      <image href={dup} width="20" height="20" />
+                    </svg>
+                    Duplicate
+                  </div>
+                </a></li>
+                <li><a className="dropdown-item" href="#" style={{color:"red"}}>
+                  <div>
+                    <svg style={{width:"20",height:"20",marginRight:"0.5em"}}>
+                      <image href={bin} width="20" height="20" />
+                    </svg>
+                    Delete
+                  </div>
+                </a></li>
+              </ul>
+            </div>
+          </div>
+        </li>
+    </div>
+  )
+}
+
+export default Scenario
