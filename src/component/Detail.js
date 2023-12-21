@@ -13,7 +13,7 @@ function Detail() {
           <textarea className="form-control" id="exampleFormControlTextarea1" style={{resize: "none"}}></textarea>
         </div>
         <div style={{paddingLeft:"56.7em"}}>
-            <button className="button-30" role="button"><span>Edit</span></button>
+            <button className="button-68" role="button"><span>Edit</span></button>
         </div>
     </div>
   )

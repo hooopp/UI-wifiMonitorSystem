@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './Scenario.module.css';
 import dup from '../img/dup.svg';
-import bin from '../img/bin.svg';
+import { FaTrashAlt } from "react-icons/fa";
 
 function Scenario(props) {
   return (
@@ -24,12 +24,10 @@ function Scenario(props) {
                     Duplicate
                   </div>
                 </a></li>
-                <li><a className="dropdown-item" href="#" style={{color:"red"}}>
+                <li><a className="dropdown-item" href="#" style={{color:"#c30022"}}>
                   <div>
-                    <svg style={{width:"20",height:"20",marginRight:"0.5em"}}>
-                      <image href={bin} width="20" height="20" />
-                    </svg>
-                    Delete
+                    <FaTrashAlt style={{marginRight:"0.5em", marginLeft:"0.2em",marginBottom:"0.2em"}}/>
+                    <span>Delete</span>
                   </div>
                 </a></li>
               </ul>

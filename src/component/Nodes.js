@@ -1,5 +1,6 @@
 import React from 'react';
 import Node from './Node'
+import { IoMdAdd } from "react-icons/io";
 
 function Nodes() {
   return (
@@ -7,7 +8,7 @@ function Nodes() {
       <div className='listNode'>
         <div className="list-group" style={{paddingBottom:"0.5em", paddingTop:"1em"}}>
           <button type="button" className="list-group-item list-group-item-action" style={{borderRadius: "10px", textAlign: "center", color:"grey", backgroundColor:""}}>
-              <span style={{ fontWeight: "bold" }}>+ </span>
+            <IoMdAdd />
               <span style={{ fontSize: "1em"}}>Add Node</span>
           </button>
         </div>

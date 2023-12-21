@@ -6,6 +6,12 @@ import styles from './Main.module.css'
 import Detail from './Detail'
 import Nodes from './Nodes'
 import Graph from './Graph'
+import { RxResume } from "react-icons/rx";
+import start from '../img/start.svg';
+import { IoDocumentText } from "react-icons/io5";
+import { IoIosDocument } from "react-icons/io";
+import { FaShareNodes } from "react-icons/fa6";
+import { FaChartSimple } from "react-icons/fa6";
 
 function Main() {
   const [mode, setMode] = useState(0);
@@ -16,20 +22,28 @@ function Main() {
             <div className= {styles.Header}>
                 <span style={{ fontSize: '2rem', fontWeight: 'bold'}}>BanA</span>
                 <div>
-                    <button className="button-30" role="button"><span>Preview All</span></button>
-                    <button className="button-30" role="button" style={{marginLeft:"1em"}}><span>Run</span></button>
+                    <button className="button-68" role="button"><span>Preview All</span></button>
+                    <button className="button-68" role="button" style={{marginLeft:"1em"}}>
+                        <div>
+                            <svg style={{width:"20",height:"20",marginRight:"0.25em"}}>
+                            <image href={start} width="15" height="15" />
+                            </svg>
+                            Start
+                        </div>
+                    </button>
+                    
                 </div>
             </div>
             {/* navbar */}
             <ul className="nav nav-underline" >
                 <li className="nav-item">
-                    <a className={`nav-link ${mode === 0 ? 'active' : ''}`} href="#" style={{color:"black"}} onClick={()=>{setMode(0)}}>Detail</a>
+                    <a className={`nav-link ${mode === 0 ? 'active' : ''}`} href="#" style={{color:"black"}} onClick={()=>{setMode(0)}}><IoIosDocument style={{marginRight:"2px"}}/>Detail</a>
                 </li>
                 <li className="nav-item" >
-                    <a className={`nav-link ${mode === 1 ? 'active' : ''}`} href="#" style={{color:"black"}} onClick={()=>{setMode(1)}}>Nodes</a>
+                    <a className={`nav-link ${mode === 1 ? 'active' : ''}`} href="#" style={{color:"black"}} onClick={()=>{setMode(1)}}><FaShareNodes style={{marginRight:"4px"}}/>Nodes</a>
                 </li>
                 <li className="nav-item">
-                    <a className={`nav-link ${mode === 2 ? 'active' : ''}`} href="#" style={{color:"black"}} onClick={()=>{setMode(2)}}>Graph</a>
+                    <a className={`nav-link ${mode === 2 ? 'active' : ''}`} href="#" style={{color:"black"}} onClick={()=>{setMode(2)}}><FaChartSimple style={{marginRight:"4px"}} />Graph</a>
                 </li>
             </ul>
         </div>

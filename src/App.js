@@ -6,11 +6,9 @@ import './App.css'
 
 function App() {
   return (
-    <div>
-      <div className="App">
+    <div className="App">
         <div className="box"><Sidebar /></div>
         <div className="box"><Main /></div>
-      </div>
     </div>
   );
 }
