@@ -8,7 +8,7 @@ function App() {
   return (
     <div className="App">
         <div className="box"><Sidebar /></div>
-        <div className="box"><Main /></div>
+        <div className="box"><Main data={{name:"BanA"}}/></div>
     </div>
   );
 }

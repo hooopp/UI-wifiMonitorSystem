@@ -1,4 +1,4 @@
-.Node {
+.Nodes {
     border: 1px solid #ccc;
     border-radius: 10px;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
@@ -6,6 +6,6 @@
     grid-template-columns: 1fr 1fr 1fr 1fr 0.9fr;
 }
 
-.Node span,div{
+.Nodes span,div{
     margin: auto;
 }

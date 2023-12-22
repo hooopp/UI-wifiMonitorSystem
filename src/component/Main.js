@@ -13,14 +13,14 @@ import { IoIosDocument } from "react-icons/io";
 import { FaShareNodes } from "react-icons/fa6";
 import { FaChartSimple } from "react-icons/fa6";
 
-function Main() {
+function Main(props) {
   const [mode, setMode] = useState(0);
   return (
     <div className={styles.Main} >
         <div className={styles.Nav} style={{backgroundColor:"white"}}>
             {/* header */}
             <div className= {styles.Header}>
-                <span style={{ fontSize: '2rem', fontWeight: 'bold'}}>BanA</span>
+                <span style={{ fontSize: '2rem', fontWeight: 'bold'}}>{props.data.name}</span>
                 <div>
                     <button className="button-68" role="button"><span>Preview All</span></button>
                     <button className="button-68" role="button" style={{marginLeft:"1em"}}>

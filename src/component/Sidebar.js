@@ -36,16 +36,7 @@ const Sidebar = () => {
       </div>
       
       {/* pagination */}
-      <div className="text-center" style={{marginLeft:"1em"}}>
-        <nav aria-label="Page navigation example">
-          <ul className="pagination">
-            <li className="page-item"><a className="page-link" href="#" style={{color:"black"}}>Previous</a></li>
-            <li className="page-item"><a className="page-link" href="#" style={{color:"black"}}>1</a></li>
-            <li className="page-item"><a className="page-link" href="#" style={{color:"black"}}>2</a></li>
-            <li className="page-item"><a className="page-link" href="#" style={{color:"black"}}>Next</a></li>
-          </ul>
-        </nav>
-      </div>
+
     </div>
   );
 }
