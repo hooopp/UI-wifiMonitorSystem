@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./Detail.module.css";
-import { useState } from 'react';
+import { useState } from "react";
 
 function Detail() {
   const [selectedOption, setSelectedOption] = useState("1");
@@ -24,7 +24,13 @@ function Detail() {
         <div className={styles.inside}>
           <div
             className="left"
-            style={{ marginLeft: "0.5em", marginTop: "0em", paddingRight: "2em" , borderRight: "2px solid #ccc", borderRadius: "2px"}}
+            style={{
+              marginLeft: "0.5em",
+              marginTop: "0em",
+              paddingRight: "2em",
+              borderRight: "2px solid white",
+              borderRadius: "2px",
+            }}
           >
             <div>
               <label htmlFor="exampleFormControlInput1" className="form-label">
@@ -41,21 +47,25 @@ function Detail() {
               <label className="form-label">Description</label>
               <textarea
                 className="form-control"
-                style={{ resize: "none" , height:"15em"}}
+                style={{ resize: "none", height: "15em" }}
               ></textarea>
             </div>
-            <div style={{ paddingLeft: "25em" }}>
-              <button className="button-68" role="button">
-                <span>Edit</span>
-              </button>
-            </div>
+            <div style={{ paddingLeft: "29em" }}></div>
           </div>
           <div
             className="right"
             style={{ marginLeft: "2em", marginTop: "0em" }}
           >
-            <div style={{marginBottom:"0.5em"}}>Select Scenario Type</div>
-            <div className="form-check" style={{ borderRadius: "5px", border: `3px solid ${borderColor1}`, padding:"1em 14em 1em 2em", marginBottom:"0.5em"}}>
+            <div style={{ marginBottom: "0.5em" }}>Select Scenario Type</div>
+            <div
+              className="form-check"
+              style={{
+                borderRadius: "5px",
+                border: `3px solid ${borderColor1}`,
+                padding: "1em 14em 1em 2em",
+                marginBottom: "0.5em",
+              }}
+            >
               <input
                 className="form-check-input"
                 type="radio"
@@ -68,7 +78,14 @@ function Detail() {
                 Server on access point
               </label>
             </div>
-            <div className={`form-check ${styles.customFormCheck}`} style={{ borderRadius: "5px", border: `3px solid ${borderColor2}`, padding:"1em 1em 1em 2em"}}>
+            <div
+              className={`form-check ${styles.customFormCheck}`}
+              style={{
+                borderRadius: "5px",
+                border: `3px solid ${borderColor2}`,
+                padding: "1em 1em 1em 2em",
+              }}
+            >
               <input
                 className="form-check-input"
                 type="radio"
@@ -103,6 +120,11 @@ function Detail() {
               </div>
             </div>
           </div>
+        </div>
+        <div style={{ textAlign:"right", marginTop:"1em", marginRight:"1em"}}>
+          <button className="button-68" role="button">
+            <span>Edit</span>
+          </button>
         </div>
       </div>
     </div>
