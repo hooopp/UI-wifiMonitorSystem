@@ -9,6 +9,8 @@ import { useMutation, useQuery } from "react-query";
 import axios from "axios";
 import SelectScenarioType from "./element/SelectScenarioType";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { FaArrowAltCircleLeft } from "react-icons/fa";
+import { FaArrowAltCircleRight } from "react-icons/fa";
 
 const Sidebar = () => {
   const [selectedOption, setSelectedOption] = useState("onDetail1");
@@ -17,19 +19,33 @@ const Sidebar = () => {
   const [scenarioName, setScenarioName] = useState("");
   const [scenarioDesc, setScenarioDesc] = useState("");
   const [ssid, setSsid] = React.useState("");
+  const [page, setPage] = React.useState(1);
   const [password, setPassword] = React.useState("");
 
-  const mutation = useMutation(data => {
-    return axios.post("http://127.0.0.1:8000/scenario", data)
-  })
+  const mutation = useMutation((data) => {
+    return axios.post("http://127.0.0.1:8000/scenario", data);
+  });
 
   const loadScenario = async () => {
-    const { data } = await axios.get('http://127.0.0.1:8000/scenario?page_size=10&page=1');
-    console.log(data)
+    const { data } = await axios.get(
+      `http://127.0.0.1:8000/scenario?page_size=9&page=${page}`
+    );
     return data;
   };
 
-  const {data : loadScenarioData, status : loadScenarioStatus, refetch : refetchLoadScenario} = useQuery("scenario", loadScenario)
+  const {
+    data: loadScenarioData,
+    status: loadScenarioStatus,
+    refetch: refetchLoadScenario,
+  } = useQuery("scenario", loadScenario);
+
+  useEffect(() => {
+    refetchLoadScenario().then(({data:loadScenarioData}) => {
+      if (loadScenarioData.length === 0) {
+        setPage(page - 1);
+      }
+    });
+  }, [page]);
 
   return (
     <div className={styles.sidebar}>
@@ -167,14 +183,15 @@ const Sidebar = () => {
                       {
                         scenario_name: scenarioName,
                         scenario_desc: scenarioDesc,
-                        is_using_target_ap: selectedOption === "onDetail1" ? false : true,
+                        is_using_target_ap:
+                          selectedOption === "onDetail1" ? false : true,
                         target_ap_ssid: ssid,
-                        target_ap_password: password
+                        target_ap_password: password,
                       },
                       {
                         onSuccess: () => {
-                          refetchLoadScenario()
-                        }
+                          refetchLoadScenario();
+                        },
                       }
                     );
                   }}
@@ -193,10 +210,56 @@ const Sidebar = () => {
             </div>
           </div>
         </div>
-        { loadScenarioData && loadScenarioData.map((scenario, i) => (<Scenario key={i} refetchLoadScenario={refetchLoadScenario} data={{ name: scenario.scenario_name, id: scenario.scenario_id}} />))}
+        <div>
+          {loadScenarioData &&
+            loadScenarioData.map((scenario, i) => (
+              <Scenario
+                key={i}
+                refetchLoadScenario={refetchLoadScenario}
+                data={{
+                  name: scenario.scenario_name,
+                  id: scenario.scenario_id,
+                }}
+              />
+            ))}
+        </div>
       </div>
 
       {/* pagination */}
+      <button
+        style={{
+          position: "absolute",
+          bottom: "1em",
+          left: "1em",
+          color: `${page === 1 ? "grey" : "#333"}`,
+          backgroundColor: "transparent",
+          border: "none",
+        }}
+        disabled={page === 1 ? true : false}
+        onClick={() => {
+          setPage(page - 1);
+        }}
+      >
+        <FaArrowAltCircleLeft style={{ fontSize: "2rem" }} />
+        <span style={{ fontWeight: "bold" }}> Previous</span>
+      </button>
+      <button
+        style={{
+          position: "absolute",
+          bottom: "1em",
+          left: "19.3em",
+          color: "#333",
+          backgroundColor: "transparent",
+          border: "none",
+          width: "5em",
+        }}
+        onClick={() => {
+          setPage(page + 1);
+        }}
+      >
+        <span style={{ fontWeight: "bold" }}>Next </span>
+        <FaArrowAltCircleRight style={{ fontSize: "2rem" }} />
+      </button>
     </div>
   );
 };
