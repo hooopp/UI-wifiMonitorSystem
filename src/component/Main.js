@@ -1,14 +1,10 @@
 import React from 'react'
 import { useState } from 'react';
-import '../bootstrap/js/bootstrap.js';
-import '../bootstrap/css/bootstrap.min.css';
 import styles from './Main.module.css'
 import Detail from './Detail'
 import Nodes from './Nodes'
 import Graph from './Graph'
-import { RxResume } from "react-icons/rx";
 import start from '../img/start.svg';
-import { IoDocumentText } from "react-icons/io5";
 import { IoIosDocument } from "react-icons/io";
 import { FaShareNodes } from "react-icons/fa6";
 import { FaChartSimple } from "react-icons/fa6";

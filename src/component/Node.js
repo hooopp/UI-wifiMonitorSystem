@@ -51,7 +51,7 @@ function Node(props) {
                   >
                     <image href={edit} width="20" height="20" />
                   </svg>
-                  Preview
+                  edit
                 </div>
               </a>
             </li>

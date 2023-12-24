@@ -1,23 +1,13 @@
 import React from "react";
 import styles from "./Detail.module.css";
 import { useState } from "react";
+import SelectScenarioType from "./element/SelectScenarioType";
 
 function Detail() {
-  const [selectedOption, setSelectedOption] = useState("1");
-  const [borderColor1, setBorderColor1] = useState("#dee2e6");
+  const [selectedOption, setSelectedOption] = useState("onAddScenario1");
+  const [borderColor1, setBorderColor1] = useState("#333");
   const [borderColor2, setBorderColor2] = useState("#dee2e6");
-
-  const handleRadioChange = (event) => {
-    setSelectedOption(event.target.id);
-    if (event.target.id === "1") {
-      setBorderColor1("#333");
-      setBorderColor2("#dee2e6");
-    } else {
-      setBorderColor1("#dee2e6");
-      setBorderColor2("#333");
-    }
-  };
-
+  const [isEdit, setIsEdit] = useState(false);
   return (
     <div className={styles.Detail}>
       <div>
@@ -36,18 +26,14 @@ function Detail() {
               <label htmlFor="exampleFormControlInput1" className="form-label">
                 Scenario Name
               </label>
-              <input
-                type="email"
-                className="form-control"
-                id="exampleFormControlInput1"
-                disabled
-              />
+              <input type="email" className="form-control" disabled = {!isEdit} />
             </div>
             <div className="mb-3" style={{ marginTop: "0.5em" }}>
               <label className="form-label">Description</label>
               <textarea
                 className="form-control"
                 style={{ resize: "none", height: "15em" }}
+                disabled = {!isEdit}
               ></textarea>
             </div>
             <div style={{ paddingLeft: "29em" }}></div>
@@ -56,75 +42,49 @@ function Detail() {
             className="right"
             style={{ marginLeft: "2em", marginTop: "0em" }}
           >
-            <div style={{ marginBottom: "0.5em" }}>Select Scenario Type</div>
-            <div
-              className="form-check"
-              style={{
-                borderRadius: "5px",
-                border: `3px solid ${borderColor1}`,
-                padding: "1em 14em 1em 2em",
-                marginBottom: "0.5em",
+            <SelectScenarioType
+              data={{
+                name: "onAddScenario",
+                isEdit,
+                selectedOption,
+                setSelectedOption,
+                borderColor1,
+                setBorderColor1,
+                borderColor2,
+                setBorderColor2,
               }}
-            >
-              <input
-                className="form-check-input"
-                type="radio"
-                name="ScenaioType"
-                id="1"
-                checked={selectedOption === "1"}
-                onChange={handleRadioChange}
-              />
-              <label className="form-check-label" htmlFor="flexRadioDefault1">
-                Server on access point
-              </label>
-            </div>
-            <div
-              className={`form-check ${styles.customFormCheck}`}
-              style={{
-                borderRadius: "5px",
-                border: `3px solid ${borderColor2}`,
-                padding: "1em 1em 1em 2em",
-              }}
-            >
-              <input
-                className="form-check-input"
-                type="radio"
-                name="ScenaioType"
-                id="2"
-                checked={selectedOption === "2"}
-                onChange={handleRadioChange}
-              />
-              <label className="form-check-label" htmlFor="flexRadioDefault2">
-                Server on host
-              </label>
-              <div>
-                <div className="mb-3" style={{ marginTop: "1em" }}>
-                  <label className="form-label">SSID :</label>
-                  <input
-                    className="form-control"
-                    id="email"
-                    disabled={selectedOption === "1"}
-                    value={selectedOption === "1" ? "" : undefined}
-                  />
-                </div>
-                <div className="mb-3" style={{ marginTop: "1em" }}>
-                  <label className="form-label">Password :</label>
-                  <input
-                    className="form-control"
-                    id="password"
-                    type="password" // Add type="password" to hide the text
-                    disabled={selectedOption === "1"}
-                    value={selectedOption === "1" ? "" : undefined}
-                  />
-                </div>
-              </div>
-            </div>
+            />
           </div>
         </div>
-        <div style={{ textAlign:"right", marginTop:"1em", marginRight:"1em"}}>
-          <button className="button-68" role="button">
-            <span>Edit</span>
-          </button>
+        <div
+          style={{ textAlign: "right", marginTop: "1em", marginRight: "1em" }}
+        >
+          {isEdit ? (
+            <>
+              <button
+                className="button-68"
+                role="button"
+                style={{ marginRight: "1em" }}
+              >
+                <span>Confirm</span>
+              </button>
+              <button
+                className="button-68"
+                role="button"
+                onClick={() => setIsEdit(false)}
+              >
+                <span>Cancel</span>
+              </button>
+            </>
+          ) : (
+            <button
+              className="button-68"
+              role="button"
+              onClick={() => setIsEdit(true)}
+            >
+              <span>Edit</span>
+            </button>
+          )}
         </div>
       </div>
     </div>

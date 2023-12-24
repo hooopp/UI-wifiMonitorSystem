@@ -1,0 +1,5 @@
+.selectScenarioType input[type="radio"]:checked{
+    background-color: #333;
+    border-color: grey;
+    box-shadow: 0 0 5px grey;
+  }
