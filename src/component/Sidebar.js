@@ -174,7 +174,6 @@ const Sidebar = () => {
                       {
                         onSuccess: () => {
                           refetchLoadScenario()
-                          // window.location.reload();
                         }
                       }
                     );
@@ -194,7 +193,7 @@ const Sidebar = () => {
             </div>
           </div>
         </div>
-        { loadScenarioData && loadScenarioData.map((scenario, i) => (<Scenario key={i} data={{ name: scenario.scenario_name}} />))}
+        { loadScenarioData && loadScenarioData.map((scenario, i) => (<Scenario key={i} refetchLoadScenario={refetchLoadScenario} data={{ name: scenario.scenario_name, id: scenario.scenario_id}} />))}
       </div>
 
       {/* pagination */}
