@@ -1,16 +1,36 @@
-import React from "react";
+import React, { useEffect } from "react";
 import logo from "../img/logo.svg";
 import Scenario from "./Scenario";
 import styles from "./Sidebar.module.css";
 import { useState } from "react";
 import { IoSearch } from "react-icons/io5";
 import { IoMdAdd } from "react-icons/io";
+import { useMutation, useQuery } from "react-query";
+import axios from "axios";
 import SelectScenarioType from "./element/SelectScenarioType";
+import { QueryClient, QueryClientProvider } from "react-query";
 
 const Sidebar = () => {
   const [selectedOption, setSelectedOption] = useState("onDetail1");
   const [borderColor1, setBorderColor1] = useState("#333");
   const [borderColor2, setBorderColor2] = useState("#dee2e6");
+  const [scenarioName, setScenarioName] = useState("");
+  const [scenarioDesc, setScenarioDesc] = useState("");
+  const [ssid, setSsid] = React.useState("");
+  const [password, setPassword] = React.useState("");
+
+  const mutation = useMutation(data => {
+    return axios.post("http://127.0.0.1:8000/scenario", data)
+  })
+
+  const loadScenario = async () => {
+    const { data } = await axios.get('http://127.0.0.1:8000/scenario?page_size=10&page=1');
+    console.log(data)
+    return data;
+  };
+
+  const {data : loadScenarioData, status : loadScenarioStatus, refetch : refetchLoadScenario} = useQuery("scenario", loadScenario)
+
   return (
     <div className={styles.sidebar}>
       {/* logo */}
@@ -82,7 +102,10 @@ const Sidebar = () => {
                 style={{ marginLeft: "0em", marginRight: "0em" }}
               >
                 <div className="mb-3">
-                  <label htmlFor="exampleFormControlInput1" className="form-label">
+                  <label
+                    htmlFor="exampleFormControlInput1"
+                    className="form-label"
+                  >
                     Scenario Name
                   </label>
                   <input
@@ -90,10 +113,15 @@ const Sidebar = () => {
                     className="form-control"
                     id="exampleFormControlInput1"
                     placeholder="Scenario Name"
+                    value={scenarioName}
+                    onChange={(e) => setScenarioName(e.target.value)}
                   />
                 </div>
                 <div className="mb-3">
-                  <label htmlFor="exampleFormControlTextarea1" className="form-label">
+                  <label
+                    htmlFor="exampleFormControlTextarea1"
+                    className="form-label"
+                  >
                     Description
                   </label>
                   <textarea
@@ -101,11 +129,27 @@ const Sidebar = () => {
                     id="exampleFormControlTextarea1"
                     rows="6"
                     placeholder="Description"
+                    value={scenarioDesc}
+                    onChange={(e) => setScenarioDesc(e.target.value)}
                     style={{ resize: "none" }}
                   ></textarea>
                 </div>
-                <SelectScenarioType data={{name:"onDetail",selectedOption,setSelectedOption,borderColor1,setBorderColor1,borderColor2,setBorderColor2}}/>
-                
+                <SelectScenarioType
+                  data={{
+                    name: "onDetail",
+                    isEdit: true,
+                    selectedOption,
+                    setSelectedOption,
+                    borderColor1,
+                    setBorderColor1,
+                    borderColor2,
+                    setBorderColor2,
+                    ssid,
+                    setSsid,
+                    password,
+                    setPassword,
+                  }}
+                />
               </div>
               <div
                 className="modal-footer"
@@ -115,7 +159,28 @@ const Sidebar = () => {
                   textAlign: "center",
                 }}
               >
-                <button type="button" className="btn btn-primary">
+                <button
+                  type="button"
+                  className="btn btn-primary"
+                  onClick={() => {
+                    mutation.mutate(
+                      {
+                        scenario_name: scenarioName,
+                        scenario_desc: scenarioDesc,
+                        is_using_target_ap: selectedOption === "onDetail1" ? false : true,
+                        target_ap_ssid: ssid,
+                        target_ap_password: password
+                      },
+                      {
+                        onSuccess: () => {
+                          refetchLoadScenario()
+                          // window.location.reload();
+                        }
+                      }
+                    );
+                  }}
+                  data-bs-dismiss="modal"
+                >
                   Confirm
                 </button>
                 <button
@@ -129,7 +194,7 @@ const Sidebar = () => {
             </div>
           </div>
         </div>
-        <Scenario data={{ name: "Scenario1" }} />
+        { loadScenarioData && loadScenarioData.map((scenario, i) => (<Scenario key={i} data={{ name: scenario.scenario_name}} />))}
       </div>
 
       {/* pagination */}

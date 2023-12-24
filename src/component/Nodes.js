@@ -9,11 +9,11 @@ function Nodes() {
     <div>
       {/* searchbar */}
       <form>
-        <div class="input-group" style={{ paddingTop: "0.5em" }}>
-          <input type="text" class="form-control" placeholder="Search" />
-          <div class="input-group-btn">
+        <div className="input-group" style={{ paddingTop: "0.5em" }}>
+          <input type="text" className="form-control" placeholder="Search" />
+          <div className="input-group-btn">
             <button
-              class="button-2"
+              className="button-2"
               type="submit"
               style={{
                 padding: "0.6em",

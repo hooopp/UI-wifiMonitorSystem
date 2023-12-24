@@ -6,7 +6,7 @@ import { FaTrashAlt } from "react-icons/fa";
 function Scenario(props) {
   return (
     <div>
-        <li className="list-group-item" style={{width:"23em",borderRadius: "50px", margin: "0.5em 0em 0em 0em ", padding:"0em 1em"}}>
+        <li className="list-group-item" style={{width:"23em",borderRadius: "50px", margin: "0.5em 0em 0em 0em ", padding:"0em 1em"}} >
           <div className={styles.inside}>
             <div className='scenarioName' style={{margin:"auto", marginLeft:"0em"}}>
               <span>{props.data.name}</span>
@@ -16,20 +16,20 @@ function Scenario(props) {
                 <span style={{fontSize:"1.5em"}}>&#x22EE;</span>
               </button>
               <ul className="dropdown-menu">
-                <li><a className="dropdown-item" href="#">
+                <li><button className=" dropdown-item" href="#">
                   <div>
                     <svg style={{width:"20",height:"20",marginRight:"0.5em"}}>
                       <image href={dup} width="20" height="20" />
                     </svg>
                     Duplicate
                   </div>
-                </a></li>
-                <li><a className="dropdown-item" href="#" style={{color:"#c30022"}}>
+                </button></li>
+                <li ><button className={`${styles.dropdownButton} dropdown-item`} href="#" style={{color:"#c30022"}} >
                   <div>
                     <FaTrashAlt style={{marginRight:"0.5em", marginLeft:"0.2em",marginBottom:"0.2em"}}/>
                     <span>Delete</span>
                   </div>
-                </a></li>
+                </button></li>
               </ul>
             </div>
           </div>

@@ -8,6 +8,8 @@ function Detail() {
   const [borderColor1, setBorderColor1] = useState("#333");
   const [borderColor2, setBorderColor2] = useState("#dee2e6");
   const [isEdit, setIsEdit] = useState(false);
+  const [ssid, setSsid] = React.useState("");
+  const [password, setPassword] = React.useState("");
   return (
     <div className={styles.Detail}>
       <div>
@@ -23,17 +25,17 @@ function Detail() {
             }}
           >
             <div>
-              <label htmlFor="exampleFormControlInput1" className="form-label">
+              <label htmlFor="email" className="form-label">
                 Scenario Name
               </label>
-              <input type="email" className="form-control" disabled = {!isEdit} />
+              <input type="email" id ="email" className="form-control" disabled={!isEdit} />
             </div>
             <div className="mb-3" style={{ marginTop: "0.5em" }}>
               <label className="form-label">Description</label>
               <textarea
                 className="form-control"
                 style={{ resize: "none", height: "15em" }}
-                disabled = {!isEdit}
+                disabled={!isEdit}
               ></textarea>
             </div>
             <div style={{ paddingLeft: "29em" }}></div>
@@ -52,6 +54,10 @@ function Detail() {
                 setBorderColor1,
                 borderColor2,
                 setBorderColor2,
+                ssid,
+                setSsid,
+                password,
+                setPassword,
               }}
             />
           </div>

@@ -3,5 +3,10 @@
     grid-template-columns: 1fr 0.1fr;
 }
 
+.dropdownButton:active {
+    /* Add your styles here. For example: */
+    background-color: #f8f9fa !important;
+  }
+
 
   
