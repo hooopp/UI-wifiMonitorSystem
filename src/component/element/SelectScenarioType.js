@@ -31,7 +31,7 @@ function SelectScenarioType(props) {
         className="form-check"
         style={{
           borderRadius: "5px",
-          border: `3px solid ${props.data.borderColor1}`,
+          border: `3px solid ${props.data.isEdit ? props.data.borderColor1 : "#dee2e6"}`,
           padding: "1em 14em 1em 2em",
           marginBottom: "0.5em",
         }}
@@ -53,7 +53,7 @@ function SelectScenarioType(props) {
         className={`form-check ${styles.customFormCheck}`}
         style={{
           borderRadius: "5px",
-          border: `3px solid ${props.data.borderColor2}`,
+          border: `3px solid ${props.data.isEdit ? props.data.borderColor2 : "#dee2e6"}`,
           padding: "1em 1em 1em 2em",
         }}
       >
@@ -74,7 +74,7 @@ function SelectScenarioType(props) {
             <label className="form-label">SSID :</label>
             <input
               className="form-control"
-              disabled={props.data.selectedOption === props.data.name + "1"}
+              disabled={props.data.selectedOption === props.data.name + "1" || !props.data.isEdit}
               value={props.data.ssid}
               onChange={(e) => props.data.setSsid(e.target.value)}
             />
@@ -85,7 +85,7 @@ function SelectScenarioType(props) {
               <input
                 className="form-control"
                 type={showPassword ? "text" : "password"}
-                disabled={props.data.selectedOption === props.data.name + "1"}
+                disabled={props.data.selectedOption === props.data.name + "1" || !props.data.isEdit}
                 value={props.data.password}
                 onChange={(e) => props.data.setPassword(e.target.value)}
               />

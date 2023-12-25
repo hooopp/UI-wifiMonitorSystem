@@ -3,13 +3,17 @@ import Main from './component/Main';
 import './bootstrap/js/bootstrap.js';
 import './bootstrap/css/bootstrap.min.css';
 import { QueryClient, QueryClientProvider } from 'react-query';
-import  { useState } from 'react';
+import  { useState, useEffect } from 'react';
 import './App.css'
 
 const queryClient = new QueryClient();
 
 function App() {
-  const [selectedScenario, setSelectedScenario] = useState("");
+  const [selectedScenario, setSelectedScenario] = useState(localStorage.getItem('selectedScenario') || "1");
+
+  useEffect(() => {
+    localStorage.setItem('selectedScenario', selectedScenario);
+  }, [selectedScenario]);
 
   return (
     <QueryClientProvider client={queryClient}>

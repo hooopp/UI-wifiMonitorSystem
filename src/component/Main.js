@@ -8,16 +8,72 @@ import start from "../img/start.svg";
 import { IoIosDocument } from "react-icons/io";
 import { FaShareNodes } from "react-icons/fa6";
 import { FaChartSimple } from "react-icons/fa6";
+import { useMutation, useQuery } from "react-query";
+import axios from "axios";
 
-function Main({selectedScenario}) {
+function Main({ selectedScenario }) {
   const [mode, setMode] = useState(0);
+  const [ssid, setSsid] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const [scenarioName, setScenarioName] = React.useState("");
+  const [scenarioDesc, setScenarioDesc] = React.useState("");
+  const [selectedOption, setSelectedOption] = useState("onAddScenario1");
+  const [borderColor1, setBorderColor1] = useState("#333");
+  const [borderColor2, setBorderColor2] = useState("#dee2e6");
+  const [isEdit, setIsEdit] = useState(false);
+
+  const loadScenarioDetail = async () => {
+    const { data } = await axios.get(
+      `http://127.0.0.1:8000/scenario/${selectedScenario}`
+    );
+    return data;
+  };
+
+  const {
+    data: loadScenarioDetailData,
+    status: loadScenarioDetailStatus,
+    refetch: refetchLoadScenarioDetail,
+  } = useQuery("scenarioDetail", loadScenarioDetail);
+
+  useEffect(() => {
+    refetchLoadScenarioDetail().then(({ data: loadScenarioData }) => {
+      setScenarioName(loadScenarioData.scenario_name);
+      setScenarioDesc(loadScenarioData.scenario_desc);
+      setSelectedOption(loadScenarioData.is_using_target_ap ? "onAddScenario2" : "onAddScenario1");
+      setIsEdit(false);
+      if (loadScenarioData.is_using_target_ap) {
+        setSsid(loadScenarioData.target_ap_ssid);
+        setPassword(loadScenarioData.target_ap_password);
+        setBorderColor1("#dee2e6");
+        setBorderColor2("#333");
+      }else{
+        setBorderColor1("#333");
+        setBorderColor2("#dee2e6");
+        setPassword("");
+        setSsid("");
+      }
+    });
+  }, [selectedScenario]);
+
+  const patchScenario = useMutation((data) => {
+    console.log(data)
+    return axios.patch(`http://127.0.0.1:8000/scenario/${selectedScenario}`, data);
+  });
+
   return (
     <div className={styles.Main}>
       <div className={styles.Nav} style={{ backgroundColor: "white" }}>
         {/* header */}
         <div className={styles.Header}>
-          <span style={{ fontSize: "2rem", fontWeight: "bold" , display:"inline-block", height:"50px"}}>
-            {selectedScenario}
+          <span
+            style={{
+              fontSize: "2rem",
+              fontWeight: "bold",
+              display: "inline-block",
+              height: "50px",
+            }}
+          >
+            {loadScenarioDetailData && loadScenarioDetailData.scenario_name}
           </span>
           <div>
             <button className="button-68" role="button">
@@ -83,7 +139,28 @@ function Main({selectedScenario}) {
         </ul>
       </div>
       <div className={styles.Body} style={{ backgroundColor: "white" }}>
-        {mode === 0 && <Detail />}
+        {mode === 0 && (
+          <Detail
+            scenarioName={scenarioName}
+            setScenarioName={setScenarioName}
+            scenarioDesc={scenarioDesc}
+            setScenarioDesc={setScenarioDesc}
+            ssid={ssid}
+            setSsid={setSsid}
+            password={password}
+            setPassword={setPassword}
+            selectedOption={selectedOption}
+            setSelectedOption={setSelectedOption}
+            borderColor1={borderColor1}
+            setBorderColor1={setBorderColor1}
+            borderColor2={borderColor2}
+            setBorderColor2={setBorderColor2}
+            isEdit={isEdit}
+            setIsEdit={setIsEdit}
+            patchScenario = {patchScenario}
+            refetchLoadScenarioDetail = {refetchLoadScenarioDetail}
+          />
+        )}
         {mode === 1 && <Nodes />}
         {mode === 2 && <Graph />}
       </div>

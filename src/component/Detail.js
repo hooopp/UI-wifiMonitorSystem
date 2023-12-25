@@ -1,15 +1,31 @@
 import React from "react";
 import styles from "./Detail.module.css";
 import { useState } from "react";
+import { useMutation, useQuery } from "react-query";
+import axios from "axios";
 import SelectScenarioType from "./element/SelectScenarioType";
 
-function Detail() {
-  const [selectedOption, setSelectedOption] = useState("onAddScenario1");
-  const [borderColor1, setBorderColor1] = useState("#333");
-  const [borderColor2, setBorderColor2] = useState("#dee2e6");
-  const [isEdit, setIsEdit] = useState(false);
-  const [ssid, setSsid] = React.useState("");
-  const [password, setPassword] = React.useState("");
+function Detail({
+  ssid,
+  setSsid,
+  password,
+  setPassword,
+  scenarioName,
+  setScenarioName,
+  setScenarioDesc,
+  scenarioDesc,
+  selectedOption,
+  setSelectedOption,
+  borderColor1,
+  borderColor2,
+  setBorderColor1,
+  setBorderColor2,
+  isEdit,
+  setIsEdit,
+  patchScenario,
+  refetchLoadScenarioDetail,
+}) {
+
   return (
     <div className={styles.Detail}>
       <div>
@@ -25,10 +41,16 @@ function Detail() {
             }}
           >
             <div>
-              <label htmlFor="email" className="form-label">
+              <label htmlFor="scenarioName" className="form-label">
                 Scenario Name
               </label>
-              <input type="email" id ="email" className="form-control" disabled={!isEdit} />
+              <input
+                id="scenarioName"
+                className="form-control"
+                disabled={!isEdit}
+                value={scenarioName}
+                onChange={(e) => setScenarioName(e.target.value)}
+              />
             </div>
             <div className="mb-3" style={{ marginTop: "0.5em" }}>
               <label className="form-label">Description</label>
@@ -36,6 +58,8 @@ function Detail() {
                 className="form-control"
                 style={{ resize: "none", height: "15em" }}
                 disabled={!isEdit}
+                value={scenarioDesc}
+                onChange={(e) => setScenarioDesc(e.target.value)}
               ></textarea>
             </div>
             <div style={{ paddingLeft: "29em" }}></div>
@@ -72,7 +96,27 @@ function Detail() {
                 role="button"
                 style={{ marginRight: "1em" }}
               >
-                <span>Confirm</span>
+                <span
+                  onClick={() => { ssid === "" ? alert("Please fill in the SSID") :
+                    patchScenario.mutate(
+                      {
+                        scenario_name: scenarioName,
+                        scenario_desc: scenarioDesc,
+                        is_using_target_ap:
+                          selectedOption === "onAddScenario1" ? false : true,
+                        target_ap_ssid: ssid,
+                        target_ap_password: password,
+                      },
+                      {
+                        onSuccess: () => {
+                          window.location.reload();
+                        },
+                      }
+                    );
+                  }}
+                >
+                  Confirm
+                </span>
               </button>
               <button
                 className="button-68"

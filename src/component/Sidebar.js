@@ -8,7 +8,6 @@ import { IoMdAdd } from "react-icons/io";
 import { useMutation, useQuery } from "react-query";
 import axios from "axios";
 import SelectScenarioType from "./element/SelectScenarioType";
-import { QueryClient, QueryClientProvider } from "react-query";
 import { FaArrowAltCircleLeft } from "react-icons/fa";
 import { FaArrowAltCircleRight } from "react-icons/fa";
 

@@ -32,7 +32,7 @@ function Scenario({data, refetchLoadScenario, setSelectedScenario}) {
             className="scenarioName"
             style={{ margin: "auto", marginLeft: "0em" }}
           >
-            <a href="#" style={{ textDecoration: "underline", color:"black"}} onClick={() => {setSelectedScenario(data.id)}}>{data.name}</a>
+            <a href="#" style={{ textDecoration: "none", color:"black"}} onClick={() => {setSelectedScenario(data.id)}}>{data.name}</a>
           </div>
           <div className="btn-group">
             <button
