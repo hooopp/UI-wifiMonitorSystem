@@ -5,14 +5,18 @@ import axios from "axios";
 import { FaTrashAlt } from "react-icons/fa";
 import { useMutation } from "react-query";
 
-function Scenario({data, refetchLoadScenario, setSelectedScenario}) {
+function Scenario({data, refetchLoadScenario, setSelectedScenario, loadScenarioData, page, setPage}) {
   const mutation = useMutation(() => {
     return axios.delete(
       `http://127.0.0.1:8000/scenario/${data.id}`
     );
   }, {
     onSuccess: () => {
-      refetchLoadScenario();
+      refetchLoadScenario().then(()=>{
+        if (loadScenarioData.length === 1) {
+          setPage(page - 1);
+        }
+      });
     }
   });
 

@@ -226,6 +226,9 @@ const Sidebar = ({setSelectedScenario}) => {
                 key={i}
                 refetchLoadScenario={refetchLoadScenario}
                 setSelectedScenario={setSelectedScenario}
+                loadScenarioData={loadScenarioData}
+                setPage={setPage}
+                page={page}
                 data={{
                   name: scenario.scenario_name,
                   id: scenario.scenario_id,
