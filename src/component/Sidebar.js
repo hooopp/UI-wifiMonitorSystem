@@ -12,7 +12,7 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import { FaArrowAltCircleLeft } from "react-icons/fa";
 import { FaArrowAltCircleRight } from "react-icons/fa";
 
-const Sidebar = () => {
+const Sidebar = ({setSelectedScenario}) => {
   const [selectedOption, setSelectedOption] = useState("onDetail1");
   const [borderColor1, setBorderColor1] = useState("#333");
   const [borderColor2, setBorderColor2] = useState("#dee2e6");
@@ -21,6 +21,7 @@ const Sidebar = () => {
   const [ssid, setSsid] = React.useState("");
   const [page, setPage] = React.useState(1);
   const [password, setPassword] = React.useState("");
+  const [searchVariable, setSearchVariable] = React.useState("");
 
   const mutation = useMutation((data) => {
     return axios.post("http://127.0.0.1:8000/scenario", data);
@@ -28,7 +29,7 @@ const Sidebar = () => {
 
   const loadScenario = async () => {
     const { data } = await axios.get(
-      `http://127.0.0.1:8000/scenario?page_size=9&page=${page}`
+      `http://127.0.0.1:8000/scenario?page_size=9&page=${page}${searchVariable ? `&search=${searchVariable}` : ""}`
     );
     return data;
   };
@@ -40,7 +41,7 @@ const Sidebar = () => {
   } = useQuery("scenario", loadScenario);
 
   useEffect(() => {
-    refetchLoadScenario().then(({data:loadScenarioData}) => {
+    refetchLoadScenario().then(({ data: loadScenarioData }) => {
       if (loadScenarioData.length === 0) {
         setPage(page - 1);
       }
@@ -58,7 +59,12 @@ const Sidebar = () => {
       {/* searchbar */}
       <form style={{ padding: "0 1em 0em 1em" }}>
         <div className="input-group">
-          <input type="text" className="form-control" placeholder="Search" />
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Search"
+            onChange={(e) => setSearchVariable(e.target.value)}
+          />
           <div className="input-group-btn">
             <button
               className="button-2"
@@ -68,6 +74,10 @@ const Sidebar = () => {
                 borderTopLeftRadius: "0",
                 borderBottomLeftRadius: "0",
                 border: "1px solid #dee2e6",
+              }}
+              onClick={(e) => {
+                e.preventDefault();
+                refetchLoadScenario();
               }}
             >
               <IoSearch style={{ fontSize: "1.5em" }} />
@@ -216,6 +226,7 @@ const Sidebar = () => {
               <Scenario
                 key={i}
                 refetchLoadScenario={refetchLoadScenario}
+                setSelectedScenario={setSelectedScenario}
                 data={{
                   name: scenario.scenario_name,
                   id: scenario.scenario_id,

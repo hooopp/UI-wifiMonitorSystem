@@ -5,7 +5,7 @@ import axios from "axios";
 import { FaTrashAlt } from "react-icons/fa";
 import { useMutation } from "react-query";
 
-function Scenario({data, refetchLoadScenario}) {
+function Scenario({data, refetchLoadScenario, setSelectedScenario}) {
   const mutation = useMutation(() => {
     return axios.delete(
       `http://127.0.0.1:8000/scenario/${data.id}`
@@ -32,7 +32,7 @@ function Scenario({data, refetchLoadScenario}) {
             className="scenarioName"
             style={{ margin: "auto", marginLeft: "0em" }}
           >
-            <span>{data.name}</span>
+            <a href="#" style={{ textDecoration: "underline", color:"black"}} onClick={() => {setSelectedScenario(data.id)}}>{data.name}</a>
           </div>
           <div className="btn-group">
             <button
