@@ -11,7 +11,7 @@ import SelectScenarioType from "./element/SelectScenarioType";
 import { FaArrowAltCircleLeft } from "react-icons/fa";
 import { FaArrowAltCircleRight } from "react-icons/fa";
 
-const Sidebar = ({setSelectedScenario}) => {
+const Sidebar = ({setSelectedScenario, selectedScenario}) => {
   const [selectedOption, setSelectedOption] = useState("onDetail1");
   const [borderColor1, setBorderColor1] = useState("#333");
   const [borderColor2, setBorderColor2] = useState("#dee2e6");
@@ -228,6 +228,7 @@ const Sidebar = ({setSelectedScenario}) => {
                 refetchLoadScenario={refetchLoadScenario}
                 setSelectedScenario={setSelectedScenario}
                 loadScenarioData={loadScenarioData}
+                selectedScenario={selectedScenario}
                 setPage={setPage}
                 page={page}
                 data={{

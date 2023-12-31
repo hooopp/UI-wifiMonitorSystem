@@ -5,8 +5,11 @@ import axios from "axios";
 import { FaTrashAlt } from "react-icons/fa";
 import { useMutation } from "react-query";
 
-function Scenario({data, refetchLoadScenario, setSelectedScenario, loadScenarioData, page, setPage}) {
+function Scenario({data, refetchLoadScenario, setSelectedScenario, loadScenarioData, page, setPage, selectedScenario}) {
   const mutation = useMutation(() => {
+    if (selectedScenario === data.id) {
+      setSelectedScenario("");
+    }
     return axios.delete(
       `http://127.0.0.1:8000/scenario/${data.id}`
     );

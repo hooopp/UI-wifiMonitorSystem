@@ -9,7 +9,7 @@ import './App.css'
 const queryClient = new QueryClient();
 
 function App() {
-  const [selectedScenario, setSelectedScenario] = useState(localStorage.getItem('selectedScenario') || "1");
+  const [selectedScenario, setSelectedScenario] = useState("");
 
   useEffect(() => {
     localStorage.setItem('selectedScenario', selectedScenario);
@@ -18,9 +18,8 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
     <div className="App">
-        <div className="box"><Sidebar setSelectedScenario={setSelectedScenario}/></div>
-        {selectedScenario===""}
-        <div className="box"><Main selectedScenario={selectedScenario}/></div>
+        <div className="box"><Sidebar setSelectedScenario={setSelectedScenario} selectedScenario={selectedScenario}/></div>
+        {selectedScenario==="" ? <div>Helooo</div> : <div className="box"><Main selectedScenario={selectedScenario}/></div>}
     </div>
     </QueryClientProvider>
   );
