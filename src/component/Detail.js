@@ -97,7 +97,7 @@ function Detail({
                 style={{ marginRight: "1em" }}
               >
                 <span
-                  onClick={() => { ssid === "" && selectedOption === "onAddScenario2" ? alert("Please fill in the SSID") :
+                  onClick={() => { (ssid === "" || password === "") && selectedOption === "onAddScenario2" ? alert("Please fill in the SSID and Password") :
                     patchScenario.mutate(
                       {
                         scenario_name: scenarioName,

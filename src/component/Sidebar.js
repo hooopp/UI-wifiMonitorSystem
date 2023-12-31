@@ -198,7 +198,8 @@ const Sidebar = ({setSelectedScenario}) => {
                         target_ap_password: password,
                       },
                       {
-                        onSuccess: () => {
+                        onSuccess: (data) => {
+                          setSelectedScenario(data.data.scenario_id);
                           refetchLoadScenario();
                         },
                       }

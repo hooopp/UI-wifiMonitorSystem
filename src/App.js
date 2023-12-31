@@ -19,6 +19,7 @@ function App() {
     <QueryClientProvider client={queryClient}>
     <div className="App">
         <div className="box"><Sidebar setSelectedScenario={setSelectedScenario}/></div>
+        {selectedScenario===""}
         <div className="box"><Main selectedScenario={selectedScenario}/></div>
     </div>
     </QueryClientProvider>

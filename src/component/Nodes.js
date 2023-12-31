@@ -3,8 +3,11 @@ import Node from "./Node";
 import styles from "./Nodes.module.css";
 import { IoMdAdd } from "react-icons/io";
 import { IoSearch } from "react-icons/io5";
+import NodePopUp from "./element/NodePopUp";
+import { useState } from "react";
 
 function Nodes() {
+
   return (
     <div>
       {/* searchbar */}
@@ -48,11 +51,14 @@ function Nodes() {
             color: "grey",
             backgroundColor: "",
           }}
+          data-bs-toggle="modal"
+          data-bs-target="#NodePopUp"
         >
           <IoMdAdd />
           <span style={{ fontSize: "1em" }}>Add Node</span>
         </button>
       </div>
+      <NodePopUp popUpMode={"add"}/>
       {/* headerNode */}
       <div
         className={styles.Nodes}
