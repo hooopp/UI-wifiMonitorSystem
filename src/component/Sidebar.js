@@ -41,7 +41,7 @@ const Sidebar = ({setSelectedScenario, selectedScenario}) => {
 
   useEffect(() => {
     refetchLoadScenario().then(({ data: loadScenarioData }) => {
-      if (loadScenarioData.length === 0) {
+      if (loadScenarioData.length === 0 && page > 1) {
         setPage(page - 1);
       }
     });

@@ -109,6 +109,7 @@ function Detail({
                       },
                       {
                         onSuccess: () => {
+                          
                           window.location.reload();
                         },
                       }

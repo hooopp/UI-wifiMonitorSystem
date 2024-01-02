@@ -1,26 +1,53 @@
-import Sidebar from './component/Sidebar';
-import Main from './component/Main';
-import './bootstrap/js/bootstrap.js';
-import './bootstrap/css/bootstrap.min.css';
-import { QueryClient, QueryClientProvider } from 'react-query';
-import  { useState, useEffect } from 'react';
-import './App.css'
+import Sidebar from "./component/Sidebar";
+import Main from "./component/Main";
+import "./bootstrap/js/bootstrap.js";
+import "./bootstrap/css/bootstrap.min.css";
+import { QueryClient, QueryClientProvider } from "react-query";
+import { useState, useEffect } from "react";
+import "./App.css";
+import spyro from "./img/spyro.svg";
 
 const queryClient = new QueryClient();
 
 function App() {
   const [selectedScenario, setSelectedScenario] = useState("");
+  useEffect(() => {
+    const storedScenario = localStorage.getItem("selectedScenario");
+    if (storedScenario) {
+      setSelectedScenario(storedScenario);
+    }
+  }, []);
+
+  // Save the value to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem("selectedScenario", selectedScenario);
+  }, [selectedScenario]);
 
   useEffect(() => {
-    localStorage.setItem('selectedScenario', selectedScenario);
+    localStorage.setItem("selectedScenario", selectedScenario);
   }, [selectedScenario]);
 
   return (
     <QueryClientProvider client={queryClient}>
-    <div className="App">
-        <div className="box"><Sidebar setSelectedScenario={setSelectedScenario} selectedScenario={selectedScenario}/></div>
-        {selectedScenario==="" ? <div>Helooo</div> : <div className="box"><Main selectedScenario={selectedScenario}/></div>}
-    </div>
+      <div className="App">
+        <div className="box">
+          <Sidebar
+            setSelectedScenario={setSelectedScenario}
+            selectedScenario={selectedScenario}
+          />
+        </div>
+        {selectedScenario === "" ? (
+          <div className="logo-container">
+            <svg width="500" height="500" viewBox="0 0 500 500">
+              <image href={spyro} x="0" y="0" width="100%" height="100%" />
+            </svg>
+          </div>
+        ) : (
+          <div className="box">
+            <Main selectedScenario={selectedScenario} />
+          </div>
+        )}
+      </div>
     </QueryClientProvider>
   );
 }

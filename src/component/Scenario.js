@@ -9,6 +9,7 @@ function Scenario({data, refetchLoadScenario, setSelectedScenario, loadScenarioD
   const mutation = useMutation(() => {
     if (selectedScenario === data.id) {
       setSelectedScenario("");
+      console.log("check")
     }
     return axios.delete(
       `http://127.0.0.1:8000/scenario/${data.id}`
