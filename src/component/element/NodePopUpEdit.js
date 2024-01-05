@@ -1,11 +1,17 @@
 import React, { useEffect } from "react";
-import styles from "./NodePopUp.module.css";
+import styles from "./NodePopUpEdit.module.css";
 import { useState } from "react";
 import { useMutation } from "react-query";
 import axios from "axios";
 import { useQuery } from "react-query";
 
-function NodePopUp({ selectedScenario, refetchLoadNode }) {
+function NodePopUpEdit({
+  selectedScenario,
+  id,
+  refetchLoadNode,
+  loadNodeDetailData,
+}) {
+  const [value, setValue] = useState("Deterministic");
   const [clientType, setClientType] = useState("Deterministic");
   const [nodeMode, setNodeMode] = useState("AP");
   const [borderColor1, setBorderColor1] = useState("#333");
@@ -28,17 +34,64 @@ function NodePopUp({ selectedScenario, refetchLoadNode }) {
     useState(0);
   const [fileAveragePacketSize, setFileAveragePacketSize] = useState(0);
 
-  const addNode = useMutation((data) => {
+  useEffect(() => {
+    console.log(loadNodeDetailData);
+    if (loadNodeDetailData) {
+      setNodeName(loadNodeDetailData.alias_name);
+      setIpAddress(loadNodeDetailData.control_ip_addr);
+      setSsid(loadNodeDetailData.network_ssid);
+      setNodeMode(loadNodeDetailData.network_mode);
+      if (loadNodeDetailData.network_mode === "client") {
+        setNodeMode("Client");
+        if (
+          loadNodeDetailData.simulation_detail.simulation_type ===
+          "deterministic"
+        ) {
+          setClientType("Deterministic");
+          setDeterministicAverageIntervalTime(
+            loadNodeDetailData.simulation_detail.average_interval_time
+          );
+          setDeterministicAveragePacketSize(
+            loadNodeDetailData.simulation_detail.average_packet_size
+          );
+        } else if (
+          loadNodeDetailData.simulation_detail.simulation_type ===
+          "web_application"
+        ) {
+          setClientType("Web");
+          setWebAverageIntervalTime(
+            loadNodeDetailData.simulation_detail.average_interval_time
+          );
+          setWebAveragePacketSize(
+            loadNodeDetailData.simulation_detail.average_packet_size
+          );
+          setWebAverageNewPagePacketSize(
+            loadNodeDetailData.simulation_detail.average_new_page_packet_size
+          );
+          setWebProabilityOfLoadNewPage(
+            loadNodeDetailData.simulation_detail.probability_of_load_new_page
+          );
+        } else {
+          setClientType("File");
+          setFileAveragePacketSize(
+            loadNodeDetailData.simulation_detail.average_packet_size
+          );
+        }
+      }
+    }
+  }, [loadNodeDetailData]);
+
+  const editNode = useMutation((data) => {
     console.log(data);
-    return axios.post(
-      `http://127.0.0.1:8000/scenario/${selectedScenario}/node`,
+    return axios.patch(
+      `http://127.0.0.1:8000/scenario/${selectedScenario}/node/${id}`,
       data
     );
   });
 
-  const addNodeFunction = () => {
+  const editNodeFunction = () => {
     if (nodeMode === "AP") {
-      addNode.mutate(
+      editNode.mutate(
         {
           control_ip_addr: ipAddress,
           alias_name: nodeName,
@@ -49,13 +102,12 @@ function NodePopUp({ selectedScenario, refetchLoadNode }) {
         {
           onSuccess: () => {
             refetchLoadNode();
-            setClientType("Deterministic");
           },
         }
       );
     } else {
       if (clientType === "Deterministic") {
-        addNode.mutate(
+        editNode.mutate(
           {
             alias_name: nodeName,
             control_ip_addr: ipAddress,
@@ -72,12 +124,11 @@ function NodePopUp({ selectedScenario, refetchLoadNode }) {
           {
             onSuccess: () => {
               refetchLoadNode();
-              setClientType("Deterministic");
             },
           }
         );
       } else if (clientType === "Web") {
-        addNode.mutate(
+        editNode.mutate(
           {
             alias_name: nodeName,
             control_ip_addr: ipAddress,
@@ -98,12 +149,11 @@ function NodePopUp({ selectedScenario, refetchLoadNode }) {
           {
             onSuccess: () => {
               refetchLoadNode();
-              setClientType("Deterministic");
             },
           }
         );
       } else {
-        addNode.mutate(
+        editNode.mutate(
           {
             alias_name: nodeName,
             control_ip_addr: ipAddress,
@@ -117,7 +167,6 @@ function NodePopUp({ selectedScenario, refetchLoadNode }) {
           {
             onSuccess: () => {
               refetchLoadNode();
-              setClientType("Deterministic");
             },
           }
         );
@@ -131,38 +180,39 @@ function NodePopUp({ selectedScenario, refetchLoadNode }) {
 
   useEffect(() => {
     if (clientType === "Deterministic") {
-      setBorderColor1("#333");
-      setBorderColor2("#dee2e6");
-      setBorderColor3("#dee2e6");
-      setWebAverageIntervalTime(0);
-      setWebAverageNewPagePacketSize(0);
-      setWebAveragePacketSize(0);
-      setWebProabilityOfLoadNewPage(0);
-      setFileAveragePacketSize(0);
-    } else if (clientType === "Web") {
-      setBorderColor1("#dee2e6");
-      setBorderColor2("#333");
-      setBorderColor3("#dee2e6");
-      setDeterministicAverageIntervalTime(0);
-      setDeterministicAveragePacketSize(0);
-      setFileAveragePacketSize(0);
-    } else {
-      setBorderColor1("#dee2e6");
-      setBorderColor2("#dee2e6");
-      setBorderColor3("#333");
-      setWebAverageIntervalTime(0);
-      setWebAverageNewPagePacketSize(0);
-      setWebAveragePacketSize(0);
-      setWebProabilityOfLoadNewPage(0);
-      setDeterministicAverageIntervalTime(0);
-      setDeterministicAveragePacketSize(0);
-    }
-  }, [clientType])
+        setBorderColor1("#333");
+        setBorderColor2("#dee2e6");
+        setBorderColor3("#dee2e6");
+        setWebAverageIntervalTime(0);
+        setWebAverageNewPagePacketSize(0);
+        setWebAveragePacketSize(0);
+        setWebProabilityOfLoadNewPage(0);
+        setFileAveragePacketSize(0);
+      } else if (clientType === "Web") {
+        setBorderColor1("#dee2e6");
+        setBorderColor2("#333");
+        setBorderColor3("#dee2e6");
+        setDeterministicAverageIntervalTime(0);
+        setDeterministicAveragePacketSize(0);
+        setFileAveragePacketSize(0);
+      } else {
+        setBorderColor1("#dee2e6");
+        setBorderColor2("#dee2e6");
+        setBorderColor3("#333");
+        setWebAverageIntervalTime(0);
+        setWebAverageNewPagePacketSize(0);
+        setWebAveragePacketSize(0);
+        setWebProabilityOfLoadNewPage(0);
+        setDeterministicAverageIntervalTime(0);
+        setDeterministicAveragePacketSize(0);
+      }
+  }, [clientType]);
+
   return (
     <div>
       <div
         className="modal fade"
-        id="NodePopUp"
+        id="NodePopUpEdit"
         data-bs-backdrop="static"
         data-bs-keyboard="false"
         tabIndex="-1"
@@ -177,10 +227,10 @@ function NodePopUp({ selectedScenario, refetchLoadNode }) {
             >
               <h1
                 className="modal-title fs-5"
-                id="staticBackdropLabel"
+                id="staticBackdropLabeledit"
                 style={{ marginLeft: "0em", marginRight: "0em" }}
               >
-                Add Node
+                Edit Node
               </h1>
             </div>
             <div
@@ -190,7 +240,6 @@ function NodePopUp({ selectedScenario, refetchLoadNode }) {
               <div>
                 <div className="mb-3">
                   <label
-                    htmlFor="nodename"
                     className="form-label"
                     style={{ marginLeft: "0em", marginRight: "0em" }}
                   >
@@ -200,7 +249,6 @@ function NodePopUp({ selectedScenario, refetchLoadNode }) {
                     type="text"
                     className="form-control"
                     placeholder="Node Name"
-                    id="nodename"
                     value={nodeName}
                     onChange={(e) => {
                       setNodeName(e.target.value);
@@ -209,7 +257,6 @@ function NodePopUp({ selectedScenario, refetchLoadNode }) {
                 </div>
                 <div className="mb-3">
                   <label
-                    htmlFor="ipaddress"
                     className="form-label"
                     style={{ marginLeft: "0em", marginRight: "0em" }}
                   >
@@ -219,7 +266,6 @@ function NodePopUp({ selectedScenario, refetchLoadNode }) {
                     type="text"
                     className="form-control"
                     placeholder="IP Address"
-                    id="ipaddress"
                     value={ipAddress}
                     onChange={(e) => {
                       setIpAddress(e.target.value);
@@ -228,7 +274,6 @@ function NodePopUp({ selectedScenario, refetchLoadNode }) {
                 </div>
                 <div className="mb-3">
                   <label
-                    htmlFor="ssid"
                     className="form-label"
                     style={{ marginLeft: "0em", marginRight: "0em" }}
                   >
@@ -238,7 +283,6 @@ function NodePopUp({ selectedScenario, refetchLoadNode }) {
                     type="text"
                     className="form-control"
                     placeholder="SSID"
-                    id="ssid"
                     value={ssid}
                     onChange={(e) => {
                       setSsid(e.target.value);
@@ -257,7 +301,7 @@ function NodePopUp({ selectedScenario, refetchLoadNode }) {
                     className="form-select"
                     aria-label="Default select example"
                     value={nodeMode}
-                    onChange={(event) => {setNodeMode(event.target.value);setClientType("Deterministic");}}
+                    onChange={(event) => setNodeMode(event.target.value)}
                   >
                     <option value="AP">AP</option>
                     <option value="Client">Client</option>
@@ -281,15 +325,15 @@ function NodePopUp({ selectedScenario, refetchLoadNode }) {
                     <input
                       className="form-check-input"
                       type="radio"
-                      name="exampleRadios"
-                      id="exampleRadios1"
+                      name="exampleRadioseditdeter"
+                      id="exampleRadios1edit"
                       value="Deterministic"
                       checked={clientType === "Deterministic"}
                       onChange={handleRadioChange}
                     />
                     <label
                       className="form-check-label"
-                      htmlFor="exampleRadios1"
+                      htmlFor="exampleRadios1edit"
                     >
                       Deterministic
                     </label>
@@ -342,15 +386,15 @@ function NodePopUp({ selectedScenario, refetchLoadNode }) {
                     <input
                       className="form-check-input"
                       type="radio"
-                      name="exampleRadios"
-                      id="exampleRadios2"
+                      name="exampleRadioseditweb"
+                      id="exampleRadios2edit"
                       value="Web"
                       checked={clientType === "Web"}
                       onChange={handleRadioChange}
                     />
                     <label
                       className="form-check-label"
-                      htmlFor="exampleRadios2"
+                      htmlFor="exampleRadios2edit"
                     >
                       Web
                     </label>
@@ -428,15 +472,15 @@ function NodePopUp({ selectedScenario, refetchLoadNode }) {
                     <input
                       className="form-check-input"
                       type="radio"
-                      name="exampleRadios"
-                      id="exampleRadios3"
+                      name="exampleRadiosedittfile"
+                      id="exampleRadios3edit"
                       value="File"
                       checked={clientType === "File"}
                       onChange={handleRadioChange}
                     />
                     <label
                       className="form-check-label"
-                      htmlFor="exampleRadios2"
+                      htmlFor="exampleRadios3edit"
                     >
                       File
                     </label>
@@ -471,7 +515,7 @@ function NodePopUp({ selectedScenario, refetchLoadNode }) {
                 className="btn btn-primary"
                 data-bs-dismiss="modal"
                 onClick={() => {
-                  addNodeFunction();
+                  editNodeFunction();
                 }}
               >
                 Confirm
@@ -480,7 +524,6 @@ function NodePopUp({ selectedScenario, refetchLoadNode }) {
                 type="button"
                 className="btn btn-secondary"
                 data-bs-dismiss="modal"
-                onClick={() => {setClientType("Deterministic");setNodeMode("AP");}}
               >
                 Cancel
               </button>
@@ -492,4 +535,4 @@ function NodePopUp({ selectedScenario, refetchLoadNode }) {
   );
 }
 
-export default NodePopUp;
+export default NodePopUpEdit;

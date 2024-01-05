@@ -3,11 +3,11 @@ import styles from "./Node.module.css";
 import preview from "../img/preview.svg";
 import edit from "../img/edit.svg";
 import { FaTrashAlt } from "react-icons/fa";
-import { useMutation } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import axios from "axios";
-import NodePopUp from "./element/NodePopUp";
+import NodePopUpEdit from "./element/NodePopUpEdit";
 
-function Node({ name, ip, mode, ssid, id, selectedScenario, refetchLoadNode, popUpMode, setPopUpMode}) {
+function Node({ name, ip, mode, ssid, id, selectedScenario, refetchLoadNode}) {
   const deleteNode = useMutation(
     () => {
       return axios.delete(
@@ -18,6 +18,20 @@ function Node({ name, ip, mode, ssid, id, selectedScenario, refetchLoadNode, pop
       onSuccess: () => {
         refetchLoadNode();
       },
+    }
+  );
+  const loadNodeDetail = async () => {
+    const { data } = await axios.get(
+      `http://localhost:8000/scenario/${selectedScenario}/node/${id}`
+    );
+    return data;
+  };
+
+  const { data: loadNodeDetailData, status: loadNodeDetailStatus, refetch: refetchloadNodeDetail } = useQuery(
+    "nodeDetail",
+    loadNodeDetail,
+    {
+      enabled: false
     }
   );
 
@@ -63,9 +77,9 @@ function Node({ name, ip, mode, ssid, id, selectedScenario, refetchLoadNode, pop
               <a
                 className="dropdown-item"
                 href="#"
-                onClick={() => {setPopUpMode("edit")}}
+                onClick={() => {refetchloadNodeDetail()}}
                 data-bs-toggle="modal"
-                data-bs-target="#NodePopUp"
+                data-bs-target="#NodePopUpEdit"
               >
                 <div>
                   <svg
@@ -99,6 +113,7 @@ function Node({ name, ip, mode, ssid, id, selectedScenario, refetchLoadNode, pop
               </a>
             </li>
           </ul>
+          <NodePopUpEdit id={id} selectedScenario={selectedScenario} refetchLoadNode={refetchLoadNode} loadNodeDetailData={loadNodeDetailData}/>
         </div>
       </div>
     </div>

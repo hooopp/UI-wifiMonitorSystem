@@ -9,7 +9,6 @@ import axios from "axios";
 import { useQuery } from "react-query";
 
 function Nodes({ selectedScenario }) {
-  const [popUpMode, setPopUpMode] = useState("add");
   const loadNode = async () => {
     const { data } = await axios.get(
       `http://localhost:8000/scenario/${selectedScenario}/node?page_size=10&page=1`
@@ -66,7 +65,6 @@ function Nodes({ selectedScenario }) {
             color: "grey",
             backgroundColor: "",
           }}
-          onClick={() => {setPopUpMode("add")}}
           data-bs-toggle="modal"
           data-bs-target="#NodePopUp"
         >
@@ -74,7 +72,7 @@ function Nodes({ selectedScenario }) {
           <span style={{ fontSize: "1em" }}>Add Node</span>
         </button>
       </div>
-      <NodePopUp popUpMode={popUpMode} selectedScenario={selectedScenario} refetchLoadNode={refetchLoadNode} />
+      <NodePopUp selectedScenario={selectedScenario} refetchLoadNode={refetchLoadNode} />
       {/* headerNode */}
       <div
         className={styles.Nodes}
@@ -109,8 +107,6 @@ function Nodes({ selectedScenario }) {
               id={data.id}
               selectedScenario={selectedScenario}
               refetchLoadNode={refetchLoadNode}
-              popUpMode={popUpMode}
-              setPopUpMode={setPopUpMode}
             />
           ))}
       </div>
