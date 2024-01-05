@@ -99,6 +99,7 @@ const Sidebar = ({setSelectedScenario, selectedScenario}) => {
           data-bs-toggle="modal"
           data-bs-target="#staticBackdrop"
           style={{ borderRadius: "50px", textAlign: "center", color: "grey" }}
+          onClick={() => {setScenarioName("");setScenarioDesc("");setSsid("");setPassword("");setSelectedOption("onDetail1");setBorderColor1("#333");setBorderColor2("#dee2e6");}}
         >
           <IoMdAdd />
           <span style={{ fontSize: "1em" }}>Add Scenario</span>

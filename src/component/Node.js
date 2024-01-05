@@ -3,18 +3,34 @@ import styles from "./Node.module.css";
 import preview from "../img/preview.svg";
 import edit from "../img/edit.svg";
 import { FaTrashAlt } from "react-icons/fa";
+import { useMutation } from "react-query";
+import axios from "axios";
+import NodePopUp from "./element/NodePopUp";
 
-function Node(props) {
+function Node({ name, ip, mode, ssid, id, selectedScenario, refetchLoadNode, popUpMode, setPopUpMode}) {
+  const deleteNode = useMutation(
+    () => {
+      return axios.delete(
+        `http://localhost:8000/scenario/${selectedScenario}/node/${id}`
+      );
+    },
+    {
+      onSuccess: () => {
+        refetchLoadNode();
+      },
+    }
+  );
+
   return (
     <div>
       <div className={styles.Node} style={{ marginBottom: "0.5em" }}>
         <span style={{ textAlign: "left", width: "200px", marginLeft: "1em" }}>
-          {props.data.name}
+          {name}
         </span>
-        <span>{props.data.ip}</span>
-        <span>{props.data.mode}</span>
-        <span>{props.data.ssid}</span>
-        <div className="btn-group" >
+        <span>{ip}</span>
+        <span>{mode}</span>
+        <span>{ssid}</span>
+        <div className="btn-group">
           <button
             className="button-2"
             type="button"
@@ -44,7 +60,13 @@ function Node(props) {
               </a>
             </li>
             <li>
-              <a className="dropdown-item" href="#">
+              <a
+                className="dropdown-item"
+                href="#"
+                onClick={() => {setPopUpMode("edit")}}
+                data-bs-toggle="modal"
+                data-bs-target="#NodePopUp"
+              >
                 <div>
                   <svg
                     style={{ width: "20", height: "20", marginRight: "0.5em" }}
@@ -60,6 +82,9 @@ function Node(props) {
                 className="dropdown-item"
                 href="#"
                 style={{ color: "#c30022" }}
+                onClick={() => {
+                  deleteNode.mutate();
+                }}
               >
                 <div>
                   <FaTrashAlt

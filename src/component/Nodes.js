@@ -5,8 +5,23 @@ import { IoMdAdd } from "react-icons/io";
 import { IoSearch } from "react-icons/io5";
 import NodePopUp from "./element/NodePopUp";
 import { useState } from "react";
+import axios from "axios";
+import { useQuery } from "react-query";
 
-function Nodes() {
+function Nodes({ selectedScenario }) {
+  const [popUpMode, setPopUpMode] = useState("add");
+  const loadNode = async () => {
+    const { data } = await axios.get(
+      `http://localhost:8000/scenario/${selectedScenario}/node?page_size=10&page=1`
+    );
+    return data;
+  };
+
+  const {
+    data: loadNodeData,
+    status: loadNodeStatus,
+    refetch: refetchLoadNode,
+  } = useQuery("node", loadNode);
 
   return (
     <div>
@@ -51,6 +66,7 @@ function Nodes() {
             color: "grey",
             backgroundColor: "",
           }}
+          onClick={() => {setPopUpMode("add")}}
           data-bs-toggle="modal"
           data-bs-target="#NodePopUp"
         >
@@ -58,7 +74,7 @@ function Nodes() {
           <span style={{ fontSize: "1em" }}>Add Node</span>
         </button>
       </div>
-      <NodePopUp popUpMode={"add"}/>
+      <NodePopUp popUpMode={popUpMode} selectedScenario={selectedScenario} refetchLoadNode={refetchLoadNode} />
       {/* headerNode */}
       <div
         className={styles.Nodes}
@@ -80,31 +96,23 @@ function Nodes() {
         <div></div>
       </div>
       {/* Node */}
+
       <div className="listNode">
-        <Node
-          data={{
-            name: "node1",
-            ip: "192.168.0.1",
-            mode: "AP",
-            ssid: "hoop'wifi",
-          }}
-        />
-        <Node
-          data={{
-            name: "node2",
-            ip: "192.168.0.2",
-            mode: "Client",
-            ssid: "hoop'wifi",
-          }}
-        />
-        <Node
-          data={{
-            name: "node3",
-            ip: "192.168.0.3",
-            mode: "Client",
-            ssid: "hoop'wifi",
-          }}
-        />
+        {loadNodeData &&
+          loadNodeData.map((data, i) => (
+            <Node
+              key={i}
+              name={data.alias_name}
+              ip={data.control_ip_addr}
+              mode={data.network_mode}
+              ssid={data.network_ssid}
+              id={data.id}
+              selectedScenario={selectedScenario}
+              refetchLoadNode={refetchLoadNode}
+              popUpMode={popUpMode}
+              setPopUpMode={setPopUpMode}
+            />
+          ))}
       </div>
     </div>
   );

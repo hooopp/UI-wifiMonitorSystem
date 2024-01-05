@@ -56,7 +56,6 @@ function Main({ selectedScenario }) {
   }, [selectedScenario]);
 
   const patchScenario = useMutation((data) => {
-    console.log(data)
     return axios.patch(`http://127.0.0.1:8000/scenario/${selectedScenario}`, data);
   });
 
@@ -161,7 +160,7 @@ function Main({ selectedScenario }) {
             refetchLoadScenarioDetail = {refetchLoadScenarioDetail}
           />
         )}
-        {mode === 1 && <Nodes />}
+        {mode === 1 && <Nodes selectedScenario={selectedScenario}/>}
         {mode === 2 && <Graph />}
       </div>
     </div>

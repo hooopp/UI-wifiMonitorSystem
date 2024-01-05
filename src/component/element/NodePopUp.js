@@ -1,13 +1,111 @@
 import React from "react";
 import styles from "./NodePopUp.module.css";
 import { useState } from "react";
+import { useMutation } from "react-query";
+import axios from "axios";
 
-function NodePopUp({ popUpMode }) {
+function NodePopUp({ popUpMode, selectedScenario, refetchLoadNode }) {
   const [clientType, setClientType] = useState("Deterministic");
   const [nodeMode, setNodeMode] = useState("AP");
   const [borderColor1, setBorderColor1] = useState("#333");
   const [borderColor2, setBorderColor2] = useState("#dee2e6");
   const [borderColor3, setBorderColor3] = useState("#dee2e6");
+  const [nodeName, setNodeName] = useState("");
+  const [ipAddress, setIpAddress] = useState("");
+  const [ssid, setSsid] = useState("");
+  const [
+    deterministicAverageIntervalTime,
+    setDeterministicAverageIntervalTime,
+  ] = useState(0);
+  const [deterministicAveragePacketSize, setDeterministicAveragePacketSize] =
+    useState(0);
+  const [webAverageIntervalTime, setWebAverageIntervalTime] = useState(0);
+  const [webAveragePacketSize, setWebAveragePacketSize] = useState(0);
+  const [webAverageNewPagePacketSize, setWebAverageNewPagePacketSize] =
+    useState(0);
+  const [webProabilityOfLoadNewPage, setWebProabilityOfLoadNewPage] =
+    useState(0);
+  const [fileAveragePacketSize, setFileAveragePacketSize] = useState(0);
+
+  const addNode = useMutation((data) => {
+    console.log(data);
+    return axios.post(
+      `http://127.0.0.1:8000/scenario/${selectedScenario}/node`,
+      data
+    );
+  });
+  
+
+  const editNodeFunction= () => {}
+
+  const addNodeFunction = () => {
+    if (nodeMode === "AP") {
+      addNode.mutate(
+        {
+          control_ip_addr: ipAddress,
+          alias_name: nodeName,
+          network_mode: "ap",
+          network_ssid: ssid,
+          simulation_detail: {},
+        },
+        { onSuccess: () => {refetchLoadNode()} }
+      );
+    } else {
+      if (clientType === "Deterministic") {
+        addNode.mutate(
+          {
+            alias_name: nodeName,
+            control_ip_addr: ipAddress,
+            network_ssid: ssid,
+            network_mode: "client",
+            simulation_detail: {
+              simulation_type: "deterministic",
+              average_interval_time: parseFloat(
+                deterministicAverageIntervalTime
+              ),
+              average_packet_size: parseFloat(deterministicAveragePacketSize),
+            },
+          },
+          { onSuccess: () => {refetchLoadNode()} }
+        );
+      } else if (clientType === "Web") {
+        addNode.mutate(
+          {
+            alias_name: nodeName,
+            control_ip_addr: ipAddress,
+            network_ssid: ssid,
+            network_mode: "client",
+            simulation_detail: {
+              simulation_type: "web_application",
+              average_interval_time: parseFloat(webAverageIntervalTime),
+              average_packet_size: parseFloat(webAveragePacketSize),
+              average_new_page_packet_size: parseFloat(
+                webAverageNewPagePacketSize
+              ),
+              probability_of_load_new_page: parseFloat(
+                webProabilityOfLoadNewPage
+              ),
+            },
+          },
+          { onSuccess: () => {refetchLoadNode()} }
+        );
+      } else {
+        addNode.mutate(
+          {
+            alias_name: nodeName,
+            control_ip_addr: ipAddress,
+            network_ssid: ssid,
+            network_mode: "client",
+            simulation_detail: {
+              simulation_type: "file_transfer",
+              average_packet_size: parseFloat(fileAveragePacketSize),
+            },
+          },
+          { onSuccess: () => {refetchLoadNode()} }
+        );
+      }
+    }
+  };
 
   const handleRadioChange = (event) => {
     setClientType(event.target.value);
@@ -15,20 +113,34 @@ function NodePopUp({ popUpMode }) {
       setBorderColor1("#333");
       setBorderColor2("#dee2e6");
       setBorderColor3("#dee2e6");
+      setWebAverageIntervalTime(0);
+      setWebAverageNewPagePacketSize(0);
+      setWebAveragePacketSize(0);
+      setWebProabilityOfLoadNewPage(0);
+      setFileAveragePacketSize(0);
     } else if (event.target.value === "Web") {
       setBorderColor1("#dee2e6");
       setBorderColor2("#333");
       setBorderColor3("#dee2e6");
+      setDeterministicAverageIntervalTime(0);
+      setDeterministicAveragePacketSize(0);
+      setFileAveragePacketSize(0);
     } else {
       setBorderColor1("#dee2e6");
       setBorderColor2("#dee2e6");
       setBorderColor3("#333");
+      setWebAverageIntervalTime(0);
+      setWebAverageNewPagePacketSize(0);
+      setWebAveragePacketSize(0);
+      setWebProabilityOfLoadNewPage(0);
+      setDeterministicAverageIntervalTime(0);
+      setDeterministicAveragePacketSize(0);
     }
   };
   return (
     <div>
       <div
-        class="modal fade"
+        className="modal fade"
         id="NodePopUp"
         data-bs-backdrop="static"
         data-bs-keyboard="false"
@@ -36,14 +148,14 @@ function NodePopUp({ popUpMode }) {
         aria-labelledby="staticBackdropLabel"
         aria-hidden="true"
       >
-        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-          <div class="modal-content">
+        <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+          <div className="modal-content">
             <div
-              class="modal-header"
+              className="modal-header"
               style={{ marginLeft: "0em", marginRight: "0em" }}
             >
               <h1
-                class="modal-title fs-5"
+                className="modal-title fs-5"
                 id="staticBackdropLabel"
                 style={{ marginLeft: "0em", marginRight: "0em" }}
               >
@@ -51,85 +163,93 @@ function NodePopUp({ popUpMode }) {
               </h1>
             </div>
             <div
-              class="modal-body"
+              className="modal-body"
               style={{ marginLeft: "0em", marginRight: "0em" }}
             >
               <div>
-                <div class="mb-3">
+                <div className="mb-3">
                   <label
-                    for="exampleFormControlInput1"
-                    class="form-label"
+                    htmlFor="nodename"
+                    className="form-label"
                     style={{ marginLeft: "0em", marginRight: "0em" }}
                   >
                     Node Name
                   </label>
                   <input
                     type="text"
-                    class="form-control"
-                    id="exampleFormControlInput1"
+                    className="form-control"
                     placeholder="Node Name"
+                    id="nodename"
+                    value={nodeName}
+                    onChange={(e) => {
+                      setNodeName(e.target.value);
+                    }}
                   />
                 </div>
-                <div class="mb-3">
+                <div className="mb-3">
                   <label
-                    for="exampleFormControlInput1"
-                    class="form-label"
+                    htmlFor="ipaddress"
+                    className="form-label"
                     style={{ marginLeft: "0em", marginRight: "0em" }}
                   >
                     IP Address
                   </label>
                   <input
                     type="text"
-                    class="form-control"
-                    id="exampleFormControlInput1"
+                    className="form-control"
                     placeholder="IP Address"
+                    id="ipaddress"
+                    value={ipAddress}
+                    onChange={(e) => {
+                      setIpAddress(e.target.value);
+                    }}
                   />
                 </div>
-                <div class="mb-3">
+                <div className="mb-3">
                   <label
-                    for="exampleFormControlInput1"
-                    class="form-label"
+                    htmlFor="ssid"
+                    className="form-label"
                     style={{ marginLeft: "0em", marginRight: "0em" }}
                   >
                     SSID
                   </label>
                   <input
                     type="text"
-                    class="form-control"
-                    id="exampleFormControlInput1"
+                    className="form-control"
                     placeholder="SSID"
+                    id="ssid"
+                    value={ssid}
+                    onChange={(e) => {
+                      setSsid(e.target.value);
+                    }}
                   />
                 </div>
-                <div class="mb-3">
+                <div className="mb-3">
                   <label
-                    for="exampleFormControlInput1"
-                    class="form-label"
+                    htmlFor="exampleFormControlInput1"
+                    className="form-label"
                     style={{ marginLeft: "0em", marginRight: "0em" }}
                   >
                     Mode
                   </label>
                   <select
-                    class="form-select"
+                    className="form-select"
                     aria-label="Default select example"
                     value={nodeMode}
                     onChange={(event) => setNodeMode(event.target.value)}
                   >
-                    <option selected={nodeMode === "AP"} value="AP">
-                      AP
-                    </option>
-                    <option selected={nodeMode === "Client"} value="Client">
-                      Client
-                    </option>
+                    <option value="AP">AP</option>
+                    <option value="Client">Client</option>
                   </select>
                 </div>
               </div>
               {nodeMode === "Client" ? (
-                <div className={styles.selectClientType}>
+                <div classNameName={styles.selectClientType}>
                   <div style={{ marginBottom: "0.5em" }}>
                     Select Scenario Type
                   </div>
                   <div
-                    class="form-check"
+                    className="form-check"
                     style={{
                       borderRadius: "5px",
                       border: `3px solid ${borderColor1}`,
@@ -138,7 +258,7 @@ function NodePopUp({ popUpMode }) {
                     }}
                   >
                     <input
-                      class="form-check-input"
+                      className="form-check-input"
                       type="radio"
                       name="exampleRadios"
                       id="exampleRadios1"
@@ -146,30 +266,51 @@ function NodePopUp({ popUpMode }) {
                       checked={clientType === "Deterministic"}
                       onClick={handleRadioChange}
                     />
-                    <label class="form-check-label" for="exampleRadios1">
+                    <label
+                      className="form-check-label"
+                      htmlFor="exampleRadios1"
+                    >
                       Deterministic
                     </label>
-                    <div>
-                      <div className="mb-3" style={{ marginTop: "1em" }}>
-                        <label className="form-label">Average Interval Time</label>
-                        <input
-                          type="number"
-                          className="form-control"
-                          disabled={clientType !== "Deterministic"}
-                        />
+                    {clientType === "Deterministic" ? (
+                      <div>
+                        <div className="mb-3" style={{ marginTop: "1em" }}>
+                          <label className="form-label">
+                            Average Interval Time
+                          </label>
+                          <input
+                            type="number"
+                            className="form-control"
+                            disabled={clientType !== "Deterministic"}
+                            value={deterministicAverageIntervalTime}
+                            onChange={(e) => {
+                              setDeterministicAverageIntervalTime(
+                                e.target.value
+                              );
+                            }}
+                          />
+                        </div>
+                        <div className="mb-3" style={{ marginTop: "1em" }}>
+                          <label className="form-label">
+                            Average Packet Size
+                          </label>
+                          <input
+                            type="number"
+                            className="form-control"
+                            disabled={clientType !== "Deterministic"}
+                            value={deterministicAveragePacketSize}
+                            onChange={(e) => {
+                              setDeterministicAveragePacketSize(e.target.value);
+                            }}
+                          />
+                        </div>
                       </div>
-                      <div className="mb-3" style={{ marginTop: "1em" }}>
-                        <label className="form-label">Average Packet Size</label>
-                        <input
-                          type="number"
-                          className="form-control"
-                          disabled={clientType !== "Deterministic"}
-                        />
-                      </div>
-                    </div>
+                    ) : (
+                      ""
+                    )}
                   </div>
                   <div
-                    class="form-check"
+                    className="form-check"
                     style={{
                       borderRadius: "5px",
                       border: `3px solid ${borderColor2}`,
@@ -178,7 +319,7 @@ function NodePopUp({ popUpMode }) {
                     }}
                   >
                     <input
-                      class="form-check-input"
+                      className="form-check-input"
                       type="radio"
                       name="exampleRadios"
                       id="exampleRadios2"
@@ -186,46 +327,77 @@ function NodePopUp({ popUpMode }) {
                       checked={clientType === "Web"}
                       onClick={handleRadioChange}
                     />
-                    <label class="form-check-label" for="exampleRadios2">
+                    <label
+                      className="form-check-label"
+                      htmlFor="exampleRadios2"
+                    >
                       Web
                     </label>
-                    <div>
-                      <div className="mb-3" style={{ marginTop: "1em" }}>
-                        <label className="form-label">Average Interval Time</label>
-                        <input
-                          type="number"
-                          className="form-control"
-                          disabled={clientType !== "Web"}
-                        />
+                    {clientType === "Web" ? (
+                      <div>
+                        <div className="mb-3" style={{ marginTop: "1em" }}>
+                          <label className="form-label">
+                            Average Interval Time
+                          </label>
+                          <input
+                            type="number"
+                            className="form-control"
+                            disabled={clientType !== "Web"}
+                            value={webAverageIntervalTime}
+                            onChange={(e) => {
+                              setWebAverageIntervalTime(e.target.value);
+                            }}
+                          />
+                        </div>
+                        <div className="mb-3" style={{ marginTop: "1em" }}>
+                          <label className="form-label">
+                            Average Packet Size
+                          </label>
+                          <input
+                            type="number"
+                            className="form-control"
+                            disabled={clientType !== "Web"}
+                            value={webAveragePacketSize}
+                            onChange={(e) => {
+                              setWebAveragePacketSize(e.target.value);
+                            }}
+                          />
+                        </div>
+                        <div className="mb-3" style={{ marginTop: "1em" }}>
+                          <label className="form-label">
+                            Average New Page Packet Size
+                          </label>
+                          <input
+                            type="number"
+                            className="form-control"
+                            disabled={clientType !== "Web"}
+                            value={webAverageNewPagePacketSize}
+                            onChange={(e) => {
+                              setWebAverageNewPagePacketSize(e.target.value);
+                            }}
+                          />
+                        </div>
+                        <div className="mb-3" style={{ marginTop: "1em" }}>
+                          <label className="form-label">
+                            Probability of Load New Page
+                          </label>
+                          <input
+                            type="number"
+                            className="form-control"
+                            disabled={clientType !== "Web"}
+                            value={webProabilityOfLoadNewPage}
+                            onChange={(e) => {
+                              setWebProabilityOfLoadNewPage(e.target.value);
+                            }}
+                          />
+                        </div>
                       </div>
-                      <div className="mb-3" style={{ marginTop: "1em" }}>
-                        <label className="form-label">Average Packet Size</label>
-                        <input
-                          type="number"
-                          className="form-control"
-                          disabled={clientType !== "Web"}
-                        />
-                      </div>
-                      <div className="mb-3" style={{ marginTop: "1em" }}>
-                        <label className="form-label">Average New Page Packet Size</label>
-                        <input
-                          type="number"
-                          className="form-control"
-                          disabled={clientType !== "Web"}
-                        />
-                      </div>
-                      <div className="mb-3" style={{ marginTop: "1em" }}>
-                        <label className="form-label">Probability of Load New Page</label>
-                        <input
-                          type="number"
-                          className="form-control"
-                          disabled={clientType !== "Web"}
-                        />
-                      </div>
-                    </div>
+                    ) : (
+                      ""
+                    )}
                   </div>
                   <div
-                    class="form-check"
+                    className="form-check"
                     style={{
                       borderRadius: "5px",
                       border: `3px solid ${borderColor3}`,
@@ -233,7 +405,7 @@ function NodePopUp({ popUpMode }) {
                     }}
                   >
                     <input
-                      class="form-check-input"
+                      className="form-check-input"
                       type="radio"
                       name="exampleRadios"
                       id="exampleRadios3"
@@ -241,31 +413,51 @@ function NodePopUp({ popUpMode }) {
                       checked={clientType === "File"}
                       onClick={handleRadioChange}
                     />
-                    <label class="form-check-label" for="exampleRadios2">
+                    <label
+                      className="form-check-label"
+                      htmlFor="exampleRadios2"
+                    >
                       File
                     </label>
-                    <div className="mb-3" style={{ marginTop: "1em" }}>
-                        <label className="form-label">Average Packet Size</label>
+                    {clientType === "File" ? (
+                      <div className="mb-3" style={{ marginTop: "1em" }}>
+                        <label className="form-label">
+                          Average Packet Size
+                        </label>
                         <input
                           type="number"
                           className="form-control"
                           disabled={clientType !== "File"}
+                          value={fileAveragePacketSize}
+                          onChange={(e) => {
+                            setFileAveragePacketSize(e.target.value);
+                          }}
                         />
                       </div>
+                    ) : (
+                      ""
+                    )}
                   </div>
                 </div>
               ) : null}
             </div>
             <div
-              class="modal-footer"
+              className="modal-footer"
               style={{ marginLeft: "0em", marginRight: "0em" }}
             >
-              <button type="button" class="btn btn-primary">
+              <button
+                type="button"
+                className="btn btn-primary"
+                data-bs-dismiss="modal"
+                onClick={() => {
+                  popUpMode==="add" ? addNodeFunction() : editNodeFunction();
+                }}
+              >
                 Confirm
               </button>
               <button
                 type="button"
-                class="btn btn-secondary"
+                className="btn btn-secondary"
                 data-bs-dismiss="modal"
               >
                 Cancel
