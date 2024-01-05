@@ -6,8 +6,21 @@ import { FaTrashAlt } from "react-icons/fa";
 import { useMutation, useQuery } from "react-query";
 import axios from "axios";
 import NodePopUpEdit from "./element/NodePopUpEdit";
+import { useState } from "react";
 
-function Node({ name, ip, mode, ssid, id, selectedScenario, refetchLoadNode, refetchLoadNodeDetail}) {
+function Node({
+  name,
+  ip,
+  mode,
+  ssid,
+  id,
+  selectedScenario,
+  refetchLoadNode,
+  setEditNodeId,
+  refetchLoadNodeDetail,
+  editButonClicked,
+  setEditButtonClicked
+}) {
   const deleteNode = useMutation(
     () => {
       return axios.delete(
@@ -43,6 +56,9 @@ function Node({ name, ip, mode, ssid, id, selectedScenario, refetchLoadNode, ref
               marginBottom: "0.25em",
               marginLeft: "8em",
             }}
+            onClick={() => {
+              setEditNodeId(id);
+            }}
           >
             <span style={{ fontSize: "1.5em" }}>&#x22EE;</span>
           </button>
@@ -63,7 +79,9 @@ function Node({ name, ip, mode, ssid, id, selectedScenario, refetchLoadNode, ref
               <a
                 className="dropdown-item"
                 href="#"
-                onClick={() => {refetchLoadNodeDetail()}}
+                onClick={() => {
+                  refetchLoadNodeDetail().then(() => {setEditButtonClicked(!editButonClicked)});
+                }}
                 data-bs-toggle="modal"
                 data-bs-target="#NodePopUpEdit"
               >
@@ -99,7 +117,6 @@ function Node({ name, ip, mode, ssid, id, selectedScenario, refetchLoadNode, ref
               </a>
             </li>
           </ul>
-          {/* <NodePopUpEdit id={id} selectedScenario={selectedScenario} refetchLoadNode={refetchLoadNode} loadNodeDetailData={loadNodeDetailData}/> */}
         </div>
       </div>
     </div>

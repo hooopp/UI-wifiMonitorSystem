@@ -158,6 +158,18 @@ function NodePopUp({ selectedScenario, refetchLoadNode }) {
       setDeterministicAveragePacketSize(0);
     }
   }, [clientType])
+
+  useEffect(() => {
+    setDeterministicAverageIntervalTime(0);
+    setDeterministicAveragePacketSize(0);
+    setWebAverageIntervalTime(0);
+    setWebAveragePacketSize(0);
+    setWebAverageNewPagePacketSize(0);
+    setWebProabilityOfLoadNewPage(0);
+    setFileAveragePacketSize(0);
+    setClientType("Deterministic");
+  }, [nodeMode]);
+
   return (
     <div>
       <div

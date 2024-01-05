@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Node from "./Node";
 import styles from "./Nodes.module.css";
 import { IoMdAdd } from "react-icons/io";
@@ -10,11 +10,12 @@ import { useQuery } from "react-query";
 import NodePopUpEdit from "./element/NodePopUpEdit";
 
 function Nodes({ selectedScenario }) {
-  const [selectedNodeId, setselectedNodeId] = useState();
+  const [editNodeId, setEditNodeId] = useState();
+  const [editButonClicked, setEditButtonClicked] = useState(false);
 
   const loadNodeDetail = async () => {
     const { data } = await axios.get(
-      `http://localhost:8000/scenario/${selectedScenario}/node/${selectedNodeId}`
+      `http://localhost:8000/scenario/${selectedScenario}/node/${editNodeId}`
     );
     return data;
   };
@@ -95,11 +96,12 @@ function Nodes({ selectedScenario }) {
         refetchLoadNode={refetchLoadNode}
       />
       <NodePopUpEdit
-        id={selectedNodeId}
+        id={editNodeId}
         selectedScenario={selectedScenario}
         refetchLoadNode={refetchLoadNode}
         loadNodeDetailData={loadNodeDetailData}
-        refetchLoadNodeDetail={refetchLoadNodeDetail}
+        loadNodeDetailStatus={loadNodeDetailStatus}
+        editButonClicked={editButonClicked}
       />
       {/* headerNode */}
       <div
@@ -135,6 +137,10 @@ function Nodes({ selectedScenario }) {
               id={data.id}
               selectedScenario={selectedScenario}
               refetchLoadNode={refetchLoadNode}
+              setEditNodeId={setEditNodeId}
+              refetchLoadNodeDetail={refetchLoadNodeDetail}
+              editButonClicked={editButonClicked}
+              setEditButtonClicked={setEditButtonClicked}
             />
           ))}
       </div>

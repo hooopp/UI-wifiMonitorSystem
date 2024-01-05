@@ -10,6 +10,7 @@ function NodePopUpEdit({
   id,
   refetchLoadNode,
   loadNodeDetailData,
+  editButonClicked,
 }) {
   const [value, setValue] = useState("");
   const [clientType, setClientType] = useState("");
@@ -35,6 +36,18 @@ function NodePopUpEdit({
   const [fileAveragePacketSize, setFileAveragePacketSize] = useState(0);
 
   useEffect(() => {
+    setDeterministicAverageIntervalTime(0);
+    setDeterministicAveragePacketSize(0);
+    setWebAverageIntervalTime(0);
+    setWebAveragePacketSize(0);
+    setWebAverageNewPagePacketSize(0);
+    setWebProabilityOfLoadNewPage(0);
+    setFileAveragePacketSize(0);
+    setClientType("Deterministic");
+  }, [nodeMode]);
+
+  useEffect(() => {
+    console.log(loadNodeDetailData); 
     if (loadNodeDetailData) {
       setNodeName(loadNodeDetailData.alias_name);
       setIpAddress(loadNodeDetailData.control_ip_addr);
@@ -78,7 +91,7 @@ function NodePopUpEdit({
         }
       }
     }
-  }, [loadNodeDetailData]);
+  }, [editButonClicked]);
 
   const editNode = useMutation((data) => {
     return axios.patch(
