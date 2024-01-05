@@ -7,7 +7,7 @@ import { useMutation, useQuery } from "react-query";
 import axios from "axios";
 import NodePopUpEdit from "./element/NodePopUpEdit";
 
-function Node({ name, ip, mode, ssid, id, selectedScenario, refetchLoadNode}) {
+function Node({ name, ip, mode, ssid, id, selectedScenario, refetchLoadNode, refetchLoadNodeDetail}) {
   const deleteNode = useMutation(
     () => {
       return axios.delete(
@@ -18,20 +18,6 @@ function Node({ name, ip, mode, ssid, id, selectedScenario, refetchLoadNode}) {
       onSuccess: () => {
         refetchLoadNode();
       },
-    }
-  );
-  const loadNodeDetail = async () => {
-    const { data } = await axios.get(
-      `http://localhost:8000/scenario/${selectedScenario}/node/${id}`
-    );
-    return data;
-  };
-
-  const { data: loadNodeDetailData, status: loadNodeDetailStatus, refetch: refetchloadNodeDetail } = useQuery(
-    "nodeDetail",
-    loadNodeDetail,
-    {
-      enabled: false
     }
   );
 
@@ -77,7 +63,7 @@ function Node({ name, ip, mode, ssid, id, selectedScenario, refetchLoadNode}) {
               <a
                 className="dropdown-item"
                 href="#"
-                onClick={() => {refetchloadNodeDetail()}}
+                onClick={() => {refetchLoadNodeDetail()}}
                 data-bs-toggle="modal"
                 data-bs-target="#NodePopUpEdit"
               >
@@ -113,7 +99,7 @@ function Node({ name, ip, mode, ssid, id, selectedScenario, refetchLoadNode}) {
               </a>
             </li>
           </ul>
-          <NodePopUpEdit id={id} selectedScenario={selectedScenario} refetchLoadNode={refetchLoadNode} loadNodeDetailData={loadNodeDetailData}/>
+          {/* <NodePopUpEdit id={id} selectedScenario={selectedScenario} refetchLoadNode={refetchLoadNode} loadNodeDetailData={loadNodeDetailData}/> */}
         </div>
       </div>
     </div>

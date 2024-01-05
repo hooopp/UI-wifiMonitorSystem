@@ -7,8 +7,26 @@ import NodePopUp from "./element/NodePopUp";
 import { useState } from "react";
 import axios from "axios";
 import { useQuery } from "react-query";
+import NodePopUpEdit from "./element/NodePopUpEdit";
 
 function Nodes({ selectedScenario }) {
+  const [selectedNodeId, setselectedNodeId] = useState();
+
+  const loadNodeDetail = async () => {
+    const { data } = await axios.get(
+      `http://localhost:8000/scenario/${selectedScenario}/node/${selectedNodeId}`
+    );
+    return data;
+  };
+
+  const {
+    data: loadNodeDetailData,
+    status: loadNodeDetailStatus,
+    refetch: refetchLoadNodeDetail,
+  } = useQuery("nodeDetail", loadNodeDetail, {
+    enabled: false,
+  });
+
   const loadNode = async () => {
     const { data } = await axios.get(
       `http://localhost:8000/scenario/${selectedScenario}/node?page_size=10&page=1`
@@ -72,7 +90,17 @@ function Nodes({ selectedScenario }) {
           <span style={{ fontSize: "1em" }}>Add Node</span>
         </button>
       </div>
-      <NodePopUp selectedScenario={selectedScenario} refetchLoadNode={refetchLoadNode} />
+      <NodePopUp
+        selectedScenario={selectedScenario}
+        refetchLoadNode={refetchLoadNode}
+      />
+      <NodePopUpEdit
+        id={selectedNodeId}
+        selectedScenario={selectedScenario}
+        refetchLoadNode={refetchLoadNode}
+        loadNodeDetailData={loadNodeDetailData}
+        refetchLoadNodeDetail={refetchLoadNodeDetail}
+      />
       {/* headerNode */}
       <div
         className={styles.Nodes}

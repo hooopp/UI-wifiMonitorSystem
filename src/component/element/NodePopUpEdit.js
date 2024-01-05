@@ -11,8 +11,8 @@ function NodePopUpEdit({
   refetchLoadNode,
   loadNodeDetailData,
 }) {
-  const [value, setValue] = useState("Deterministic");
-  const [clientType, setClientType] = useState("Deterministic");
+  const [value, setValue] = useState("");
+  const [clientType, setClientType] = useState("");
   const [nodeMode, setNodeMode] = useState("AP");
   const [borderColor1, setBorderColor1] = useState("#333");
   const [borderColor2, setBorderColor2] = useState("#dee2e6");
@@ -35,12 +35,11 @@ function NodePopUpEdit({
   const [fileAveragePacketSize, setFileAveragePacketSize] = useState(0);
 
   useEffect(() => {
-    console.log(loadNodeDetailData);
     if (loadNodeDetailData) {
       setNodeName(loadNodeDetailData.alias_name);
       setIpAddress(loadNodeDetailData.control_ip_addr);
       setSsid(loadNodeDetailData.network_ssid);
-      setNodeMode(loadNodeDetailData.network_mode);
+      setNodeMode("AP");
       if (loadNodeDetailData.network_mode === "client") {
         setNodeMode("Client");
         if (
@@ -82,7 +81,6 @@ function NodePopUpEdit({
   }, [loadNodeDetailData]);
 
   const editNode = useMutation((data) => {
-    console.log(data);
     return axios.patch(
       `http://127.0.0.1:8000/scenario/${selectedScenario}/node/${id}`,
       data
@@ -308,7 +306,7 @@ function NodePopUpEdit({
                   </select>
                 </div>
               </div>
-              {nodeMode === "Client" ? (
+              {nodeMode === "Client"? (
                 <div className={styles.selectClientType}>
                   <div style={{ marginBottom: "0.5em" }}>
                     Select Scenario Type
@@ -326,14 +324,14 @@ function NodePopUpEdit({
                       className="form-check-input"
                       type="radio"
                       name="exampleRadioseditdeter"
-                      id="exampleRadios1edit"
                       value="Deterministic"
+                      id = {`radioDeterministicEdit${id}`}
                       checked={clientType === "Deterministic"}
                       onChange={handleRadioChange}
                     />
                     <label
                       className="form-check-label"
-                      htmlFor="exampleRadios1edit"
+                      htmlFor={`radioDeterministicEdit${id}`}
                     >
                       Deterministic
                     </label>
@@ -387,14 +385,14 @@ function NodePopUpEdit({
                       className="form-check-input"
                       type="radio"
                       name="exampleRadioseditweb"
-                      id="exampleRadios2edit"
                       value="Web"
+                      id = {`radioWebEdit${id}`}
                       checked={clientType === "Web"}
                       onChange={handleRadioChange}
                     />
                     <label
                       className="form-check-label"
-                      htmlFor="exampleRadios2edit"
+                      htmlFor={`radioWebEdit${id}`}
                     >
                       Web
                     </label>
@@ -473,14 +471,14 @@ function NodePopUpEdit({
                       className="form-check-input"
                       type="radio"
                       name="exampleRadiosedittfile"
-                      id="exampleRadios3edit"
                       value="File"
+                      id = {`radioFileEdit${id}`}
                       checked={clientType === "File"}
                       onChange={handleRadioChange}
                     />
                     <label
                       className="form-check-label"
-                      htmlFor="exampleRadios3edit"
+                      htmlFor={`radioFileEdit${id}`}
                     >
                       File
                     </label>
