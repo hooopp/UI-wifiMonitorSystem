@@ -36,7 +36,7 @@ function App() {
             selectedScenario={selectedScenario}
           />
         </div>
-        {selectedScenario === "" ? (
+        {selectedScenario === "" || selectedScenario === undefined ? (
           <div className="logo-container">
             <svg width="500" height="500" viewBox="0 0 500 500">
               <image href={spyro} x="0" y="0" width="100%" height="100%" />

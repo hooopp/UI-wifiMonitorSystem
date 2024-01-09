@@ -6,11 +6,7 @@ import { FaTrashAlt } from "react-icons/fa";
 import { useMutation } from "react-query";
 
 function Scenario({data, refetchLoadScenario, setSelectedScenario, loadScenarioData, page, setPage, selectedScenario}) {
-  const mutation = useMutation(() => {
-    if (selectedScenario === data.id) {
-      setSelectedScenario("");
-      console.log("check")
-    }
+  const deleteScenario = useMutation(() => {
     return axios.delete(
       `http://127.0.0.1:8000/scenario/${data.id}`
     );
@@ -23,6 +19,14 @@ function Scenario({data, refetchLoadScenario, setSelectedScenario, loadScenarioD
       });
     }
   });
+
+  const deleteFuction = () => {
+    if (selectedScenario === data.id) {
+      setSelectedScenario("");
+      console.log("check")
+    }
+    return deleteScenario.mutate();
+  }
 
   return (
     <div>
@@ -40,7 +44,7 @@ function Scenario({data, refetchLoadScenario, setSelectedScenario, loadScenarioD
             className="scenarioName"
             style={{ margin: "auto", marginLeft: "0em" }}
           >
-            <a href="#" style={{ textDecoration: "none", color:"black"}} onClick={() => {setSelectedScenario(data.id)}}>{data.name}</a>
+            <a href="#" style={{ textDecoration: "none", color:"black"}} onClick={() => {setSelectedScenario(data.id);}}>{data.name}</a>
           </div>
           <div className="btn-group">
             <button
@@ -80,7 +84,7 @@ function Scenario({data, refetchLoadScenario, setSelectedScenario, loadScenarioD
                   href="#"
                   style={{ color: "#c30022" }}
                   onClick={() => {
-                    mutation.mutate();
+                    deleteFuction();
                   }}
                 >
                   <div>

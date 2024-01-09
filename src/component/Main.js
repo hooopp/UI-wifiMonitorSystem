@@ -21,11 +21,13 @@ function Main({ selectedScenario }) {
   const [borderColor1, setBorderColor1] = useState("#333");
   const [borderColor2, setBorderColor2] = useState("#dee2e6");
   const [isEdit, setIsEdit] = useState(false);
+  const [selectedWifiType, setSelectedWifiType] = useState("2.4GHz");
 
   const loadScenarioDetail = async () => {
     const { data } = await axios.get(
       `http://127.0.0.1:8000/scenario/${selectedScenario}`
     );
+    console.log(data);
     return data;
   };
 
@@ -36,11 +38,13 @@ function Main({ selectedScenario }) {
   } = useQuery("scenarioDetail", loadScenarioDetail);
 
   useEffect(() => {
+    setMode(0)
     refetchLoadScenarioDetail().then(({ data: loadScenarioData }) => {
       setScenarioName(loadScenarioData.scenario_name);
       setScenarioDesc(loadScenarioData.scenario_desc);
       setSelectedOption(loadScenarioData.is_using_target_ap ? "onAddScenario2" : "onAddScenario1");
       setIsEdit(false);
+      setSelectedWifiType(loadScenarioData.target_ap_radio === "5G" ? "5GHz" : "2.4GHz");
       if (loadScenarioData.is_using_target_ap) {
         setSsid(loadScenarioData.target_ap_ssid);
         setPassword(loadScenarioData.target_ap_password);
@@ -158,6 +162,8 @@ function Main({ selectedScenario }) {
             setIsEdit={setIsEdit}
             patchScenario = {patchScenario}
             refetchLoadScenarioDetail = {refetchLoadScenarioDetail}
+            selectedWifiType = {selectedWifiType}
+            setSelectedWifiType = {setSelectedWifiType}
           />
         )}
         {mode === 1 && <Nodes selectedScenario={selectedScenario}/>}

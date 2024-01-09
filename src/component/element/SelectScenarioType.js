@@ -18,11 +18,15 @@ function SelectScenarioType(props) {
       props.data.setBorderColor2("#dee2e6");
       props.data.setSsid("");
       props.data.setPassword("");
+      props.data.setSelectedWifiType("2.4GHz");
     } else {
       props.data.setBorderColor1("#dee2e6");
       props.data.setBorderColor2("#333");
     }
   };
+  const handleWifiTypeChange = (event) => {
+    props.data.setSelectedWifiType(event.target.id);
+  }
 
   return (
     <div className={styles.selectScenarioType}>
@@ -31,7 +35,9 @@ function SelectScenarioType(props) {
         className="form-check"
         style={{
           borderRadius: "5px",
-          border: `3px solid ${props.data.isEdit ? props.data.borderColor1 : "#dee2e6"}`,
+          border: `3px solid ${
+            props.data.isEdit ? props.data.borderColor1 : "#dee2e6"
+          }`,
           padding: "1em 14em 1em 2em",
           marginBottom: "0.5em",
         }}
@@ -53,7 +59,9 @@ function SelectScenarioType(props) {
         className={`form-check ${styles.customFormCheck}`}
         style={{
           borderRadius: "5px",
-          border: `3px solid ${props.data.isEdit ? props.data.borderColor2 : "#dee2e6"}`,
+          border: `3px solid ${
+            props.data.isEdit ? props.data.borderColor2 : "#dee2e6"
+          }`,
           padding: "1em 1em 1em 2em",
         }}
       >
@@ -74,7 +82,10 @@ function SelectScenarioType(props) {
             <label className="form-label">SSID :</label>
             <input
               className="form-control"
-              disabled={props.data.selectedOption === props.data.name + "1" || !props.data.isEdit}
+              disabled={
+                props.data.selectedOption === props.data.name + "1" ||
+                !props.data.isEdit
+              }
               value={props.data.ssid}
               onChange={(e) => props.data.setSsid(e.target.value)}
             />
@@ -85,25 +96,68 @@ function SelectScenarioType(props) {
               <input
                 className="form-control"
                 type={showPassword ? "text" : "password"}
-                disabled={props.data.selectedOption === props.data.name + "1" || !props.data.isEdit}
+                disabled={
+                  props.data.selectedOption === props.data.name + "1" ||
+                  !props.data.isEdit
+                }
                 value={props.data.password}
                 onChange={(e) => props.data.setPassword(e.target.value)}
               />
-              {props.data.selectedOption === props.data.name + "2" ?<button
-                type="button"
-                style={{
-                  position: "absolute",
-                  right: "10px",
-                  top: "50%",
-                  transform: "translateY(-50%)",
-                  background: "transparent",
-                  border: "none",
-                }}
-                onClick={togglePasswordVisibility}
-              >
-                {showPassword ? <FaEye size={25} /> : <FaEyeSlash size={25} />}
-              </button> : null}
+              {props.data.selectedOption === props.data.name + "2" ? (
+                <button
+                  type="button"
+                  style={{
+                    position: "absolute",
+                    right: "10px",
+                    top: "50%",
+                    transform: "translateY(-50%)",
+                    background: "transparent",
+                    border: "none",
+                  }}
+                  onClick={togglePasswordVisibility}
+                >
+                  {showPassword ? (
+                    <FaEye size={25} />
+                  ) : (
+                    <FaEyeSlash size={25} />
+                  )}
+                </button>
+              ) : null}
             </div>
+          </div>
+        </div>
+        <div style={{display:"flex"}}>
+          <div
+            className="form-check"
+            style={{ marginLeft: "0em" }}
+          >
+            <input
+              className="form-check-input"
+              type="radio"
+              checked={props.data.selectedWifiType === "2.4GHz"}
+              id = "2.4GHz"
+              disabled={!props.data.isEdit || props.data.selectedOption === props.data.name + "1"}
+              onChange={handleWifiTypeChange}
+            />
+            <label className="form-check-label">
+              2.4 GHz
+            </label>
+          </div>
+          <div
+            className="form-check"
+            style={{marginLeft:"-12em"}}
+          >
+            <input
+              className="form-check-input"
+              type="radio"
+              checked={props.data.selectedWifiType === "5GHz"}
+              id="5GHz"
+              disabled={!props.data.isEdit || props.data.selectedOption === props.data.name + "1"}
+              onChange={handleWifiTypeChange}
+            />
+            <label className="form-check-label">
+              5GHz
+            </label>
           </div>
         </div>
       </div>

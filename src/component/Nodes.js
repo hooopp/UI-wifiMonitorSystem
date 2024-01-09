@@ -8,6 +8,8 @@ import { useState } from "react";
 import axios from "axios";
 import { useQuery } from "react-query";
 import NodePopUpEdit from "./element/NodePopUpEdit";
+import { FaArrowAltCircleLeft } from "react-icons/fa";
+import { FaArrowAltCircleRight } from "react-icons/fa";
 
 function Nodes({ selectedScenario }) {
   const [editNodeId, setEditNodeId] = useState();
@@ -42,7 +44,7 @@ function Nodes({ selectedScenario }) {
   } = useQuery("node", loadNode);
 
   return (
-    <div>
+    <div style={{position:"relative"}}>
       {/* searchbar */}
       <form>
         <div className="input-group" style={{ paddingTop: "0.5em" }}>
@@ -143,6 +145,33 @@ function Nodes({ selectedScenario }) {
               setEditButtonClicked={setEditButtonClicked}
             />
           ))}
+          <button
+            style={{
+              backgroundColor: "transparent",
+              border: "none",
+              position: "absolute",
+              left:"20em",
+              top:"41em",
+            }}
+            disabled
+          >
+            <FaArrowAltCircleLeft style={{ fontSize: "2rem" }} />
+            <span style={{ fontWeight: "bold" }}> Previous</span>
+          </button>
+          <button
+            style={{
+              color: "#333",
+              backgroundColor: "transparent",
+              border: "none",
+              width: "5em",
+              position: "absolute",
+              left:"35em",
+              top:"41em"
+            }}
+          >
+            <span style={{ fontWeight: "bold" }}>Next </span>
+            <FaArrowAltCircleRight style={{ fontSize: "2rem" }} />
+          </button>
       </div>
     </div>
   );

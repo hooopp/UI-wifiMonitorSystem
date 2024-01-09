@@ -24,6 +24,8 @@ function Detail({
   setIsEdit,
   patchScenario,
   refetchLoadScenarioDetail,
+  selectedWifiType,
+  setSelectedWifiType,
 }) {
 
   return (
@@ -82,6 +84,8 @@ function Detail({
                 setSsid,
                 password,
                 setPassword,
+                selectedWifiType,
+                setSelectedWifiType,
               }}
             />
           </div>
@@ -106,6 +110,7 @@ function Detail({
                           selectedOption === "onAddScenario1" ? false : true,
                         target_ap_ssid: ssid,
                         target_ap_password: password,
+                        target_ap_radio: selectedWifiType === "2.4GHz" ? "2G" : "5G",
                       },
                       {
                         onSuccess: () => {

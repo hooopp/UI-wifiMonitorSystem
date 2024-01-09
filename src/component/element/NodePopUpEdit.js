@@ -21,6 +21,7 @@ function NodePopUpEdit({
   const [nodeName, setNodeName] = useState("");
   const [ipAddress, setIpAddress] = useState("");
   const [ssid, setSsid] = useState("");
+  const [timeOut, setTimeOut] = useState(0);
   const [
     deterministicAverageIntervalTime,
     setDeterministicAverageIntervalTime,
@@ -44,15 +45,17 @@ function NodePopUpEdit({
     setWebProabilityOfLoadNewPage(0);
     setFileAveragePacketSize(0);
     setClientType("Deterministic");
+    setTimeOut(0);
   }, [nodeMode]);
 
   useEffect(() => {
-    console.log(loadNodeDetailData); 
+    console.log(loadNodeDetailData);
     if (loadNodeDetailData) {
       setNodeName(loadNodeDetailData.alias_name);
       setIpAddress(loadNodeDetailData.control_ip_addr);
       setSsid(loadNodeDetailData.network_ssid);
       setNodeMode("AP");
+      setTimeOut(loadNodeDetailData.simulation_detail.timeout);
       if (loadNodeDetailData.network_mode === "client") {
         setNodeMode("Client");
         if (
@@ -130,6 +133,7 @@ function NodePopUpEdit({
                 deterministicAverageIntervalTime
               ),
               average_packet_size: parseFloat(deterministicAveragePacketSize),
+              timeout: parseFloat(timeOut),
             },
           },
           {
@@ -155,6 +159,7 @@ function NodePopUpEdit({
               probability_of_load_new_page: parseFloat(
                 webProabilityOfLoadNewPage
               ),
+              timeout: parseFloat(timeOut),
             },
           },
           {
@@ -173,6 +178,7 @@ function NodePopUpEdit({
             simulation_detail: {
               simulation_type: "file_transfer",
               average_packet_size: parseFloat(fileAveragePacketSize),
+              timeout: parseFloat(timeOut),
             },
           },
           {
@@ -190,33 +196,34 @@ function NodePopUpEdit({
   };
 
   useEffect(() => {
+    setTimeOut(0);
     if (clientType === "Deterministic") {
-        setBorderColor1("#333");
-        setBorderColor2("#dee2e6");
-        setBorderColor3("#dee2e6");
-        setWebAverageIntervalTime(0);
-        setWebAverageNewPagePacketSize(0);
-        setWebAveragePacketSize(0);
-        setWebProabilityOfLoadNewPage(0);
-        setFileAveragePacketSize(0);
-      } else if (clientType === "Web") {
-        setBorderColor1("#dee2e6");
-        setBorderColor2("#333");
-        setBorderColor3("#dee2e6");
-        setDeterministicAverageIntervalTime(0);
-        setDeterministicAveragePacketSize(0);
-        setFileAveragePacketSize(0);
-      } else {
-        setBorderColor1("#dee2e6");
-        setBorderColor2("#dee2e6");
-        setBorderColor3("#333");
-        setWebAverageIntervalTime(0);
-        setWebAverageNewPagePacketSize(0);
-        setWebAveragePacketSize(0);
-        setWebProabilityOfLoadNewPage(0);
-        setDeterministicAverageIntervalTime(0);
-        setDeterministicAveragePacketSize(0);
-      }
+      setBorderColor1("#333");
+      setBorderColor2("#dee2e6");
+      setBorderColor3("#dee2e6");
+      setWebAverageIntervalTime(0);
+      setWebAverageNewPagePacketSize(0);
+      setWebAveragePacketSize(0);
+      setWebProabilityOfLoadNewPage(0);
+      setFileAveragePacketSize(0);
+    } else if (clientType === "Web") {
+      setBorderColor1("#dee2e6");
+      setBorderColor2("#333");
+      setBorderColor3("#dee2e6");
+      setDeterministicAverageIntervalTime(0);
+      setDeterministicAveragePacketSize(0);
+      setFileAveragePacketSize(0);
+    } else {
+      setBorderColor1("#dee2e6");
+      setBorderColor2("#dee2e6");
+      setBorderColor3("#333");
+      setWebAverageIntervalTime(0);
+      setWebAverageNewPagePacketSize(0);
+      setWebAveragePacketSize(0);
+      setWebProabilityOfLoadNewPage(0);
+      setDeterministicAverageIntervalTime(0);
+      setDeterministicAveragePacketSize(0);
+    }
   }, [clientType]);
 
   return (
@@ -319,7 +326,7 @@ function NodePopUpEdit({
                   </select>
                 </div>
               </div>
-              {nodeMode === "Client"? (
+              {nodeMode === "Client" ? (
                 <div className={styles.selectClientType}>
                   <div style={{ marginBottom: "0.5em" }}>
                     Select Scenario Type
@@ -338,7 +345,7 @@ function NodePopUpEdit({
                       type="radio"
                       name="exampleRadioseditdeter"
                       value="Deterministic"
-                      id = {`radioDeterministicEdit${id}`}
+                      id={`radioDeterministicEdit${id}`}
                       checked={clientType === "Deterministic"}
                       onChange={handleRadioChange}
                     />
@@ -380,6 +387,18 @@ function NodePopUpEdit({
                             }}
                           />
                         </div>
+                        <div className="mb-3" style={{ marginTop: "1em" }}>
+                          <label className="form-label">Time Out</label>
+                          <input
+                            type="number"
+                            className="form-control"
+                            disabled={clientType !== "Deterministic"}
+                            value={timeOut}
+                            onChange={(e) => {
+                              setTimeOut(e.target.value);
+                            }}
+                          />
+                        </div>
                       </div>
                     ) : (
                       ""
@@ -399,7 +418,7 @@ function NodePopUpEdit({
                       type="radio"
                       name="exampleRadioseditweb"
                       value="Web"
-                      id = {`radioWebEdit${id}`}
+                      id={`radioWebEdit${id}`}
                       checked={clientType === "Web"}
                       onChange={handleRadioChange}
                     />
@@ -467,6 +486,18 @@ function NodePopUpEdit({
                             }}
                           />
                         </div>
+                        <div className="mb-3" style={{ marginTop: "1em" }}>
+                          <label className="form-label">Time Out</label>
+                          <input
+                            type="number"
+                            className="form-control"
+                            disabled={clientType !== "Web"}
+                            value={timeOut}
+                            onChange={(e) => {
+                              setTimeOut(e.target.value);
+                            }}
+                          />
+                        </div>
                       </div>
                     ) : (
                       ""
@@ -485,7 +516,7 @@ function NodePopUpEdit({
                       type="radio"
                       name="exampleRadiosedittfile"
                       value="File"
-                      id = {`radioFileEdit${id}`}
+                      id={`radioFileEdit${id}`}
                       checked={clientType === "File"}
                       onChange={handleRadioChange}
                     />
@@ -509,6 +540,18 @@ function NodePopUpEdit({
                             setFileAveragePacketSize(e.target.value);
                           }}
                         />
+                        <div className="mb-3" style={{ marginTop: "1em" }}>
+                          <label className="form-label">Time Out</label>
+                          <input
+                            type="number"
+                            className="form-control"
+                            disabled={clientType !== "File"}
+                            value={timeOut}
+                            onChange={(e) => {
+                              setTimeOut(e.target.value);
+                            }}
+                          />
+                        </div>
                       </div>
                     ) : (
                       ""

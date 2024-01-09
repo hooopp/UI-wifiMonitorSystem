@@ -20,6 +20,7 @@ const Sidebar = ({setSelectedScenario, selectedScenario}) => {
   const [ssid, setSsid] = React.useState("");
   const [page, setPage] = React.useState(1);
   const [password, setPassword] = React.useState("");
+  const [selectedWifiType, setSelectedWifiType] = React.useState("2.4GHz");
   const [searchVariable, setSearchVariable] = React.useState("");
 
   const mutation = useMutation((data) => {
@@ -174,6 +175,8 @@ const Sidebar = ({setSelectedScenario, selectedScenario}) => {
                     setSsid,
                     password,
                     setPassword,
+                    selectedWifiType,
+                    setSelectedWifiType
                   }}
                 />
               </div>
@@ -197,6 +200,7 @@ const Sidebar = ({setSelectedScenario, selectedScenario}) => {
                           selectedOption === "onDetail1" ? false : true,
                         target_ap_ssid: ssid,
                         target_ap_password: password,
+                        target_ap_radio: selectedWifiType === "2.4GHz" ? "2.4G" : "5G",
                       },
                       {
                         onSuccess: (data) => {

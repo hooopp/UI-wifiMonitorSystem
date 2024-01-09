@@ -27,6 +27,7 @@ function NodePopUp({ selectedScenario, refetchLoadNode }) {
   const [webProabilityOfLoadNewPage, setWebProabilityOfLoadNewPage] =
     useState(0);
   const [fileAveragePacketSize, setFileAveragePacketSize] = useState(0);
+  const [timeOut, setTimeOut] = useState(0);
 
   const addNode = useMutation((data) => {
     console.log(data);
@@ -67,6 +68,7 @@ function NodePopUp({ selectedScenario, refetchLoadNode }) {
                 deterministicAverageIntervalTime
               ),
               average_packet_size: parseFloat(deterministicAveragePacketSize),
+              timeout: parseFloat(timeOut),
             },
           },
           {
@@ -93,6 +95,7 @@ function NodePopUp({ selectedScenario, refetchLoadNode }) {
               probability_of_load_new_page: parseFloat(
                 webProabilityOfLoadNewPage
               ),
+              timeout: parseFloat(timeOut),
             },
           },
           {
@@ -112,6 +115,7 @@ function NodePopUp({ selectedScenario, refetchLoadNode }) {
             simulation_detail: {
               simulation_type: "file_transfer",
               average_packet_size: parseFloat(fileAveragePacketSize),
+              timeout: parseFloat(timeOut),
             },
           },
           {
@@ -130,6 +134,7 @@ function NodePopUp({ selectedScenario, refetchLoadNode }) {
   };
 
   useEffect(() => {
+    setTimeOut(0);
     if (clientType === "Deterministic") {
       setBorderColor1("#333");
       setBorderColor2("#dee2e6");
@@ -168,6 +173,7 @@ function NodePopUp({ selectedScenario, refetchLoadNode }) {
     setWebProabilityOfLoadNewPage(0);
     setFileAveragePacketSize(0);
     setClientType("Deterministic");
+    setTimeOut(0);
   }, [nodeMode]);
 
   return (
@@ -337,6 +343,22 @@ function NodePopUp({ selectedScenario, refetchLoadNode }) {
                             }}
                           />
                         </div>
+                        <div className="mb-3" style={{ marginTop: "1em" }}>
+                          <label className="form-label">
+                            Time Out
+                          </label>
+                          <input
+                            type="number"
+                            className="form-control"
+                            disabled={clientType !== "Deterministic"}
+                            value={timeOut}
+                            onChange={(e) => {
+                              setTimeOut(
+                                e.target.value
+                              );
+                            }}
+                          />
+                        </div>
                       </div>
                     ) : (
                       ""
@@ -424,6 +446,22 @@ function NodePopUp({ selectedScenario, refetchLoadNode }) {
                             }}
                           />
                         </div>
+                        <div className="mb-3" style={{ marginTop: "1em" }}>
+                          <label className="form-label">
+                            Time Out
+                          </label>
+                          <input
+                            type="number"
+                            className="form-control"
+                            disabled={clientType !== "Web"}
+                            value={timeOut}
+                            onChange={(e) => {
+                              setTimeOut(
+                                e.target.value
+                              );
+                            }}
+                          />
+                        </div>
                       </div>
                     ) : (
                       ""
@@ -466,7 +504,25 @@ function NodePopUp({ selectedScenario, refetchLoadNode }) {
                             setFileAveragePacketSize(e.target.value);
                           }}
                         />
+                        <div className="mb-3" style={{ marginTop: "1em" }}>
+                          <label className="form-label">
+                            Time Out
+                          </label>
+                          <input
+                            type="number"
+                            className="form-control"
+                            disabled={clientType !== "File"}
+                            value={timeOut}
+                            onChange={(e) => {
+                              setTimeOut(
+                                e.target.value
+                              );
+                            }}
+                          />
+                        </div>
                       </div>
+                      
+                      
                     ) : (
                       ""
                     )}
