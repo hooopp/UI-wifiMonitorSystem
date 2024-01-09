@@ -19,7 +19,7 @@ function Node({
   setEditNodeId,
   refetchLoadNodeDetail,
   editButonClicked,
-  setEditButtonClicked
+  setEditButtonClicked,
 }) {
   const deleteNode = useMutation(
     () => {
@@ -64,7 +64,15 @@ function Node({
           </button>
           <ul className="dropdown-menu">
             <li>
-              <a className="dropdown-item" href="#">
+              <a
+                className="dropdown-item"
+                href="#"
+                data-bs-toggle="modal"
+                data-bs-target="#NodePreview"
+                onClick={() => {
+                  refetchLoadNodeDetail()
+                }}
+              >
                 <div>
                   <svg
                     style={{ width: "20", height: "20", marginRight: "0.5em" }}
@@ -80,7 +88,9 @@ function Node({
                 className="dropdown-item"
                 href="#"
                 onClick={() => {
-                  refetchLoadNodeDetail().then(() => {setEditButtonClicked(!editButonClicked)});
+                  refetchLoadNodeDetail().then(() => {
+                    setEditButtonClicked(!editButonClicked);
+                  });
                 }}
                 data-bs-toggle="modal"
                 data-bs-target="#NodePopUpEdit"

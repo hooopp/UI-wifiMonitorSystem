@@ -127,7 +127,7 @@ function Detail({
               <button
                 className="button-68"
                 role="button"
-                onClick={() => setIsEdit(false)}
+                onClick={() => {setIsEdit(false);refetchLoadScenarioDetail();}}
               >
                 <span>Cancel</span>
               </button>

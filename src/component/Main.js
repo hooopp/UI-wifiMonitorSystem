@@ -3,7 +3,7 @@ import { useState } from "react";
 import styles from "./Main.module.css";
 import Detail from "./Detail";
 import Nodes from "./Nodes";
-import Graph from "./Graph";
+import Graphs from "./Graphs";
 import start from "../img/start.svg";
 import { IoIosDocument } from "react-icons/io";
 import { FaShareNodes } from "react-icons/fa6";
@@ -44,7 +44,7 @@ function Main({ selectedScenario }) {
       setScenarioDesc(loadScenarioData.scenario_desc);
       setSelectedOption(loadScenarioData.is_using_target_ap ? "onAddScenario2" : "onAddScenario1");
       setIsEdit(false);
-      setSelectedWifiType(loadScenarioData.target_ap_radio === "5G" ? "5GHz" : "2.4GHz");
+      setSelectedWifiType(loadScenarioData.target_ap_radio === "5G" ? "5GHzon_AddScenario" : "2.4GHz_onAddScenario");
       if (loadScenarioData.is_using_target_ap) {
         setSsid(loadScenarioData.target_ap_ssid);
         setPassword(loadScenarioData.target_ap_password);
@@ -167,7 +167,7 @@ function Main({ selectedScenario }) {
           />
         )}
         {mode === 1 && <Nodes selectedScenario={selectedScenario}/>}
-        {mode === 2 && <Graph />}
+        {mode === 2 && <Graphs />}
       </div>
     </div>
   );

@@ -18,7 +18,7 @@ function SelectScenarioType(props) {
       props.data.setBorderColor2("#dee2e6");
       props.data.setSsid("");
       props.data.setPassword("");
-      props.data.setSelectedWifiType("2.4GHz");
+      props.data.setSelectedWifiType("2.4GHz_"+props.data.name);
     } else {
       props.data.setBorderColor1("#dee2e6");
       props.data.setBorderColor2("#333");
@@ -79,7 +79,7 @@ function SelectScenarioType(props) {
         </label>
         <div>
           <div className="mb-3" style={{ marginTop: "1em" }}>
-            <label className="form-label">SSID :</label>
+            <label className="form-label" style={{color:`${props.data.isEdit === false ? "#cccccc" : "#333"}`}}>SSID</label>
             <input
               className="form-control"
               disabled={
@@ -91,7 +91,7 @@ function SelectScenarioType(props) {
             />
           </div>
           <div className="mb-3" style={{ marginTop: "1em" }}>
-            <label className="form-label">Password :</label>
+            <label className="form-label" style={{color:`${props.data.isEdit === false ? "#cccccc" : "#333"}`}}>Password</label>
             <div style={{ position: "relative" }}>
               <input
                 className="form-control"
@@ -126,6 +126,7 @@ function SelectScenarioType(props) {
             </div>
           </div>
         </div>
+        <div style={{marginBottom:"0.5em" ,color:`${props.data.isEdit === false ? "#cccccc" : "#333"}`}}>Wi-Fi Frequency</div>
         <div style={{display:"flex"}}>
           <div
             className="form-check"
@@ -134,8 +135,8 @@ function SelectScenarioType(props) {
             <input
               className="form-check-input"
               type="radio"
-              checked={props.data.selectedWifiType === "2.4GHz"}
-              id = "2.4GHz"
+              checked={props.data.selectedWifiType === "2.4GHz_"+props.data.name}
+              id = {"2.4GHz_"+props.data.name}
               disabled={!props.data.isEdit || props.data.selectedOption === props.data.name + "1"}
               onChange={handleWifiTypeChange}
             />
@@ -150,8 +151,8 @@ function SelectScenarioType(props) {
             <input
               className="form-check-input"
               type="radio"
-              checked={props.data.selectedWifiType === "5GHz"}
-              id="5GHz"
+              checked={props.data.selectedWifiType === "5GHz_"+props.data.name}
+              id={"5GHz_"+props.data.name}
               disabled={!props.data.isEdit || props.data.selectedOption === props.data.name + "1"}
               onChange={handleWifiTypeChange}
             />

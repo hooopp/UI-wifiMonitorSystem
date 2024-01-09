@@ -10,6 +10,7 @@ import { useQuery } from "react-query";
 import NodePopUpEdit from "./element/NodePopUpEdit";
 import { FaArrowAltCircleLeft } from "react-icons/fa";
 import { FaArrowAltCircleRight } from "react-icons/fa";
+import NodePreview from "./element/NodePreview";
 
 function Nodes({ selectedScenario }) {
   const [editNodeId, setEditNodeId] = useState();
@@ -44,7 +45,7 @@ function Nodes({ selectedScenario }) {
   } = useQuery("node", loadNode);
 
   return (
-    <div style={{position:"relative"}}>
+    <div style={{ position: "relative" }}>
       {/* searchbar */}
       <form>
         <div className="input-group" style={{ paddingTop: "0.5em" }}>
@@ -145,33 +146,62 @@ function Nodes({ selectedScenario }) {
               setEditButtonClicked={setEditButtonClicked}
             />
           ))}
-          <button
-            style={{
-              backgroundColor: "transparent",
-              border: "none",
-              position: "absolute",
-              left:"20em",
-              top:"41em",
-            }}
-            disabled
-          >
-            <FaArrowAltCircleLeft style={{ fontSize: "2rem" }} />
-            <span style={{ fontWeight: "bold" }}> Previous</span>
-          </button>
-          <button
-            style={{
-              color: "#333",
-              backgroundColor: "transparent",
-              border: "none",
-              width: "5em",
-              position: "absolute",
-              left:"35em",
-              top:"41em"
-            }}
-          >
-            <span style={{ fontWeight: "bold" }}>Next </span>
-            <FaArrowAltCircleRight style={{ fontSize: "2rem" }} />
-          </button>
+        <button
+          style={{
+            backgroundColor: "transparent",
+            border: "none",
+            position: "absolute",
+            left: "20em",
+            top: "41em",
+          }}
+          disabled
+        >
+          <FaArrowAltCircleLeft style={{ fontSize: "2rem" }} />
+          <span style={{ fontWeight: "bold" }}> Previous</span>
+        </button>
+        <button
+          style={{
+            color: "#333",
+            backgroundColor: "transparent",
+            border: "none",
+            width: "5em",
+            position: "absolute",
+            left: "35em",
+            top: "41em",
+          }}
+        >
+          <span style={{ fontWeight: "bold" }}>Next </span>
+          <FaArrowAltCircleRight style={{ fontSize: "2rem" }} />
+        </button>
+      </div>
+      <div
+        className="modal fade"
+        id="NodePreview"
+        tabIndex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog modal-dialog-scrollable">
+          <div className="modal-content">
+            <div
+              className="modal-header"
+              style={{ marginLeft: "0em", marginRight: "0em" }}
+            >
+              <h1 className="modal-title fs-5" id="exampleModalLabel">
+                Preview Node
+              </h1>
+              <button
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div className="modal-body" style={{ marginLeft: "0em", marginRight: "0em" }}>
+              <NodePreview name={loadNodeDetailData ? loadNodeDetailData.alias_name : ""}  ip={loadNodeDetailData ? loadNodeDetailData.control_ip_addr : ""} simulationDetail={loadNodeDetailData ? loadNodeDetailData.simulation_detail : ""} ssid={loadNodeDetailData ? loadNodeDetailData.network_ssid : ""}/>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

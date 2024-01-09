@@ -6,6 +6,6 @@
     grid-template-columns: 1fr 1fr 1fr 1fr 0.9fr;
 }
 
-.Graph span,div{
+.Nodes span,div{
     margin: auto;
 }
