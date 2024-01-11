@@ -1,9 +1,10 @@
 import React, { useEffect } from "react";
 import styles from "./NodePopUp.module.css";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useMutation } from "react-query";
 import axios from "axios";
 import { useQuery } from "react-query";
+import { Modal } from "../../bootstrap/js/bootstrap.js";
 
 function NodePopUp({ selectedScenario, refetchLoadNode }) {
   const [clientType, setClientType] = useState("Deterministic");
@@ -44,6 +45,10 @@ function NodePopUp({ selectedScenario, refetchLoadNode }) {
   };
 
   const addNodeFunction = () => {
+    if (isValidIP(ipAddress) === false) {
+      alert("IP Address is not valid");
+      return;
+    }
     if (nodeMode === "AP") {
       addNode.mutate(
         {
@@ -55,6 +60,7 @@ function NodePopUp({ selectedScenario, refetchLoadNode }) {
         },
         {
           onSuccess: () => {
+            closeRef.current.click();
             refetchLoadNode();
             setClientType("Deterministic");
           },
@@ -79,6 +85,7 @@ function NodePopUp({ selectedScenario, refetchLoadNode }) {
           },
           {
             onSuccess: () => {
+              closeRef.current.click();
               refetchLoadNode();
               setClientType("Deterministic");
             },
@@ -106,6 +113,7 @@ function NodePopUp({ selectedScenario, refetchLoadNode }) {
           },
           {
             onSuccess: () => {
+              closeRef.current.click();
               refetchLoadNode();
               setClientType("Deterministic");
             },
@@ -126,6 +134,7 @@ function NodePopUp({ selectedScenario, refetchLoadNode }) {
           },
           {
             onSuccess: () => {
+              closeRef.current.click();
               refetchLoadNode();
               setNodeMode("AP");
               setNodeName("");
@@ -185,6 +194,8 @@ function NodePopUp({ selectedScenario, refetchLoadNode }) {
     setTimeOut(0);
   }, [nodeMode]);
 
+  const closeRef = useRef();
+
   return (
     <div>
       <div
@@ -194,7 +205,7 @@ function NodePopUp({ selectedScenario, refetchLoadNode }) {
         data-bs-keyboard="false"
         tabIndex="-1"
         aria-labelledby="staticBackdropLabel"
-        aria-hidden="true"
+        aria-hidden="True"
       >
         <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">
           <div className="modal-content">
@@ -534,8 +545,14 @@ function NodePopUp({ selectedScenario, refetchLoadNode }) {
             >
               <button
                 type="button"
+                className="close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+                ref={closeRef}
+              ></button>
+              <button
+                type="button"
                 className="btn btn-primary"
-                data-bs-dismiss={"modal"}
                 onClick={() => {
                   addNodeFunction();
                 }}
@@ -552,6 +569,7 @@ function NodePopUp({ selectedScenario, refetchLoadNode }) {
                   setNodeName("");
                   setIpAddress("");
                   setSsid("");
+                  closeRef.current.click()
                 }}
               >
                 Cancel

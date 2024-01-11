@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import { useState, useEffect } from "react";
 import "./App.css";
 import spyro from "./img/spyro.svg";
+import {Modal} from "./bootstrap/js/bootstrap.js";
 
 const queryClient = new QueryClient();
 
