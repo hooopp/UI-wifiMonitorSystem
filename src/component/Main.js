@@ -40,11 +40,12 @@ function Main({ selectedScenario }) {
   useEffect(() => {
     setMode(0)
     refetchLoadScenarioDetail().then(({ data: loadScenarioData }) => {
+      console.log(loadScenarioData)
       setScenarioName(loadScenarioData.scenario_name);
       setScenarioDesc(loadScenarioData.scenario_desc);
       setSelectedOption(loadScenarioData.is_using_target_ap ? "onAddScenario2" : "onAddScenario1");
       setIsEdit(false);
-      setSelectedWifiType(loadScenarioData.target_ap_radio === "5G" ? "5GHzon_AddScenario" : "2.4GHz_onAddScenario");
+      setSelectedWifiType(loadScenarioData.target_ap_radio === "5G" ? "5GHz_onAddScenario" : "2.4GHz_onAddScenario");
       if (loadScenarioData.is_using_target_ap) {
         setSsid(loadScenarioData.target_ap_ssid);
         setPassword(loadScenarioData.target_ap_password);
