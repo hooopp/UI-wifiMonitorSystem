@@ -197,8 +197,21 @@ function Nodes({ selectedScenario }) {
                 aria-label="Close"
               ></button>
             </div>
-            <div className="modal-body" style={{ marginLeft: "0em", marginRight: "0em" }}>
-              <NodePreview name={loadNodeDetailData ? loadNodeDetailData.alias_name : ""}  ip={loadNodeDetailData ? loadNodeDetailData.control_ip_addr : ""} simulationDetail={loadNodeDetailData ? loadNodeDetailData.simulation_detail : ""} ssid={loadNodeDetailData ? loadNodeDetailData.network_ssid : ""}/>
+            <div
+              className="modal-body"
+              style={{ marginLeft: "0em", marginRight: "0em" }}
+            >
+              <NodePreview
+                name={loadNodeDetailData ? loadNodeDetailData.alias_name : ""}
+                ip={
+                  loadNodeDetailData ? loadNodeDetailData.control_ip_addr : ""
+                }
+                simulationDetail={
+                  loadNodeDetailData ? loadNodeDetailData.simulation_detail : ""
+                }
+                ssid={loadNodeDetailData ? loadNodeDetailData.network_ssid : ""}
+                nodeMode={loadNodeDetailData ? loadNodeDetailData.network_mode : ""}
+              />
             </div>
           </div>
         </div>

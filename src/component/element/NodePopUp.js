@@ -37,6 +37,12 @@ function NodePopUp({ selectedScenario, refetchLoadNode }) {
     );
   });
 
+  const isValidIP = (ip) => {
+    const ipRegex =
+      /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+    return ipRegex.test(ip);
+  };
+
   const addNodeFunction = () => {
     if (nodeMode === "AP") {
       addNode.mutate(
@@ -121,7 +127,10 @@ function NodePopUp({ selectedScenario, refetchLoadNode }) {
           {
             onSuccess: () => {
               refetchLoadNode();
-              setClientType("Deterministic");
+              setNodeMode("AP");
+              setNodeName("");
+              setIpAddress("");
+              setSsid("");
             },
           }
         );
@@ -162,7 +171,7 @@ function NodePopUp({ selectedScenario, refetchLoadNode }) {
       setDeterministicAverageIntervalTime(0);
       setDeterministicAveragePacketSize(0);
     }
-  }, [clientType])
+  }, [clientType]);
 
   useEffect(() => {
     setDeterministicAverageIntervalTime(0);
@@ -275,7 +284,10 @@ function NodePopUp({ selectedScenario, refetchLoadNode }) {
                     className="form-select"
                     aria-label="Default select example"
                     value={nodeMode}
-                    onChange={(event) => {setNodeMode(event.target.value);setClientType("Deterministic");}}
+                    onChange={(event) => {
+                      setNodeMode(event.target.value);
+                      setClientType("Deterministic");
+                    }}
                   >
                     <option value="AP">AP</option>
                     <option value="Client">Client</option>
@@ -344,18 +356,14 @@ function NodePopUp({ selectedScenario, refetchLoadNode }) {
                           />
                         </div>
                         <div className="mb-3" style={{ marginTop: "1em" }}>
-                          <label className="form-label">
-                            Time Out
-                          </label>
+                          <label className="form-label">Time Out</label>
                           <input
                             type="number"
                             className="form-control"
                             disabled={clientType !== "Deterministic"}
                             value={timeOut}
                             onChange={(e) => {
-                              setTimeOut(
-                                e.target.value
-                              );
+                              setTimeOut(e.target.value);
                             }}
                           />
                         </div>
@@ -447,18 +455,14 @@ function NodePopUp({ selectedScenario, refetchLoadNode }) {
                           />
                         </div>
                         <div className="mb-3" style={{ marginTop: "1em" }}>
-                          <label className="form-label">
-                            Time Out
-                          </label>
+                          <label className="form-label">Time Out</label>
                           <input
                             type="number"
                             className="form-control"
                             disabled={clientType !== "Web"}
                             value={timeOut}
                             onChange={(e) => {
-                              setTimeOut(
-                                e.target.value
-                              );
+                              setTimeOut(e.target.value);
                             }}
                           />
                         </div>
@@ -505,24 +509,18 @@ function NodePopUp({ selectedScenario, refetchLoadNode }) {
                           }}
                         />
                         <div className="mb-3" style={{ marginTop: "1em" }}>
-                          <label className="form-label">
-                            Time Out
-                          </label>
+                          <label className="form-label">Time Out</label>
                           <input
                             type="number"
                             className="form-control"
                             disabled={clientType !== "File"}
                             value={timeOut}
                             onChange={(e) => {
-                              setTimeOut(
-                                e.target.value
-                              );
+                              setTimeOut(e.target.value);
                             }}
                           />
                         </div>
                       </div>
-                      
-                      
                     ) : (
                       ""
                     )}
@@ -537,7 +535,7 @@ function NodePopUp({ selectedScenario, refetchLoadNode }) {
               <button
                 type="button"
                 className="btn btn-primary"
-                data-bs-dismiss="modal"
+                data-bs-dismiss={"modal"}
                 onClick={() => {
                   addNodeFunction();
                 }}
@@ -548,7 +546,13 @@ function NodePopUp({ selectedScenario, refetchLoadNode }) {
                 type="button"
                 className="btn btn-secondary"
                 data-bs-dismiss="modal"
-                onClick={() => {setClientType("Deterministic");setNodeMode("AP");}}
+                onClick={() => {
+                  refetchLoadNode();
+                  setNodeMode("AP");
+                  setNodeName("");
+                  setIpAddress("");
+                  setSsid("");
+                }}
               >
                 Cancel
               </button>
