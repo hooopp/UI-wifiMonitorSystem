@@ -27,7 +27,6 @@ function Main({ selectedScenario }) {
     const { data } = await axios.get(
       `http://127.0.0.1:8000/scenario/${selectedScenario}`
     );
-    console.log(data);
     return data;
   };
 

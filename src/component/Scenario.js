@@ -23,7 +23,6 @@ function Scenario({data, refetchLoadScenario, setSelectedScenario, loadScenarioD
   const deleteFuction = () => {
     if (selectedScenario === data.id) {
       setSelectedScenario("");
-      console.log("check")
     }
     return deleteScenario.mutate();
   }

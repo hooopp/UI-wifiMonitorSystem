@@ -51,7 +51,6 @@ function Nodes({ selectedScenario }) {
 
   useEffect(() => {
     refetchLoadNode().then(({ data: loadScenarioData }) => {
-      console.log(loadScenarioData);
       if (loadScenarioData.length === 0 && page > 1) {
         setPage(page - 1);
       }
