@@ -15,6 +15,9 @@ import NodePreview from "./element/NodePreview";
 function Nodes({ selectedScenario }) {
   const [editNodeId, setEditNodeId] = useState();
   const [editButonClicked, setEditButtonClicked] = useState(false);
+  const [searchVariable, setSearchVariable] = useState("");
+  const [page, setPage] = useState(1);
+  const [prevPage, setPrevPage] = useState(1);
 
   const loadNodeDetail = async () => {
     const { data } = await axios.get(
@@ -33,7 +36,9 @@ function Nodes({ selectedScenario }) {
 
   const loadNode = async () => {
     const { data } = await axios.get(
-      `http://localhost:8000/scenario/${selectedScenario}/node?page_size=10&page=1`
+      `http://localhost:8000/scenario/${selectedScenario}/node?page_size=8&page=${page}${
+        searchVariable ? `&search=${searchVariable}` : ""
+      }`
     );
     return data;
   };
@@ -44,12 +49,26 @@ function Nodes({ selectedScenario }) {
     refetch: refetchLoadNode,
   } = useQuery("node", loadNode);
 
+  useEffect(() => {
+    refetchLoadNode().then(({ data: loadScenarioData }) => {
+      console.log(loadScenarioData);
+      if (loadScenarioData.length === 0 && page > 1) {
+        setPage(page - 1);
+      }
+    });
+  }, [page]);
+
   return (
     <div style={{ position: "relative" }}>
       {/* searchbar */}
       <form>
         <div className="input-group" style={{ paddingTop: "0.5em" }}>
-          <input type="text" className="form-control" placeholder="Search" />
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Search"
+            onChange={(e) => setSearchVariable(e.target.value)}
+          />
           <div className="input-group-btn">
             <button
               className="button-2"
@@ -59,6 +78,10 @@ function Nodes({ selectedScenario }) {
                 borderTopLeftRadius: "0",
                 borderBottomLeftRadius: "0",
                 border: "1px solid #dee2e6",
+              }}
+              onClick={(e) => {
+                e.preventDefault();
+                refetchLoadNode();
               }}
             >
               <IoSearch style={{ fontSize: "1.5em" }} />
@@ -144,6 +167,9 @@ function Nodes({ selectedScenario }) {
               refetchLoadNodeDetail={refetchLoadNodeDetail}
               editButonClicked={editButonClicked}
               setEditButtonClicked={setEditButtonClicked}
+              page={page}
+              setPage={setPage}
+              loadNodeData={loadNodeData}
             />
           ))}
         <button
@@ -154,7 +180,10 @@ function Nodes({ selectedScenario }) {
             left: "20em",
             top: "41em",
           }}
-          disabled
+          disabled={page === 1 ? true : false}
+          onClick={() => {
+            setPage(page - 1);
+          }}
         >
           <FaArrowAltCircleLeft style={{ fontSize: "2rem" }} />
           <span style={{ fontWeight: "bold" }}> Previous</span>
@@ -168,6 +197,9 @@ function Nodes({ selectedScenario }) {
             position: "absolute",
             left: "35em",
             top: "41em",
+          }}
+          onClick={() => {
+            setPage(page + 1);
           }}
         >
           <span style={{ fontWeight: "bold" }}>Next </span>
@@ -210,7 +242,9 @@ function Nodes({ selectedScenario }) {
                   loadNodeDetailData ? loadNodeDetailData.simulation_detail : ""
                 }
                 ssid={loadNodeDetailData ? loadNodeDetailData.network_ssid : ""}
-                nodeMode={loadNodeDetailData ? loadNodeDetailData.network_mode : ""}
+                nodeMode={
+                  loadNodeDetailData ? loadNodeDetailData.network_mode : ""
+                }
               />
             </div>
           </div>

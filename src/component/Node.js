@@ -20,6 +20,9 @@ function Node({
   refetchLoadNodeDetail,
   editButonClicked,
   setEditButtonClicked,
+  loadNodeData,
+  page,
+  setPage
 }) {
   const deleteNode = useMutation(
     () => {
@@ -29,7 +32,11 @@ function Node({
     },
     {
       onSuccess: () => {
-        refetchLoadNode();
+        refetchLoadNode().then(()=>{
+          if (loadNodeData.length === 1) {
+            setPage(page - 1);
+          }
+        });;
       },
     }
   );
