@@ -135,11 +135,11 @@ function SelectScenarioType(props) {
             <input
               className="form-check-input"
               type="radio"
-              checked={props.data.selectedWifiType === "2.4GHz_"+props.data.name}
+              checked={props.data.selectedWifiType === "2.4GHz_"+props.data.name && props.data.selectedOption !== props.data.name + "1"}
               id = {"2.4GHz_"+props.data.name}
               disabled={!props.data.isEdit || props.data.selectedOption === props.data.name + "1"}
               onChange={handleWifiTypeChange}
-              style={props.data.selectedOption === props.data.name + "1" ? {backgroundColor:"white",borderColor:"white", boxShadow:"none"} : {}}
+              style={props.data.selectedOption === props.data.name + "1" ? {backgroundColor:"#e9ecef",borderColor:"#e9ecef"} : {}}
             />
             <label className="form-check-label">
               2.4 GHz
@@ -156,6 +156,7 @@ function SelectScenarioType(props) {
               id={"5GHz_"+props.data.name}
               disabled={!props.data.isEdit || props.data.selectedOption === props.data.name + "1"}
               onChange={handleWifiTypeChange}
+              style={props.data.selectedOption === props.data.name + "1" ? {backgroundColor:"#e9ecef",borderColor:"#e9ecef"} : {}}
             />
             <label className="form-check-label">
               5GHz
