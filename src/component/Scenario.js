@@ -62,7 +62,7 @@ function Scenario({data, refetchLoadScenario, setSelectedScenario, loadScenarioD
             </button>
             <ul className="dropdown-menu">
               <li>
-                <button className=" dropdown-item" href="#">
+                <button className={`${styles.dropdownButton} dropdown-item`} href="#" style={{color:"#333"}}>
                   <div>
                     <svg
                       style={{

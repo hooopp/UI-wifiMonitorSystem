@@ -11,11 +11,13 @@ import {Modal} from "./bootstrap/js/bootstrap.js";
 const queryClient = new QueryClient();
 
 function App() {
-  const [selectedScenario, setSelectedScenario] = useState("");
+  const storedScenario = localStorage.getItem("selectedScenario");
+  const [selectedScenario, setSelectedScenario] = useState(storedScenario || "");
   useEffect(() => {
     const storedScenario = localStorage.getItem("selectedScenario");
     if (storedScenario) {
       setSelectedScenario(storedScenario);
+      console.log(storedScenario);
     }
   }, []);
 
@@ -23,10 +25,7 @@ function App() {
   useEffect(() => {
     localStorage.setItem("selectedScenario", selectedScenario);
   }, [selectedScenario]);
-
-  useEffect(() => {
-    localStorage.setItem("selectedScenario", selectedScenario);
-  }, [selectedScenario]);
+  
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -43,7 +42,7 @@ function App() {
               <image href={spyro} x="0" y="0" width="100%" height="100%" />
             </svg>
           </div>
-        ) : (
+        ) : selectedScenario === "initial" ? "" :(
           <div className="box">
             <Main selectedScenario={selectedScenario} />
           </div>

@@ -1,3 +1,2 @@
-- ลบscenarioที่เลือกอยู่แล้วบัค checking
-- กดtab node แล้วเปลี่ยน scenario มันไม่โหลด 
-- เปลี่ยนชื่อ แล้วกดลบไม่ไป
+- duplicate กดแล้วเปนสีฟ้า
+- radio button ตอนเลือก ap ให้เอาออก

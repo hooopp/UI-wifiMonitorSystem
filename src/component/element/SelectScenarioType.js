@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styles from "./SelectScenarioType.module.css";
 import { useState } from "react";
 import { FaEye } from "react-icons/fa";
@@ -139,6 +139,7 @@ function SelectScenarioType(props) {
               id = {"2.4GHz_"+props.data.name}
               disabled={!props.data.isEdit || props.data.selectedOption === props.data.name + "1"}
               onChange={handleWifiTypeChange}
+              style={props.data.selectedOption === props.data.name + "1" ? {backgroundColor:"white",borderColor:"white", boxShadow:"none"} : {}}
             />
             <label className="form-check-label">
               2.4 GHz
