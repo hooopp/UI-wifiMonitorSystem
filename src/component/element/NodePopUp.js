@@ -60,9 +60,12 @@ function NodePopUp({ selectedScenario, refetchLoadNode }) {
         },
         {
           onSuccess: () => {
-            closeRef.current.click();
             refetchLoadNode();
-            setClientType("Deterministic");
+            setNodeMode("AP");
+            setNodeName("");
+            setIpAddress("");
+            setSsid("");
+            closeRef.current.click();
           },
         }
       );
@@ -85,9 +88,12 @@ function NodePopUp({ selectedScenario, refetchLoadNode }) {
           },
           {
             onSuccess: () => {
-              closeRef.current.click();
               refetchLoadNode();
-              setClientType("Deterministic");
+              setNodeMode("AP");
+              setNodeName("");
+              setIpAddress("");
+              setSsid("");
+              closeRef.current.click();
             },
           }
         );
@@ -113,9 +119,12 @@ function NodePopUp({ selectedScenario, refetchLoadNode }) {
           },
           {
             onSuccess: () => {
-              closeRef.current.click();
               refetchLoadNode();
-              setClientType("Deterministic");
+              setNodeMode("AP");
+              setNodeName("");
+              setIpAddress("");
+              setSsid("");
+              closeRef.current.click();
             },
           }
         );
@@ -134,12 +143,12 @@ function NodePopUp({ selectedScenario, refetchLoadNode }) {
           },
           {
             onSuccess: () => {
-              closeRef.current.click();
               refetchLoadNode();
               setNodeMode("AP");
               setNodeName("");
               setIpAddress("");
               setSsid("");
+              closeRef.current.click();
             },
           }
         );
@@ -218,7 +227,7 @@ function NodePopUp({ selectedScenario, refetchLoadNode }) {
                 id="staticBackdropLabel"
                 style={{ marginLeft: "0em", marginRight: "0em" }}
               >
-                Add Node
+                <span style={{ fontWeight: "bold" }}>Add Node</span>
               </h1>
             </div>
             <div
@@ -569,7 +578,7 @@ function NodePopUp({ selectedScenario, refetchLoadNode }) {
                   setNodeName("");
                   setIpAddress("");
                   setSsid("");
-                  closeRef.current.click()
+                  closeRef.current.click();
                 }}
               >
                 Cancel

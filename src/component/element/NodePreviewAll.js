@@ -1,6 +1,6 @@
 import React from "react";
 
-function NodePreview({ name, ip, simulationDetail, ssid, nodeMode }) {
+function NodePreviewAll({ name, ip, simulationDetail, nodeMode }) {
   const ClientType = () => {
     if (simulationDetail.simulation_type === "deterministic") {
       return (
@@ -11,7 +11,9 @@ function NodePreview({ name, ip, simulationDetail, ssid, nodeMode }) {
           </tr>
           <tr>
             <td>average interval time</td>
-            <td>{simulationDetail.average_interval_time.toLocaleString()} msec</td>
+            <td>
+              {simulationDetail.average_interval_time.toLocaleString()} msec
+            </td>
           </tr>
           <tr>
             <td>average packet size</td>
@@ -32,7 +34,9 @@ function NodePreview({ name, ip, simulationDetail, ssid, nodeMode }) {
           </tr>
           <tr>
             <td>average interval time</td>
-            <td>{simulationDetail.average_interval_time.toLocaleString()} msec</td>
+            <td>
+              {simulationDetail.average_interval_time.toLocaleString()} msec
+            </td>
           </tr>
           <tr>
             <td>average packet size</td>
@@ -40,18 +44,23 @@ function NodePreview({ name, ip, simulationDetail, ssid, nodeMode }) {
           </tr>
           <tr>
             <td>average new packet size</td>
-            <td>{simulationDetail.average_new_page_packet_size.toLocaleString()} MB</td>
+            <td>
+              {simulationDetail.average_new_page_packet_size.toLocaleString()}{" "}
+              MB
+            </td>
           </tr>
           <tr>
             <td>propability of load new page</td>
-            <td>{simulationDetail.probability_of_load_new_page.toLocaleString()}</td>
+            <td>
+              {simulationDetail.probability_of_load_new_page.toLocaleString()}
+            </td>
           </tr>
           <tr>
             <td>time out</td>
             <td>{simulationDetail.timeout.toLocaleString()} msec</td>
           </tr>
         </>
-      )
+      );
     } else {
       return (
         <>
@@ -68,16 +77,19 @@ function NodePreview({ name, ip, simulationDetail, ssid, nodeMode }) {
             <td>{simulationDetail.timeout.toLocaleString()} msec</td>
           </tr>
         </>
-      )
+      );
     }
   };
 
   return (
-    <div style={{
-      borderRadius: "10px",
-      padding: "10px",
-      border: "1px solid #dee2e6",
-    }}>
+    <div
+      style={{
+        borderRadius: "10px",
+        padding: "10px",
+        border: "1px solid #dee2e6",
+        marginBottom: "0.5em",
+      }}
+    >
       <table class="table">
         <tbody>
           <tr>
@@ -88,19 +100,38 @@ function NodePreview({ name, ip, simulationDetail, ssid, nodeMode }) {
             <td>ip</td>
             <td>{ip}</td>
           </tr>
-          <tr>
-            <td>ssid</td>
-            <td>{ssid}</td>
-          </tr>
-          <tr>
-            <td>mode</td>
-            <td>{nodeMode === "client" ? "Client" : "AP"}</td>
-          </tr>
-          {nodeMode === "client" ? ClientType() : ""}
+          {nodeMode === "client" ? (
+            ClientType()
+          ) : (
+            <>
+              <tr>
+                <td>wi-fi frequency</td>
+                <td>{simulationDetail.radio === "5G" ? "5GHz" : "2.4GHz"}</td>
+              </tr>
+              <tr>
+                <td>simulation types</td>
+                <td>
+                  {simulationDetail.sever_types.map(type => {
+                    if (type === "deterministic") {
+                      return <div>- Deterministic</div>;
+                    }else if (type === "web_application") {
+                      return <div>- Web</div>;
+                    }else {
+                      return <div>- File</div>;
+                    }
+                  })}
+                </td>
+              </tr>
+              <tr>
+                <td>time out</td>
+                <td>{simulationDetail.timeout}</td>
+              </tr>
+            </>
+          )}
         </tbody>
       </table>
     </div>
   );
 }
 
-export default NodePreview;
+export default NodePreviewAll;

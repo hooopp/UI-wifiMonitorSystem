@@ -121,7 +121,7 @@ const Sidebar = ({setSelectedScenario, selectedScenario}) => {
                 style={{ marginLeft: "0em", marginRight: "0em" }}
               >
                 <h1 className="modal-title fs-5" id="staticBackdropLabel">
-                  Add Scenario
+                  <span style={{fontWeight:"bold"}}>Add Scenario</span>
                 </h1>
               </div>
               <div

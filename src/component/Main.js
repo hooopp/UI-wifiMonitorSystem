@@ -3,6 +3,7 @@ import { useState } from "react";
 import styles from "./Main.module.css";
 import Detail from "./Detail";
 import Nodes from "./Nodes";
+import NodePreviewAll from "./element/NodePreviewAll";
 import Graphs from "./Graphs";
 import start from "../img/start.svg";
 import { IoIosDocument } from "react-icons/io";
@@ -36,21 +37,43 @@ function Main({ selectedScenario }) {
     refetch: refetchLoadScenarioDetail,
   } = useQuery("scenarioDetail", loadScenarioDetail);
 
+  const loadNodePreview = async () => {
+    const { data } = await axios.get(
+      `http://localhost:8000/scenario/${selectedScenario}/node/preview`
+    );
+    console.log(data);
+    return data;
+  };
+
+  const {
+    data: loadNodePreviewData,
+    status: loadNodePreviewStatus,
+    refetch: refetchLoadNodePreview,
+  } = useQuery("nodePreview", loadNodePreview, { enabled: false });
+
   useEffect(() => {
-    setMode(0)
+    setMode(0);
     refetchLoadScenarioDetail().then(({ data: loadScenarioData }) => {
-      console.log(loadScenarioData)
+      console.log(loadScenarioData);
       setScenarioName(loadScenarioData.scenario_name);
       setScenarioDesc(loadScenarioData.scenario_desc);
-      setSelectedOption(loadScenarioData.is_using_target_ap ? "onAddScenario2" : "onAddScenario1");
+      setSelectedOption(
+        loadScenarioData.is_using_target_ap
+          ? "onAddScenario2"
+          : "onAddScenario1"
+      );
       setIsEdit(false);
-      setSelectedWifiType(loadScenarioData.target_ap_radio === "5G" ? "5GHz_onAddScenario" : "2.4GHz_onAddScenario");
+      setSelectedWifiType(
+        loadScenarioData.target_ap_radio === "5G"
+          ? "5GHz_onAddScenario"
+          : "2.4GHz_onAddScenario"
+      );
       if (loadScenarioData.is_using_target_ap) {
         setSsid(loadScenarioData.target_ap_ssid);
         setPassword(loadScenarioData.target_ap_password);
         setBorderColor1("#dee2e6");
         setBorderColor2("#333");
-      }else{
+      } else {
         setBorderColor1("#333");
         setBorderColor2("#dee2e6");
         setPassword("");
@@ -60,7 +83,10 @@ function Main({ selectedScenario }) {
   }, [selectedScenario]);
 
   const patchScenario = useMutation((data) => {
-    return axios.patch(`http://127.0.0.1:8000/scenario/${selectedScenario}`, data);
+    return axios.patch(
+      `http://127.0.0.1:8000/scenario/${selectedScenario}`,
+      data
+    );
   });
 
   return (
@@ -79,7 +105,15 @@ function Main({ selectedScenario }) {
             {loadScenarioDetailData && loadScenarioDetailData.scenario_name}
           </span>
           <div>
-            <button className="button-68" role="button">
+            <button
+              className="button-68"
+              role="button"
+              data-bs-toggle="modal"
+              data-bs-target="#NodePreviewAll"
+              onClick={() => {
+                refetchLoadNodePreview();
+              }}
+            >
               <span>Preview All</span>
             </button>
             <button
@@ -160,14 +194,139 @@ function Main({ selectedScenario }) {
             setBorderColor2={setBorderColor2}
             isEdit={isEdit}
             setIsEdit={setIsEdit}
-            patchScenario = {patchScenario}
-            refetchLoadScenarioDetail = {refetchLoadScenarioDetail}
-            selectedWifiType = {selectedWifiType}
-            setSelectedWifiType = {setSelectedWifiType}
+            patchScenario={patchScenario}
+            refetchLoadScenarioDetail={refetchLoadScenarioDetail}
+            selectedWifiType={selectedWifiType}
+            setSelectedWifiType={setSelectedWifiType}
           />
         )}
-        {mode === 1 && <Nodes selectedScenario={selectedScenario}/>}
+        {mode === 1 && <Nodes selectedScenario={selectedScenario} />}
         {mode === 2 && <Graphs />}
+      </div>
+      <div
+        className="modal fade"
+        id="NodePreviewAll"
+        tabIndex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog modal-dialog-scrollable">
+          <div className="modal-content">
+            <div
+              className="modal-header"
+              style={{ marginLeft: "0em", marginRight: "0em" }}
+            >
+              <h1 className="modal-title fs-5" id="exampleModalLabel">
+                <span style={{ fontWeight: "bold" }}>Preview All</span>
+              </h1>
+              <button
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div
+              className="modal-body"
+              style={{ marginLeft: "0em", marginRight: "0em" }}
+            >
+              {loadNodePreviewData &&
+                Object.entries(loadNodePreviewData.network_info).map(
+                  ([network, info], index) => {
+                    return (
+                      <div
+                        key={index}
+                        style={{
+                          borderRadius: "10px",
+                          padding: "10px",
+                          border: "1px solid #dee2e6",
+                          marginBottom: "1em",
+                        }}
+                      >
+                        <div
+                          style={{ marginBottom: "0.5em", fontWeight: "bold" }}
+                        >
+                          ssid : {network}
+                        </div>
+                        {Object.keys(info.aps).length === 0 ? (
+                          ""
+                        ) : (
+                          <>
+                            <div
+                              style={{
+                                borderRadius: "10px",
+                                padding: "10px",
+                                border: "1px solid #dee2e6",
+                                marginBottom: "1em",
+                              }}
+                            >
+                              <div
+                                style={{
+                                  marginBottom: "0.5em",
+                                  fontWeight: "bold",
+                                }}
+                              >
+                                AP
+                              </div>
+                              {Object.entries(info.aps).map(
+                                ([ap, apInfo], index) => {
+                                  return (
+                                    <div>
+                                      <NodePreviewAll
+                                        nodeMode={"ap"}
+                                        name={apInfo.alias_name}
+                                        ip={ap}
+                                        simulationDetail={apInfo}
+                                      />
+                                    </div>
+                                  );
+                                }
+                              )}
+                            </div>
+                          </>
+                        )}
+                        {Object.keys(info.clients).length === 0 ? (
+                          ""
+                        ) : (
+                          <div
+                            style={{
+                              borderRadius: "10px",
+                              padding: "10px",
+                              border: "1px solid #dee2e6",
+                              marginBottom: "1em",
+                            }}
+                          >
+                            <div
+                              style={{
+                                marginBottom: "0.5em",
+                                fontWeight: "bold",
+                              }}
+                            >
+                              Client
+                            </div>
+                            {Object.entries(info.clients).map(
+                              ([client, clientInfo], index) => {
+                                return (
+                                  <div>
+                                    <NodePreviewAll
+                                      nodeMode={"client"}
+                                      name={clientInfo.alias_name}
+                                      ip={client}
+                                      simulationDetail={clientInfo}
+                                    />
+                                  </div>
+                                );
+                              }
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  }
+                )}
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

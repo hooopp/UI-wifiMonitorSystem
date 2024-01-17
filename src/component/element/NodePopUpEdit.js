@@ -248,7 +248,7 @@ function NodePopUpEdit({
                 id="staticBackdropLabeledit"
                 style={{ marginLeft: "0em", marginRight: "0em" }}
               >
-                Edit Node
+                <span style={{fontWeight:"bold"}}>Edit Node</span>
               </h1>
             </div>
             <div

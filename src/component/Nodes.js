@@ -219,7 +219,7 @@ function Nodes({ selectedScenario }) {
               style={{ marginLeft: "0em", marginRight: "0em" }}
             >
               <h1 className="modal-title fs-5" id="exampleModalLabel">
-                Preview Node
+                <span style={{fontWeight:"bold"}}>Preview Node</span>
               </h1>
               <button
                 type="button"

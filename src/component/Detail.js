@@ -58,7 +58,7 @@ function Detail({
               <label className="form-label">Description</label>
               <textarea
                 className="form-control"
-                style={{ resize: "none", height: "15em" }}
+                style={{ resize: "none", height: "18.5em" }}
                 disabled={!isEdit}
                 value={scenarioDesc}
                 onChange={(e) => setScenarioDesc(e.target.value)}
