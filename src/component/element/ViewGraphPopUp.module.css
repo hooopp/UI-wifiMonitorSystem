@@ -8,3 +8,8 @@
     box-shadow: 0 0 5px white; /* Change 'grey' to your desired color */
     border-color: #dee2e6;
   }
+
+  .dropdown-item.no-focus:active, .dropdown-item.no-focus:focus {
+    background-color: transparent !important;
+    color: inherit;
+  }

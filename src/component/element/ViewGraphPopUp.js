@@ -17,60 +17,146 @@ function ViewGraphPopUp({
     .map((line) => "# " + line)
     .join("\n");
   const messagesEndRef = React.useRef(null);
+  const [selecetdSsid, setSelectedSsid] = React.useState("");
+  const [selecetdNode, setSelectedNode] = React.useState("");
+
+  const raw_data = {
+    id: 13,
+    state: "finished",
+    simulation_data: {
+      "192.168.1.1": {
+        "Tx-Power": [
+          [1704356715.2266462, "6"],
+          [1704356716.4962032, "3"],
+          [1704356717.7641122, "4"],
+          [1704356719.033403, "7"],
+          [1704356720.3017914, "8"],
+          [1704356721.5713918, "5"],
+          [1704356722.8393524, "5"],
+          [1704356724.1088338, "6"],
+        ],
+        Signal: [
+          [1704356717.7641122, "4"],
+          [1704356719.033403, "7"],
+          [1704356720.3017914, "8"],
+          [1704356721.5713918, "5"],
+          [1704356722.8393524, "5"],
+          [1704356724.1088338, "6"],
+          [1704356715.2266462, "6"],
+          [1704356716.4962032, "3"],
+        ],
+        Noise: [
+          [1704356720.3017914, "8"],
+          [1704356721.5713918, "5"],
+          [1704356722.8393524, "5"],
+          [1704356724.1088338, "6"],
+          [1704356715.2266462, "6"],
+          [1704356716.4962032, "3"],
+          [1704356717.7641122, "4"],
+          [1704356719.033403, "7"],
+        ],
+        BitRate: [
+          [1704356722.8393524, "5"],
+          [1704356724.1088338, "6"],
+          [1704356715.2266462, "6"],
+          [1704356716.4962032, "3"],
+          [1704356717.7641122, "4"],
+          [1704356719.033403, "7"],
+          [1704356720.3017914, "8"],
+          [1704356721.5713918, "5"],
+        ],
+      },
+      "192.168.1.2": {
+        "Tx-Power": [
+          [1704356715.2233462, "7"],
+          [1704356716.4952032, "5"],
+          [1704356717.7841122, "6"],
+          [1704356719.033403, "7"],
+          [1704356720.3012914, "5"],
+          [1704356721.575918, "6"],
+        ],
+        Signal: [
+          [1704356721.575918, "6"],
+          [1704356715.2233462, "7"],
+          [1704356716.4952032, "5"],
+          [1704356717.7841122, "6"],
+          [1704356719.033403, "7"],
+          [1704356720.3012914, "5"],
+        ],
+        Noise: [
+          [1704356715.2233462, "7"],
+          [1704356716.4952032, "5"],
+          [1704356717.7841122, "6"],
+          [1704356719.033403, "7"],
+          [1704356720.3012914, "5"],
+          [1704356721.575918, "6"],
+        ],
+        BitRate: [
+          [1704356716.4952032, "5"],
+          [1704356717.7841122, "6"],
+          [1704356719.033403, "7"],
+          [1704356720.3012914, "5"],
+          [1704356721.575918, "6"],
+          [1704356715.2233462, "7"],
+        ],
+      },
+    },
+  };
 
   const simulation_data = {
-    ssid1: {
-      "192.168.0.1": {
-        TxPower: [
-          { timeStamp: "2022-06-01T15:00:01.323", value: 3 },
-          { timeStamp: "2022-06-01T15:00:02.323", value: 6 },
-          { timeStamp: "2022-06-01T15:00:03.323", value: 4 },
-          { timeStamp: "2022-06-01T15:00:04.323", value: 5 },
-          { timeStamp: "2022-06-01T15:00:05.323", value: 2 },
-        ],
-        Signal: [
-          { timeStamp: "2022-06-01T15:00:01.323", value: 18 },
-          { timeStamp: "2022-06-01T15:00:02.323", value: 17 },
-          { timeStamp: "2022-06-01T15:00:03.323", value: 15 },
-          { timeStamp: "2022-06-01T15:00:04.323", value: 14 },
-          { timeStamp: "2022-06-01T15:00:05.323", value: 17 },
-        ],
-        Noise: [],
-        Bitrate: [],
-      },
-      "192.168.0.2": {
-        TxPower: [],
-        Signal: [],
-        Noise: [],
-        Bitrate: [],
-      },
-    },
-    ssid2: {
-      "172.0.0.1": {
-        TxPower: [
-          { timeStamp: "2022-06-01T15:00:01.443", value: 3 },
-          { timeStamp: "2022-06-01T15:00:02.443", value: 6 },
-          { timeStamp: "2022-06-01T15:00:03.443", value: 4 },
-          { timeStamp: "2022-06-01T15:00:04.443", value: 5 },
-          { timeStamp: "2022-06-01T15:00:05.443", value: 2 },
-        ],
-        Signal: [
-          { timeStamp: "2022-06-01T15:00:01.443", value: 18 },
-          { timeStamp: "2022-06-01T15:00:02.443", value: 17 },
-          { timeStamp: "2022-06-01T15:00:03.443", value: 15 },
-          { timeStamp: "2022-06-01T15:00:04.443", value: 14 },
-          { timeStamp: "2022-06-01T15:00:05.443", value: 17 },
-        ],
-        Noise: [],
-        Bitrate: [],
-      },
-      "172.0.0.2": {
-        TxPower: [],
-        Signal: [],
-        Noise: [],
-        Bitrate: [],
-      },
-    },
+    nodes: ["192.168.1.1", "192.168.1.2"],
+    TxPower: [
+      { timeStamp: "08:25:15", "192.168.1.1": "6", "192.168.1.2": "7" },
+      { timeStamp: "08:25:16", "192.168.1.1": "3", "192.168.1.2": "5" },
+      { timeStamp: "08:25:17", "192.168.1.1": "4", "192.168.1.2": "6" },
+      { timeStamp: "08:25:18", "192.168.1.1": "7", "192.168.1.2": "7" },
+      { timeStamp: "08:25:19", "192.168.1.1": "8", "192.168.1.2": "5" },
+      { timeStamp: "08:25:20", "192.168.1.1": "5", "192.168.1.2": "6" },
+      { timeStamp: "08:25:21", "192.168.1.1": "5", "192.168.1.2": 0 },
+      { timeStamp: "08:25:22", "192.168.1.1": "6", "192.168.1.2": 0 },
+    ],
+    Signal: [
+      { timeStamp: "08:25:15", "192.168.1.1": "4", "192.168.1.2": "6" },
+      { timeStamp: "08:25:16", "192.168.1.1": "7", "192.168.1.2": "7" },
+      { timeStamp: "08:25:17", "192.168.1.1": "8", "192.168.1.2": "5" },
+      { timeStamp: "08:25:18", "192.168.1.1": "5", "192.168.1.2": "6" },
+      { timeStamp: "08:25:19", "192.168.1.1": "5", "192.168.1.2": "7" },
+      { timeStamp: "08:25:20", "192.168.1.1": "6", "192.168.1.2": "5" },
+      { timeStamp: "08:25:21", "192.168.1.1": "6", "192.168.1.2": 0 },
+      { timeStamp: "08:25:22", "192.168.1.1": "3", "192.168.1.2": 0 },
+    ],
+    Noise: [
+      { timeStamp: "08:25:15", "192.168.1.1": "8", "192.168.1.2": "7" },
+      { timeStamp: "08:25:16", "192.168.1.1": "5", "192.168.1.2": "5" },
+      { timeStamp: "08:25:17", "192.168.1.1": "5", "192.168.1.2": "6" },
+      { timeStamp: "08:25:18", "192.168.1.1": "6", "192.168.1.2": "7" },
+      { timeStamp: "08:25:19", "192.168.1.1": "6", "192.168.1.2": "5" },
+      { timeStamp: "08:25:20", "192.168.1.1": "3", "192.168.1.2": "6" },
+      { timeStamp: "08:25:21", "192.168.1.1": "4", "192.168.1.2": 0 },
+      { timeStamp: "08:25:22", "192.168.1.1": "7", "192.168.1.2": 0 },
+    ],
+    BitRate: [
+      { timeStamp: "08:25:15", "192.168.1.1": "5", "192.168.1.2": "5" },
+      { timeStamp: "08:25:16", "192.168.1.1": "6", "192.168.1.2": "6" },
+      { timeStamp: "08:25:17", "192.168.1.1": "6", "192.168.1.2": "7" },
+      { timeStamp: "08:25:18", "192.168.1.1": "3", "192.168.1.2": "5" },
+      { timeStamp: "08:25:19", "192.168.1.1": "4", "192.168.1.2": "6" },
+      { timeStamp: "08:25:20", "192.168.1.1": "7", "192.168.1.2": "7" },
+      { timeStamp: "08:25:21", "192.168.1.1": "8", "192.168.1.2": 0 },
+      { timeStamp: "08:25:22", "192.168.1.1": "5", "192.168.1.2": 0 },
+    ],
+  };
+
+  const handleDownload = () => {
+    const json = JSON.stringify(simulation_data);
+    const blob = new Blob([json], { type: "application/json" });
+    const href = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = href;
+    link.download = "data.json";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   useEffect(() => {
@@ -208,34 +294,56 @@ function ViewGraphPopUp({
                 >
                   Visualization
                 </div>
-                <div style={{ display: "flex" }}>
-                  <select
-                    class="form-select"
-                    aria-label="Default select example"
-                    style={{ width: "15em", margin: "1em" }}
-                  >
-                    {simulation_data &&
-                      Object.entries(simulation_data).map(
-                        ([key, value], index) => <option>{key}</option>
-                      )}
-                  </select>
-                  <select
-                    class="form-select"
-                    aria-label="Default select example"
-                    style={{ width: "15em", margin: "1em" }}
-                  >
-                    {simulation_data &&
-                      Object.entries(simulation_data).map(
-                        ([key, value], index) =>
-                          key === "ssid2"
-                            ? Object.entries(value).map(
-                                ([key2, value2], index) => (
-                                  <option>{key2}</option>
-                                )
-                              )
-                            : ""
-                      )}
-                  </select>
+                <div style={{ margin: "1em", marginBottom: "0.5em" }}>
+                  <div class="dropdown">
+                    <button
+                      class="btn btn-dark dropdown-toggle"
+                      type="button"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                    >
+                      <span style={{ fontWeight: "bold" }}>select nodes</span>
+                    </button>
+                    <ul class="dropdown-menu">
+                      <li>
+                        <li>
+                          <div style={{ display: "flex" }}>
+                            <input></input>
+                            <span class="dropdown-item-text">
+                              Dropdown item text
+                            </span>
+                          </div>
+                        </li>
+                      </li>
+                      <li>
+                        <button class="dropdown-item" type="button">
+                          Another action
+                        </button>
+                      </li>
+                      <li>
+                        <button class="dropdown-item" type="button">
+                          Something else here
+                        </button>
+                      </li>
+                    </ul>
+                  </div>
+                  {/* <div>
+                    <button
+                      type="button"
+                      class="btn btn-dark"
+                      style={{
+                        width: "9em",
+                        height: "2.25em",
+                        fontWeight: "bold",
+                        marginLeft: "1em",
+                      }}
+                      onClick={() => {
+                        handleDownload();
+                      }}
+                    >
+                      export as JSON
+                    </button>
+                  </div> */}
                 </div>
                 <div
                   style={{
@@ -246,11 +354,6 @@ function ViewGraphPopUp({
                 >
                   Tx-Power
                 </div>
-                {simulation_data && (
-                  <RechartGraph
-                    data={simulation_data.ssid1["192.168.0.1"].TxPower}
-                  />
-                )}
                 <div
                   style={{
                     fontWeight: "bold",
@@ -260,11 +363,6 @@ function ViewGraphPopUp({
                 >
                   Signal
                 </div>
-                {simulation_data && (
-                  <RechartGraph
-                    data={simulation_data.ssid1["192.168.0.1"].Signal}
-                  />
-                )}
               </div>
             </div>
           </div>
