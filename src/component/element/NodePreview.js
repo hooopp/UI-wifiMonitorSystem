@@ -78,7 +78,7 @@ function NodePreview({ name, ip, simulationDetail, ssid, nodeMode }) {
       padding: "10px",
       border: "1px solid #dee2e6",
     }}>
-      <table class="table">
+      <table className="table">
         <tbody>
           <tr>
             <td>node name</td>

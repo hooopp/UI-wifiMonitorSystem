@@ -1,2 +1,2 @@
-- duplicate กดแล้วเปนสีฟ้า
-- radio button ตอนเลือก ap ให้เอาออก
+- api preview ถ้าไม่แอด ap ก่อน client แล้ว scenario types จะไม่ขึ้น
+- attribute ที่ส่งมาเขียน server ผิดจะแก้ก็ได้ แต่บอกด้วย

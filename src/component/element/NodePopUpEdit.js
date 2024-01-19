@@ -49,7 +49,6 @@ function NodePopUpEdit({
   }, [nodeMode]);
 
   useEffect(() => {
-    console.log(loadNodeDetailData);
     if (loadNodeDetailData) {
       setNodeName(loadNodeDetailData.alias_name);
       setIpAddress(loadNodeDetailData.control_ip_addr);

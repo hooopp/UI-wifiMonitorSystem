@@ -201,7 +201,7 @@ function Main({ selectedScenario }) {
           />
         )}
         {mode === 1 && <Nodes selectedScenario={selectedScenario} />}
-        {mode === 2 && <Graphs />}
+        {mode === 2 && <Graphs selectedScenario={selectedScenario} />}
       </div>
       <div
         className="modal fade"

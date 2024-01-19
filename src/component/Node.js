@@ -44,12 +44,12 @@ function Node({
   return (
     <div>
       <div className={styles.Node} style={{ marginBottom: "0.5em" }}>
-        <span style={{ textAlign: "left", width: "200px", marginLeft: "1em" }}>
+        <div style={{ textAlign: "left", width: "200px", marginLeft: "1em" }}>
           {name}
-        </span>
-        <span>{ip}</span>
-        <span>{mode}</span>
-        <span>{ssid}</span>
+        </div>
+        <div>{ip}</div>
+        <div>{mode}</div>
+        <div>{ssid}</div>
         <div className="btn-group">
           <button
             className="button-2"

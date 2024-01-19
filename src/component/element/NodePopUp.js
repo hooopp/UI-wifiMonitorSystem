@@ -252,6 +252,7 @@ function NodePopUp({ selectedScenario, refetchLoadNode }) {
                     onChange={(e) => {
                       setNodeName(e.target.value);
                     }}
+                    maxLength="18"
                   />
                 </div>
                 <div className="mb-3">
@@ -558,6 +559,7 @@ function NodePopUp({ selectedScenario, refetchLoadNode }) {
                 data-bs-dismiss="modal"
                 aria-label="Close"
                 ref={closeRef}
+                style={{border:"none"}}
               ></button>
               <button
                 type="button"
