@@ -565,18 +565,20 @@ function NodePopUpEdit({
             >
               <button
                 type="button"
-                className="btn btn-primary"
+                className="btn btn-dark"
                 data-bs-dismiss="modal"
                 onClick={() => {
                   editNodeFunction();
                 }}
+                style={{fontWeight:"bold"}}
               >
                 Confirm
               </button>
               <button
                 type="button"
-                className="btn btn-secondary"
+                className="btn btn-danger"
                 data-bs-dismiss="modal"
+                style={{fontWeight:"bold"}}
               >
                 Cancel
               </button>

@@ -106,7 +106,7 @@ function Main({ selectedScenario }) {
           </span>
           <div>
             <button
-              className="button-68"
+              className="btn btn-dark"
               role="button"
               data-bs-toggle="modal"
               data-bs-target="#NodePreviewAll"
@@ -114,10 +114,10 @@ function Main({ selectedScenario }) {
                 refetchLoadNodePreview();
               }}
             >
-              <span>Preview All</span>
+              <span style={{fontWeight:"bold"}}>Preview All</span>
             </button>
             <button
-              className="button-68"
+              className="btn btn-dark"
               role="button"
               style={{ marginLeft: "1em" }}
             >
@@ -125,9 +125,9 @@ function Main({ selectedScenario }) {
                 <svg
                   style={{ width: "20", height: "20", marginRight: "0.25em" }}
                 >
-                  <image href={start} width="15" height="15" />
+                  <image href={start} width="15" height="15"/>
                 </svg>
-                Start
+                <span style={{fontWeight:"bold"}}>Start</span>
               </div>
             </button>
           </div>

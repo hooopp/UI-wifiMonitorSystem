@@ -563,16 +563,17 @@ function NodePopUp({ selectedScenario, refetchLoadNode }) {
               ></button>
               <button
                 type="button"
-                className="btn btn-primary"
+                className="btn btn-dark"
                 onClick={() => {
                   addNodeFunction();
                 }}
+                style={{fontWeight:"bold"}}
               >
-                Confirm
+                Confirm 
               </button>
               <button
                 type="button"
-                className="btn btn-secondary"
+                className="btn btn-danger"
                 data-bs-dismiss="modal"
                 onClick={() => {
                   refetchLoadNode();
@@ -582,6 +583,7 @@ function NodePopUp({ selectedScenario, refetchLoadNode }) {
                   setSsid("");
                   closeRef.current.click();
                 }}
+                style={{fontWeight:"bold"}}
               >
                 Cancel
               </button>

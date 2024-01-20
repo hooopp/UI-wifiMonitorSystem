@@ -325,7 +325,7 @@ function ViewGraphPopUp({ reportIsClicked, loadGraphRefetch }) {
                   Visualization
                 </div>
                 <div style={{ margin: "1em", marginBottom: "0.5em" }}>
-                  <div class="dropdown">
+                  <div className="dropdown">
                     <button
                       className="btn btn-dark dropdown-toggle"
                       type="button"
@@ -336,10 +336,10 @@ function ViewGraphPopUp({ reportIsClicked, loadGraphRefetch }) {
                       <span style={{ fontWeight: "bold" }}>select nodes</span>
                     </button>
                     <button className="btn btn-dark" style={{fontWeight:"bold", marginLeft:"0.5em"}} onClick={()=>{downloadData(simulationData)}}>export JSON</button>
-                    <ul class="dropdown-menu" style={{ width: "18em" }}>
+                    <ul className="dropdown-menu" style={{ width: "18em" }}>
                       {simulationData.nodes.map((node, index) => {
                         return (
-                          <li>
+                          <li key={index}>
                             <div style={{ display: "flex" }}>
                               <div className={styles.autoScroll}>
                                 <input
@@ -385,7 +385,7 @@ function ViewGraphPopUp({ reportIsClicked, loadGraphRefetch }) {
                               <div className="mb3">
                                 <input
                                   className="form-control"
-                                  id="ee"
+                                  id={`inputColor${index}`}
                                   style={{
                                     width: "6em",
                                     position: "relative",

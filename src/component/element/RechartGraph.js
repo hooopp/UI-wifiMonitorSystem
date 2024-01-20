@@ -18,9 +18,9 @@ function RechartGraph({ data, listNode }) {
         style={{ margin: "-0.5em" }}
       >
         <defs>
-          {listNode.map((node) => {
+          {listNode.map((node,index) => {
             return (
-              (node.checked &&<linearGradient id={node.node} x1="0" y1="0" x2="0" y2="1">
+              (node.checked &&<linearGradient key={index} id={node.node} x1="0" y1="0" x2="0" y2="1">
                 <stop offset="5%" stopColor={node.color} stopOpacity={0.8} />
                 <stop offset="95%" stopColor={node.color} stopOpacity={0} />
               </linearGradient>)
@@ -31,7 +31,7 @@ function RechartGraph({ data, listNode }) {
         <YAxis />
         <CartesianGrid strokeDasharray="3 3" />
         <Tooltip />
-        {listNode.map((node) => {
+        {listNode.map((node,index) => {
           return (
             node.checked && (
               <Area
@@ -40,6 +40,7 @@ function RechartGraph({ data, listNode }) {
                 stroke={node.color}
                 fillOpacity={1}
                 fill={`url(#${node.node})`}
+                key={index}
               />
             )
           );

@@ -27,7 +27,6 @@ function Detail({
   selectedWifiType,
   setSelectedWifiType,
 }) {
-
   return (
     <div className={styles.Detail}>
       <div>
@@ -96,49 +95,60 @@ function Detail({
           {isEdit ? (
             <>
               <button
-                className="button-68"
+                className="btn btn-dark"
                 role="button"
-                style={{ marginRight: "1em" }}
+                style={{ marginRight: "1em", fontWeight:"bold" }}
               >
                 <span
-                  onClick={() => { (ssid === "" || password === "") && selectedOption === "onAddScenario2" ? alert("Please fill in the SSID and Password") :
-                    patchScenario.mutate(
-                      {
-                        scenario_name: scenarioName,
-                        scenario_desc: scenarioDesc,
-                        is_using_target_ap:
-                          selectedOption === "onAddScenario1" ? false : true,
-                        target_ap_ssid: ssid,
-                        target_ap_password: password,
-                        target_ap_radio: selectedWifiType === "2.4GHz_onAddScenario" ? "2.4G" : "5G",
-                      },
-                      {
-                        onSuccess: () => {
-                          
-                          window.location.reload();
-                        },
-                      }
-                    );
+                  onClick={() => {
+                    (ssid === "" || password === "") &&
+                    selectedOption === "onAddScenario2"
+                      ? alert("Please fill in the SSID and Password")
+                      : patchScenario.mutate(
+                          {
+                            scenario_name: scenarioName,
+                            scenario_desc: scenarioDesc,
+                            is_using_target_ap:
+                              selectedOption === "onAddScenario1"
+                                ? false
+                                : true,
+                            target_ap_ssid: ssid,
+                            target_ap_password: password,
+                            target_ap_radio:
+                              selectedWifiType === "2.4GHz_onAddScenario"
+                                ? "2.4G"
+                                : "5G",
+                          },
+                          {
+                            onSuccess: () => {
+                              window.location.reload();
+                            },
+                          }
+                        );
                   }}
                 >
                   Confirm
                 </span>
               </button>
               <button
-                className="button-68"
+                className="btn btn-danger"
                 role="button"
-                onClick={() => {setIsEdit(false);window.location.reload();}}
+                onClick={() => {
+                  setIsEdit(false);
+                  window.location.reload();
+                }}
+                style={{fontWeight:"bold"}}
               >
                 <span>Cancel</span>
               </button>
             </>
           ) : (
             <button
-              className="button-68"
+              className="btn btn-dark"
               role="button"
               onClick={() => setIsEdit(true)}
             >
-              <span>Edit</span>
+              <span style={{ fontWeight: "bold" }}>Edit</span>
             </button>
           )}
         </div>
