@@ -1,12 +1,9 @@
 import React, { useEffect } from "react";
 import styles from "./ViewGraphPopUp.module.css";
 import RechartGraph from "./RechartGraph";
+import { set } from "date-fns";
 
-function ViewGraphPopUp({
-  reportIsClicked,
-  loadGraphDetailData,
-  loadGraphRefetch,
-}) {
+function ViewGraphPopUp({ reportIsClicked, loadGraphRefetch }) {
   const [name, setName] = React.useState("");
   const [state, setState] = React.useState("");
   const [createdTime, setCreatedTime] = React.useState("");
@@ -19,8 +16,12 @@ function ViewGraphPopUp({
   const messagesEndRef = React.useRef(null);
   const [selecetdSsid, setSelectedSsid] = React.useState("");
   const [selecetdNode, setSelectedNode] = React.useState("");
+  const [listNode, setListNode] = React.useState([
+    { node: "192.168.1.1", color: "#8884d8", checked: true },
+    { node: "192.168.1.2", color: "#82ca9d", checked: true },
+  ]);
 
-  const raw_data = {
+  const loadGraphDetailData = {
     id: 13,
     state: "finished",
     simulation_data: {
@@ -101,9 +102,29 @@ function ViewGraphPopUp({
         ],
       },
     },
+    scenario_id: 2,
+    scenario_snapshot: {
+      "GalaxyNote10+25bc": {
+        is_target_ap: true,
+        aps: {},
+        clients: {
+          "192.168.1.1": {
+            simulation_type: "deterministic",
+            timeout: 300,
+            average_interval_time: 10,
+            average_packet_size: 128,
+            alias_name: "w9",
+          },
+        },
+      },
+    },
+    title: "test13",
+    state_message:
+      "192.168.1.1 : {'message': 'wifi is connected'}\nthis_device: connected to GalaxyNote10+25bc with ip_address 192.168.86.50\n192.168.1.1 : {'message': 'simulation task has been scheduled'}\nw9 deterministic_client 1704356715.2606883: hello change from term to INT\nthis_device deterministic_server 1704356715.0653534: hello change from term to INT\r\nthis_device deterministic_server 1704356715.0663533: server start at 0.0.0.0:8888\r\n[Errno 110] Connect call failed ('192.168.86.50', 8888)\nw9 deterministic_client 1704356847.4718745: \n\nexited\n\n\nthis_device deterministic_server 1704357020.093951: Closing server socket.\r\nthis_device deterministic_server 1704357020.094738: Cancel all pending tasks(handle_client tasks) for exit.\r\nWait for all tasks to terminate: [<coroutine object IocpProactor.accept.<locals>.accept_coro at 0x000002395AB7CF20>]\r\nthis_device deterministic_server 1704357020.0957787: All coroutines completed. Exiting.\r\nthis_device deterministic_server 1704357020.0977912: \r\n\r\nexited\r\n\r\n\r\n",
+    created_at: "2024-01-04T15:25:05.881919",
   };
 
-  const simulation_data = {
+  const simulationData = {
     nodes: ["192.168.1.1", "192.168.1.2"],
     TxPower: [
       { timeStamp: "08:25:15", "192.168.1.1": "6", "192.168.1.2": "7" },
@@ -147,8 +168,17 @@ function ViewGraphPopUp({
     ],
   };
 
-  const handleDownload = () => {
-    const json = JSON.stringify(simulation_data);
+  function getRandomColor() {
+    return (
+      "#" +
+      Math.floor(Math.random() * 16777215)
+        .toString(16)
+        .padStart(6, "0")
+    );
+  }
+
+  function downloadData(data) {
+    const json = JSON.stringify(data);
     const blob = new Blob([json], { type: "application/json" });
     const href = URL.createObjectURL(blob);
     const link = document.createElement("a");
@@ -157,7 +187,7 @@ function ViewGraphPopUp({
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-  };
+  }
 
   useEffect(() => {
     if (reportIsClicked) {
@@ -297,53 +327,95 @@ function ViewGraphPopUp({
                 <div style={{ margin: "1em", marginBottom: "0.5em" }}>
                   <div class="dropdown">
                     <button
-                      class="btn btn-dark dropdown-toggle"
+                      className="btn btn-dark dropdown-toggle"
                       type="button"
                       data-bs-toggle="dropdown"
                       aria-expanded="false"
+                      style={{marginLeft:"1em"}}
                     >
                       <span style={{ fontWeight: "bold" }}>select nodes</span>
                     </button>
-                    <ul class="dropdown-menu">
-                      <li>
-                        <li>
-                          <div style={{ display: "flex" }}>
-                            <input></input>
-                            <span class="dropdown-item-text">
-                              Dropdown item text
-                            </span>
-                          </div>
-                        </li>
-                      </li>
-                      <li>
-                        <button class="dropdown-item" type="button">
-                          Another action
-                        </button>
-                      </li>
-                      <li>
-                        <button class="dropdown-item" type="button">
-                          Something else here
-                        </button>
-                      </li>
+                    <button className="btn btn-dark" style={{fontWeight:"bold", marginLeft:"0.5em"}} onClick={()=>{downloadData(simulationData)}}>export JSON</button>
+                    <ul class="dropdown-menu" style={{ width: "18em" }}>
+                      {simulationData.nodes.map((node, index) => {
+                        return (
+                          <li>
+                            <div style={{ display: "flex" }}>
+                              <div className={styles.autoScroll}>
+                                <input
+                                  className="form-check-input"
+                                  type="checkbox"
+                                  id={index}
+                                  value=""
+                                  aria-label=""
+                                  style={{
+                                    position: "relative",
+                                    left: "0.3em",
+                                  }}
+                                  checked={listNode[index].checked}
+                                  onChange={(e) => {
+                                    setListNode(
+                                      listNode.map((item, i) => {
+                                        if (i === index) {
+                                          return {
+                                            ...item,
+                                            checked: !item.checked,
+                                          };
+                                        } else {
+                                          return item;
+                                        }
+                                      })
+                                    );
+                                  }}
+                                />
+                              </div>
+                              <div>
+                                <span
+                                  className="dropdown-item-text"
+                                  style={{
+                                    width: "10em",
+                                    paddingLeft: "0em",
+                                    position: "relative",
+                                    left: "0.5em",
+                                  }}
+                                >
+                                  {node}
+                                </span>
+                              </div>
+                              <div className="mb3">
+                                <input
+                                  className="form-control"
+                                  id="ee"
+                                  style={{
+                                    width: "6em",
+                                    position: "relative",
+                                    left: "-1em",
+                                    margin: "0.25em 0em",
+                                    color: "black",
+                                  }}
+                                  value={listNode[index].color}
+                                  onChange={(e) => {
+                                    setListNode(
+                                      listNode.map((item, i) => {
+                                        if (i === index) {
+                                          return {
+                                            ...item,
+                                            color: e.target.value,
+                                          };
+                                        } else {
+                                          return item;
+                                        }
+                                      })
+                                    );
+                                  }}
+                                />
+                              </div>
+                            </div>
+                          </li>
+                        );
+                      })}
                     </ul>
                   </div>
-                  {/* <div>
-                    <button
-                      type="button"
-                      class="btn btn-dark"
-                      style={{
-                        width: "9em",
-                        height: "2.25em",
-                        fontWeight: "bold",
-                        marginLeft: "1em",
-                      }}
-                      onClick={() => {
-                        handleDownload();
-                      }}
-                    >
-                      export as JSON
-                    </button>
-                  </div> */}
                 </div>
                 <div
                   style={{
@@ -352,8 +424,12 @@ function ViewGraphPopUp({
                     marginBottom: "1em",
                   }}
                 >
-                  Tx-Power
+                  Tx Power
                 </div>
+                <RechartGraph
+                  data={simulationData["TxPower"]}
+                  listNode={listNode}
+                />
                 <div
                   style={{
                     fontWeight: "bold",
@@ -363,6 +439,36 @@ function ViewGraphPopUp({
                 >
                   Signal
                 </div>
+                <RechartGraph
+                  data={simulationData["Signal"]}
+                  listNode={listNode}
+                />
+                <div
+                  style={{
+                    fontWeight: "bold",
+                    marginLeft: "2em",
+                    marginBottom: "1em",
+                  }}
+                >
+                  Noise
+                </div>
+                <RechartGraph
+                  data={simulationData["Noise"]}
+                  listNode={listNode}
+                />
+                <div
+                  style={{
+                    fontWeight: "bold",
+                    marginLeft: "2em",
+                    marginBottom: "1em",
+                  }}
+                >
+                  Bit Rate
+                </div>
+                <RechartGraph
+                  data={simulationData["BitRate"]}
+                  listNode={listNode}
+                />
               </div>
             </div>
           </div>
