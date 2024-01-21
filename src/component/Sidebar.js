@@ -10,8 +10,9 @@ import axios from "axios";
 import SelectScenarioType from "./element/SelectScenarioType";
 import { FaArrowAltCircleLeft } from "react-icons/fa";
 import { FaArrowAltCircleRight } from "react-icons/fa";
+import { TbFileImport } from "react-icons/tb";
 
-const Sidebar = ({setSelectedScenario, selectedScenario}) => {
+const Sidebar = ({ setSelectedScenario, selectedScenario }) => {
   const [selectedOption, setSelectedOption] = useState("onDetail1");
   const [borderColor1, setBorderColor1] = useState("#333");
   const [borderColor2, setBorderColor2] = useState("#dee2e6");
@@ -20,7 +21,10 @@ const Sidebar = ({setSelectedScenario, selectedScenario}) => {
   const [ssid, setSsid] = React.useState("");
   const [page, setPage] = React.useState(1);
   const [password, setPassword] = React.useState("");
-  const [selectedWifiType, setSelectedWifiType] = React.useState("2.4GHz_onDetail");
+  const [selectedWifiType, setSelectedWifiType] =
+    React.useState("2.4GHz_onDetail");
+    const [selectedWifiTypeAP, setSelectedWifiTypeAP] =
+    React.useState("2.4GHz_onDetail");
   const [searchVariable, setSearchVariable] = React.useState("");
 
   const mutation = useMutation((data) => {
@@ -29,7 +33,9 @@ const Sidebar = ({setSelectedScenario, selectedScenario}) => {
 
   const loadScenario = async () => {
     const { data } = await axios.get(
-      `http://127.0.0.1:8000/scenario?page_size=9&page=${page}${searchVariable ? `&search=${searchVariable}` : ""}`
+      `http://127.0.0.1:8000/scenario?page_size=9&page=${page}${
+        searchVariable ? `&search=${searchVariable}` : ""
+      }`
     );
     return data;
   };
@@ -39,6 +45,44 @@ const Sidebar = ({setSelectedScenario, selectedScenario}) => {
     status: loadScenarioStatus,
     refetch: refetchLoadScenario,
   } = useQuery("scenario", loadScenario);
+
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [fileContent, setFileContent] = useState(null);
+
+  const handleFileUpload = (event) => {
+    setSelectedFile(event.target.files[0]);
+  };
+
+  const checkFileStructure = () => {
+    console.log(fileContent)
+  }
+
+  const handleUpload = () => {
+    if (!selectedFile) {
+      console.log("No file selected!");
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function (event) {
+      try {
+        const parsedData = JSON.parse(event.target.result);
+        setFileContent(parsedData);
+      } catch (error) {
+        if (error instanceof SyntaxError) {
+          console.error("Invalid JSON in file.");
+        } else {
+          throw error; // re-throw the error unchanged
+        }
+      }
+    };
+    reader.onerror = function (event) {
+      console.error("File could not be read! Code " + event.target.error.code);
+    };
+    reader.readAsText(selectedFile);
+
+    return checkFileStructure();
+  };
 
   useEffect(() => {
     refetchLoadScenario().then(({ data: loadScenarioData }) => {
@@ -100,133 +144,20 @@ const Sidebar = ({setSelectedScenario, selectedScenario}) => {
           data-bs-toggle="modal"
           data-bs-target="#staticBackdrop"
           style={{ borderRadius: "50px", textAlign: "center", color: "grey" }}
-          onClick={() => {setScenarioName("");setScenarioDesc("");setSsid("");setPassword("");setSelectedOption("onDetail1");setBorderColor1("#333");setBorderColor2("#dee2e6");}}
+          onClick={() => {
+            setScenarioName("");
+            setScenarioDesc("");
+            setSsid("");
+            setPassword("");
+            setSelectedOption("onDetail1");
+            setBorderColor1("#333");
+            setBorderColor2("#dee2e6");
+          }}
         >
           <IoMdAdd />
           <span style={{ fontSize: "1em" }}>Add Scenario</span>
         </button>
-        <div
-          className="modal fade"
-          id="staticBackdrop"
-          data-bs-backdrop="static"
-          data-bs-keyboard="false"
-          tabIndex="-1"
-          aria-labelledby="staticBackdropLabel"
-          aria-hidden="true"
-        >
-          <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-            <div className="modal-content">
-              <div
-                className="modal-header"
-                style={{ marginLeft: "0em", marginRight: "0em" }}
-              >
-                <h1 className="modal-title fs-5" id="staticBackdropLabel">
-                  <span style={{fontWeight:"bold"}}>Add Scenario</span>
-                </h1>
-              </div>
-              <div
-                className="modal-body"
-                style={{ marginLeft: "0em", marginRight: "0em" }}
-              >
-                <div className="mb-3">
-                  <label
-                    htmlFor="exampleFormControlInput1"
-                    className="form-label"
-                  >
-                    Scenario Name
-                  </label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="exampleFormControlInput1"
-                    placeholder="Scenario Name"
-                    value={scenarioName}
-                    onChange={(e) => setScenarioName(e.target.value)}
-                  />
-                </div>
-                <div className="mb-3">
-                  <label
-                    htmlFor="exampleFormControlTextarea1"
-                    className="form-label"
-                  >
-                    Description
-                  </label>
-                  <textarea
-                    className="form-control"
-                    id="exampleFormControlTextarea1"
-                    rows="6"
-                    placeholder="Description"
-                    value={scenarioDesc}
-                    onChange={(e) => setScenarioDesc(e.target.value)}
-                    style={{ resize: "none" }}
-                  ></textarea>
-                </div>
-                <SelectScenarioType
-                  data={{
-                    name: "onDetail",
-                    isEdit: true,
-                    selectedOption,
-                    setSelectedOption,
-                    borderColor1,
-                    setBorderColor1,
-                    borderColor2,
-                    setBorderColor2,
-                    ssid,
-                    setSsid,
-                    password,
-                    setPassword,
-                    selectedWifiType,
-                    setSelectedWifiType
-                  }}
-                />
-              </div>
-              <div
-                className="modal-footer"
-                style={{
-                  marginLeft: "0em",
-                  marginRight: "0em",
-                  textAlign: "center",
-                }}
-              >
-                <button
-                  type="button"
-                  className="btn btn-dark"
-                  onClick={() => {
-                    mutation.mutate(
-                      {
-                        scenario_name: scenarioName,
-                        scenario_desc: scenarioDesc,
-                        is_using_target_ap:
-                          selectedOption === "onDetail1" ? false : true,
-                        target_ap_ssid: ssid,
-                        target_ap_password: password,
-                        target_ap_radio: selectedWifiType === "2.4GHz_onDetail" ? "2.4G" : "5G",
-                      },
-                      {
-                        onSuccess: (data) => {
-                          setSelectedScenario(data.data.scenario_id);
-                          refetchLoadScenario();
-                        },
-                      }
-                    );
-                  }}
-                  data-bs-dismiss="modal"
-                  style={{fontWeight:"bold"}}
-                >
-                  Confirm
-                </button>
-                <button
-                  type="button"
-                  className="btn btn-danger"
-                  data-bs-dismiss="modal"
-                  style={{fontWeight:"bold"}}
-                >
-                  Cancel
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
+
         <div>
           {loadScenarioData &&
             loadScenarioData.map((scenario, i) => (
@@ -282,6 +213,219 @@ const Sidebar = ({setSelectedScenario, selectedScenario}) => {
         <span style={{ fontWeight: "bold" }}>Next </span>
         <FaArrowAltCircleRight style={{ fontSize: "2rem" }} />
       </button>
+      {/* modal */}
+      <div
+        className="modal fade"
+        id="importModal"
+        data-bs-backdrop="static"
+        data-bs-keyboard="false"
+        tabIndex="-1"
+        aria-labelledby="staticBackdropLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div
+              class="modal-header"
+              style={{ marginLeft: "0em", marginRight: "0em" }}
+            >
+              <h1
+                class="modal-title fs-5"
+                id="staticBackdropLabel"
+                style={{ fontWeight: "bold" }}
+              >
+                Import JSON
+              </h1>
+            </div>
+            <div class="modal-body">
+              <div style={{display:"flex"}}>
+                <div style={{width:"23em"}}>
+                  <input
+                    style={{ display: "none" }}
+                    id="file-upload"
+                    type="file"
+                    accept=".json"
+                    onChange={handleFileUpload}
+                  />
+                  <label htmlFor="file-upload" className="btn btn-secondary">
+                    Choose File
+                  </label>
+                  {selectedFile && (
+                    <span style={{marginLeft:"0.5em"}}>
+                      {selectedFile.name.length > 20
+                        ? selectedFile.name.substring(0, 20) + "... .json"
+                        : selectedFile.name}
+                    </span>
+                  )}
+                </div>
+
+                <button
+                  onClick={handleUpload}
+                  className="btn btn-secondary"
+                  style={{ border: "none", marginLeft: "2em" }}
+                >
+                  Check
+                </button>
+              </div>
+            </div>
+            <div
+              class="modal-footer"
+              style={{ marginLeft: "0em", marginRight: "0em" }}
+            >
+              <button
+                type="button"
+                className="btn btn-dark"
+                data-bs-dismiss="modal"
+              >
+                Confirm
+              </button>
+              <button
+                type="button"
+                class="btn btn-danger"
+                data-bs-dismiss="modal"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        className="modal fade"
+        id="staticBackdrop"
+        data-bs-backdrop="static"
+        data-bs-keyboard="false"
+        tabIndex="-1"
+        aria-labelledby="staticBackdropLabel"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+          <div className="modal-content">
+            <div
+              className="modal-header"
+              style={{ marginLeft: "0em", marginRight: "0em" }}
+            >
+              <h1 className="modal-title fs-5" id="staticBackdropLabel">
+                <span style={{ fontWeight: "bold" }}>Add Scenario</span>
+              </h1>
+              <span>
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  data-bs-toggle="modal"
+                  data-bs-target="#importModal"
+                >
+                  <TbFileImport style={{ fontSize: "1.25em" }} />
+                  <span style={{ marginLeft: "0.25em" }}>Import JSON</span>
+                </button>
+              </span>
+            </div>
+            <div
+              className="modal-body"
+              style={{ marginLeft: "0em", marginRight: "0em" }}
+            >
+              <div className="mb-3">
+                <label
+                  htmlFor="exampleFormControlInput1"
+                  className="form-label"
+                >
+                  Scenario Name
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="exampleFormControlInput1"
+                  placeholder="Scenario Name"
+                  value={scenarioName}
+                  onChange={(e) => setScenarioName(e.target.value)}
+                />
+              </div>
+              <div className="mb-3">
+                <label
+                  htmlFor="exampleFormControlTextarea1"
+                  className="form-label"
+                >
+                  Description
+                </label>
+                <textarea
+                  className="form-control"
+                  id="exampleFormControlTextarea1"
+                  rows="6"
+                  placeholder="Description"
+                  value={scenarioDesc}
+                  onChange={(e) => setScenarioDesc(e.target.value)}
+                  style={{ resize: "none" }}
+                ></textarea>
+              </div>
+              <SelectScenarioType
+                data={{
+                  name: "onDetail",
+                  isEdit: true,
+                  selectedOption,
+                  setSelectedOption,
+                  borderColor1,
+                  setBorderColor1,
+                  borderColor2,
+                  setBorderColor2,
+                  ssid,
+                  setSsid,
+                  password,
+                  setPassword,
+                  selectedWifiType,
+                  setSelectedWifiType,
+                  setSelectedWifiTypeAP,
+                  selectedWifiTypeAP,
+                }}
+              />
+            </div>
+            <div
+              className="modal-footer"
+              style={{
+                marginLeft: "0em",
+                marginRight: "0em",
+                textAlign: "center",
+              }}
+            >
+              <button
+                type="button"
+                className="btn btn-dark"
+                onClick={() => {
+                  mutation.mutate(
+                    {
+                      scenario_name: scenarioName,
+                      scenario_desc: scenarioDesc,
+                      is_using_target_ap:
+                        selectedOption === "onDetail1" ? false : true,
+                      target_ap_ssid: ssid,
+                      target_ap_password: password,
+                      target_ap_radio:
+                        selectedWifiType === "2.4GHz_onDetail" ? "2.4G" : "5G",
+                    },
+                    {
+                      onSuccess: (data) => {
+                        setSelectedScenario(data.data.scenario_id);
+                        refetchLoadScenario();
+                      },
+                    }
+                  );
+                }}
+                data-bs-dismiss="modal"
+                style={{ fontWeight: "bold" }}
+              >
+                Confirm
+              </button>
+              <button
+                type="button"
+                className="btn btn-danger"
+                data-bs-dismiss="modal"
+                style={{ fontWeight: "bold" }}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

@@ -274,24 +274,43 @@ function NodePopUp({ selectedScenario, refetchLoadNode }) {
                     }}
                   />
                 </div>
-                <div className="mb-3">
-                  <label
-                    htmlFor="ssid"
-                    className="form-label"
-                    style={{ marginLeft: "0em", marginRight: "0em" }}
-                  >
-                    SSID
-                  </label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    placeholder="SSID"
-                    id="ssid"
-                    value={ssid}
-                    onChange={(e) => {
-                      setSsid(e.target.value);
-                    }}
-                  />
+                <div style={{display:"flex"}}>
+                  <div className="mb-3">
+                    <label
+                      htmlFor="ssid"
+                      className="form-label"
+                      style={{ marginLeft: "0em", marginRight: "0em" }}
+                    >
+                      SSID
+                    </label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="SSID"
+                      id="ssid"
+                      value={ssid}
+                      onChange={(e) => {
+                        setSsid(e.target.value);
+                      }}
+                      style={{width:"27em"}}
+                    />
+                  </div>
+                  <div class="dropdown" style={{position:"relative",top:"0.5em"}}>
+                    <button
+                      class="btn btn-secondary dropdown-toggle"
+                      type="button"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                    >
+                    </button>
+                    <ul class="dropdown-menu">
+                      <li>
+                        <a class="dropdown-item" href="#">
+                          Action
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
                 </div>
                 <div className="mb-3">
                   <label
@@ -559,7 +578,7 @@ function NodePopUp({ selectedScenario, refetchLoadNode }) {
                 data-bs-dismiss="modal"
                 aria-label="Close"
                 ref={closeRef}
-                style={{border:"none"}}
+                style={{ border: "none" }}
               ></button>
               <button
                 type="button"
@@ -567,9 +586,9 @@ function NodePopUp({ selectedScenario, refetchLoadNode }) {
                 onClick={() => {
                   addNodeFunction();
                 }}
-                style={{fontWeight:"bold"}}
+                style={{ fontWeight: "bold" }}
               >
-                Confirm 
+                Confirm
               </button>
               <button
                 type="button"
@@ -583,7 +602,7 @@ function NodePopUp({ selectedScenario, refetchLoadNode }) {
                   setSsid("");
                   closeRef.current.click();
                 }}
-                style={{fontWeight:"bold"}}
+                style={{ fontWeight: "bold" }}
               >
                 Cancel
               </button>
