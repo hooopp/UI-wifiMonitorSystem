@@ -18,7 +18,7 @@ function Main({ selectedScenario }) {
   const [password, setPassword] = React.useState("");
   const [scenarioName, setScenarioName] = React.useState("");
   const [scenarioDesc, setScenarioDesc] = React.useState("");
-  const [selectedOption, setSelectedOption] = useState("onAddScenario1");
+  const [selectedOption, setSelectedOption] = useState("");
   const [borderColor1, setBorderColor1] = useState("#333");
   const [borderColor2, setBorderColor2] = useState("#dee2e6");
   const [isEdit, setIsEdit] = useState(false);

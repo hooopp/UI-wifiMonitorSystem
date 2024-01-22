@@ -13,7 +13,7 @@ function NodePopUpEdit({
   editButonClicked,
 }) {
   const [value, setValue] = useState("");
-  const [clientType, setClientType] = useState("");
+  const [clientType, setClientType] = useState("Deterministic");
   const [nodeMode, setNodeMode] = useState("AP");
   const [borderColor1, setBorderColor1] = useState("#333");
   const [borderColor2, setBorderColor2] = useState("#dee2e6");
@@ -35,65 +35,8 @@ function NodePopUpEdit({
   const [webProabilityOfLoadNewPage, setWebProabilityOfLoadNewPage] =
     useState(0);
   const [fileAveragePacketSize, setFileAveragePacketSize] = useState(0);
-
-  useEffect(() => {
-    setDeterministicAverageIntervalTime(0);
-    setDeterministicAveragePacketSize(0);
-    setWebAverageIntervalTime(0);
-    setWebAveragePacketSize(0);
-    setWebAverageNewPagePacketSize(0);
-    setWebProabilityOfLoadNewPage(0);
-    setFileAveragePacketSize(0);
-    setClientType("Deterministic");
-    setTimeOut(0);
-  }, [nodeMode]);
-
-  useEffect(() => {
-    if (loadNodeDetailData) {
-      setNodeName(loadNodeDetailData.alias_name);
-      setIpAddress(loadNodeDetailData.control_ip_addr);
-      setSsid(loadNodeDetailData.network_ssid);
-      setNodeMode("AP");
-      setTimeOut(loadNodeDetailData.simulation_detail.timeout);
-      if (loadNodeDetailData.network_mode === "client") {
-        setNodeMode("Client");
-        if (
-          loadNodeDetailData.simulation_detail.simulation_type ===
-          "deterministic"
-        ) {
-          setClientType("Deterministic");
-          setDeterministicAverageIntervalTime(
-            loadNodeDetailData.simulation_detail.average_interval_time
-          );
-          setDeterministicAveragePacketSize(
-            loadNodeDetailData.simulation_detail.average_packet_size
-          );
-        } else if (
-          loadNodeDetailData.simulation_detail.simulation_type ===
-          "web_application"
-        ) {
-          setClientType("Web");
-          setWebAverageIntervalTime(
-            loadNodeDetailData.simulation_detail.average_interval_time
-          );
-          setWebAveragePacketSize(
-            loadNodeDetailData.simulation_detail.average_packet_size
-          );
-          setWebAverageNewPagePacketSize(
-            loadNodeDetailData.simulation_detail.average_new_page_packet_size
-          );
-          setWebProabilityOfLoadNewPage(
-            loadNodeDetailData.simulation_detail.probability_of_load_new_page
-          );
-        } else {
-          setClientType("File");
-          setFileAveragePacketSize(
-            loadNodeDetailData.simulation_detail.average_packet_size
-          );
-        }
-      }
-    }
-  }, [editButonClicked]);
+  const [changeMode, setChangeMode] = useState(false);
+  const [changeClientType, setChangeClientType] = useState(false);
 
   const editNode = useMutation((data) => {
     return axios.patch(
@@ -195,35 +138,106 @@ function NodePopUpEdit({
   };
 
   useEffect(() => {
+    if (loadNodeDetailData) {
+      setNodeName(loadNodeDetailData.alias_name);
+      setIpAddress(loadNodeDetailData.control_ip_addr);
+      setSsid(loadNodeDetailData.network_ssid);
+      if (loadNodeDetailData.network_mode === "ap") {
+        setNodeMode("AP");
+      } else {
+        setNodeMode("Client");
+      }
+      setTimeOut(loadNodeDetailData.simulation_detail.timeout);
+      if (loadNodeDetailData.network_mode === "client") {
+        if (
+          loadNodeDetailData.simulation_detail.simulation_type ===
+          "deterministic"
+        ) {
+          setClientType("Deterministic");
+          setDeterministicAverageIntervalTime(
+            loadNodeDetailData.simulation_detail.average_interval_time
+          );
+          setDeterministicAveragePacketSize(
+            loadNodeDetailData.simulation_detail.average_packet_size
+          );
+          setBorderColor1("#333");
+          setBorderColor2("#dee2e6");
+          setBorderColor3("#dee2e6");
+        } else if (
+          loadNodeDetailData.simulation_detail.simulation_type ===
+          "web_application"
+        ) {
+          setClientType("Web");
+          setWebAverageIntervalTime(
+            loadNodeDetailData.simulation_detail.average_interval_time
+          );
+          setWebAveragePacketSize(
+            loadNodeDetailData.simulation_detail.average_packet_size
+          );
+          setWebAverageNewPagePacketSize(
+            loadNodeDetailData.simulation_detail.average_new_page_packet_size
+          );
+          setWebProabilityOfLoadNewPage(
+            loadNodeDetailData.simulation_detail.probability_of_load_new_page
+          );
+          setBorderColor1("#dee2e6");
+          setBorderColor2("#333");
+          setBorderColor3("#dee2e6");
+        } else {
+          setClientType("File");
+          setFileAveragePacketSize(
+            loadNodeDetailData.simulation_detail.average_packet_size
+          );
+        }
+      }
+    }
+  }, [editButonClicked]);
+
+  useEffect(() => {
+    setDeterministicAverageIntervalTime(0);
+    setDeterministicAveragePacketSize(0);
+    setWebAverageIntervalTime(0);
+    setWebAveragePacketSize(0);
+    setWebAverageNewPagePacketSize(0);
+    setWebProabilityOfLoadNewPage(0);
+    setFileAveragePacketSize(0);
+    setClientType("Deterministic");
     setTimeOut(0);
+    setBorderColor1("#dee2e6");
+    setBorderColor2("#dee2e6");
+    setBorderColor3("#333");
+  }, [changeMode]);
+
+  useEffect(() => {
     if (clientType === "Deterministic") {
+      console.log("Deterministic");
       setBorderColor1("#333");
       setBorderColor2("#dee2e6");
       setBorderColor3("#dee2e6");
-      setWebAverageIntervalTime(0);
-      setWebAverageNewPagePacketSize(0);
-      setWebAveragePacketSize(0);
-      setWebProabilityOfLoadNewPage(0);
-      setFileAveragePacketSize(0);
-    } else if (clientType === "Web") {
+      setDeterministicAverageIntervalTime(0);
+      setDeterministicAveragePacketSize(0);
+      setTimeOut(0);
+    }
+    if (clientType === "Web") {
+      console.log("Web");
       setBorderColor1("#dee2e6");
       setBorderColor2("#333");
       setBorderColor3("#dee2e6");
-      setDeterministicAverageIntervalTime(0);
-      setDeterministicAveragePacketSize(0);
-      setFileAveragePacketSize(0);
-    } else {
-      setBorderColor1("#dee2e6");
-      setBorderColor2("#dee2e6");
-      setBorderColor3("#333");
       setWebAverageIntervalTime(0);
       setWebAverageNewPagePacketSize(0);
       setWebAveragePacketSize(0);
       setWebProabilityOfLoadNewPage(0);
-      setDeterministicAverageIntervalTime(0);
-      setDeterministicAveragePacketSize(0);
+      setTimeOut(0);
     }
-  }, [clientType]);
+    if (clientType === "File") {
+      console.log("File");
+      setBorderColor1("#dee2e6");
+      setBorderColor2("#dee2e6");
+      setBorderColor3("#333");
+      setFileAveragePacketSize(0);
+      setTimeOut(0);
+    }
+  }, [changeClientType]);
 
   return (
     <div>
@@ -247,7 +261,7 @@ function NodePopUpEdit({
                 id="staticBackdropLabeledit"
                 style={{ marginLeft: "0em", marginRight: "0em" }}
               >
-                <span style={{fontWeight:"bold"}}>Edit Node</span>
+                <span style={{ fontWeight: "bold" }}>Edit Node</span>
               </h1>
             </div>
             <div
@@ -318,7 +332,10 @@ function NodePopUpEdit({
                     className="form-select"
                     aria-label="Default select example"
                     value={nodeMode}
-                    onChange={(event) => setNodeMode(event.target.value)}
+                    onChange={(event) => {
+                      setNodeMode(event.target.value);
+                      setChangeMode(!changeMode);
+                    }}
                   >
                     <option value="AP">AP</option>
                     <option value="Client">Client</option>
@@ -346,7 +363,10 @@ function NodePopUpEdit({
                       value="Deterministic"
                       id={`radioDeterministicEdit${id}`}
                       checked={clientType === "Deterministic"}
-                      onChange={handleRadioChange}
+                      onChange={(event) => {
+                        setClientType(event.target.value);
+                        setChangeClientType(!changeClientType);
+                      }}
                     />
                     <label
                       className="form-check-label"
@@ -419,7 +439,10 @@ function NodePopUpEdit({
                       value="Web"
                       id={`radioWebEdit${id}`}
                       checked={clientType === "Web"}
-                      onChange={handleRadioChange}
+                      onChange={(e) => {
+                        handleRadioChange(e);
+                        setChangeClientType(!changeClientType);
+                      }}
                     />
                     <label
                       className="form-check-label"
@@ -517,7 +540,10 @@ function NodePopUpEdit({
                       value="File"
                       id={`radioFileEdit${id}`}
                       checked={clientType === "File"}
-                      onChange={handleRadioChange}
+                      onChange={(e) => {
+                        handleRadioChange(e);
+                        setChangeClientType(!changeClientType);
+                      }}
                     />
                     <label
                       className="form-check-label"
@@ -570,7 +596,7 @@ function NodePopUpEdit({
                 onClick={() => {
                   editNodeFunction();
                 }}
-                style={{fontWeight:"bold"}}
+                style={{ fontWeight: "bold" }}
               >
                 Confirm
               </button>
@@ -578,7 +604,7 @@ function NodePopUpEdit({
                 type="button"
                 className="btn btn-danger"
                 data-bs-dismiss="modal"
-                style={{fontWeight:"bold"}}
+                style={{ fontWeight: "bold" }}
               >
                 Cancel
               </button>
