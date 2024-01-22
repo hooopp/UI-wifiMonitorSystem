@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useMutation } from "react-query";
 import axios from "axios";
 import { useQuery } from "react-query";
+import { set } from "date-fns";
 
 function NodePopUpEdit({
   selectedScenario,
@@ -24,6 +25,8 @@ function NodePopUpEdit({
   const [ipAddress, setIpAddress] = useState("");
   const [ssid, setSsid] = useState("");
   const [timeOut, setTimeOut] = useState(0);
+  const [txPower, setTxPower] = useState(1);
+  const [frequency, setFrequency] = useState("2.4GHz");
   const [
     deterministicAverageIntervalTime,
     setDeterministicAverageIntervalTime,
@@ -48,6 +51,10 @@ function NodePopUpEdit({
     );
   });
 
+  const handleFrequencyChange = (event) => {
+    setFrequency(event.target.value);
+  };
+
   const isValidIP = (ip) => {
     const ipRegex =
       /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
@@ -67,6 +74,8 @@ function NodePopUpEdit({
           network_mode: "ap",
           network_ssid: ssid,
           simulation_detail: {},
+          radio: frequency === "2.4GHz" ? "2.4G" : "5G",
+          tx_power: txPower.toString(),
         },
         {
           onSuccess: () => {
@@ -159,6 +168,8 @@ function NodePopUpEdit({
       setNodeName(loadNodeDetailData.alias_name);
       setIpAddress(loadNodeDetailData.control_ip_addr);
       setSsid(loadNodeDetailData.network_ssid);
+      setFrequency(loadNodeDetailData.radio === "2.4G" ? "2.4GHz" : "5GHz");
+      setTxPower(loadNodeDetailData.tx_power);
       if (loadNodeDetailData.network_mode === "ap") {
         setNodeMode("AP");
       } else {
@@ -358,11 +369,19 @@ function NodePopUpEdit({
                         {loadNodePreviewData &&
                           Object.entries(loadNodePreviewData.network_info).map(
                             ([key, value], index) => {
-                              return(<li key={index}>
-                                <a className="dropdown-item" href="#" onClick={()=>{setSsid(key)}}>
-                                  {key}
-                                </a>
-                              </li>);
+                              return (
+                                <li key={index}>
+                                  <a
+                                    className="dropdown-item"
+                                    href="#"
+                                    onClick={() => {
+                                      setSsid(key);
+                                    }}
+                                  >
+                                    {key}
+                                  </a>
+                                </li>
+                              );
                             }
                           )}
                       </ul>
@@ -632,7 +651,70 @@ function NodePopUpEdit({
                     )}
                   </div>
                 </div>
-              ) : null}
+              ) : (
+                <div
+                  className={styles.selectClientType}
+                  style={{
+                    borderRadius: "10px",
+                    padding: "10px",
+                    border: "1px solid #dee2e6",
+                    marginBottom: "1em",
+                  }}
+                >
+                  <div style={{ marginBottom: "0.5em" }}>Tx-power</div>
+                  <input
+                    type="number"
+                    className="form-control"
+                    value={txPower}
+                    min="1"
+                    max="20"
+                    onChange={(e) => {
+                      let value = e.target.value;
+                      if (value < 1) {
+                        value = 1;
+                      } else if (value > 20) {
+                        value = 20;
+                      }
+                      setTxPower(value);
+                    }}
+                  />
+                  <div style={{ marginBottom: "0.5em", marginTop: "1em" }}>
+                    Select Frequency
+                  </div>
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    name="exampleRadios1"
+                    id="frequencyedit1"
+                    value="2.4GHz"
+                    checked={frequency === "2.4GHz"}
+                    onChange={handleFrequencyChange}
+                  />
+                  <label
+                    className="form-check-label"
+                    htmlFor="frequencyedit1"
+                    style={{ marginRight: "1em", marginLeft: "0.5em" }}
+                  >
+                    2.4GHz
+                  </label>
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    name="exampleRadios2"
+                    id="frequencyedit2"
+                    value="5GHz"
+                    checked={frequency === "5GHz"}
+                    onChange={handleFrequencyChange}
+                  />
+                  <label
+                    className="form-check-label"
+                    htmlFor="frequencyedit2"
+                    style={{ marginRight: "0.5em", marginLeft: "0.5em" }}
+                  >
+                    5GHz
+                  </label>
+                </div>
+              )}
             </div>
             <div
               className="modal-footer"

@@ -16,6 +16,12 @@ function Graphs({ selectedScenario }) {
   const [selectedGraph, setSelectedGraph] = React.useState("");
   const [reportIsClicked, setReportIsClicked] = React.useState(false);
 
+  const cancelSimulation = useMutation(() => {
+    return axios.post(
+      `http://127.0.0.1:8000/scenario/${selectedScenario}/simulation/${selectedGraph}/cancel`,
+    );
+  });
+
   const loadGraph = async () => {
     const { data } = await axios.get(
       `http://localhost:8000/scenario/${selectedScenario}/simulation?page_size=9&page=${page}${
@@ -118,6 +124,7 @@ function Graphs({ selectedScenario }) {
             loadGraphDetailRefetch={loadGraphDetailRefetch}
             setReportIsClicked={setReportIsClicked}
             reportIsClicked={reportIsClicked}
+            cancelSimulation={cancelSimulation}
           />
         ))}
       {/* pagination */}

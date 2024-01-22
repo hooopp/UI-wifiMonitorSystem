@@ -11,6 +11,7 @@ import { FaShareNodes } from "react-icons/fa6";
 import { FaChartSimple } from "react-icons/fa6";
 import { useMutation, useQuery } from "react-query";
 import axios from "axios";
+import { set } from "date-fns";
 
 function Main({ selectedScenario }) {
   const [mode, setMode] = useState(0);
@@ -23,6 +24,7 @@ function Main({ selectedScenario }) {
   const [borderColor2, setBorderColor2] = useState("#dee2e6");
   const [isEdit, setIsEdit] = useState(false);
   const [selectedWifiType, setSelectedWifiType] = useState("2.4GHz");
+  const [testName, setTestName] = useState("");
 
   const loadScenarioDetail = async () => {
     const { data } = await axios.get(
@@ -50,6 +52,12 @@ function Main({ selectedScenario }) {
     status: loadNodePreviewStatus,
     refetch: refetchLoadNodePreview,
   } = useQuery("nodePreview", loadNodePreview, { enabled: false });
+
+  const runScenario = useMutation((data) => {
+    return axios.post(
+      `http://127.0.0.1:8000/scenario/${selectedScenario}/simulation/run`,data
+    );
+  });
 
   useEffect(() => {
     setMode(0);
@@ -122,6 +130,8 @@ function Main({ selectedScenario }) {
             <button
               className="btn btn-dark"
               role="button"
+              data-bs-toggle="modal"
+              data-bs-target="#runScenario"
               style={{ marginLeft: "1em" }}
             >
               <div>
@@ -333,6 +343,71 @@ function Main({ selectedScenario }) {
                     );
                   }
                 )}
+            </div>
+          </div>
+        </div>
+      </div>
+      {/* modal */}
+      <div
+        class="modal fade"
+        id="runScenario"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div
+              class="modal-header"
+              style={{ marginLeft: "0em", marginRight: "0em" }}
+            >
+              <h1
+                class="modal-title fs-5"
+                id="title"
+                style={{ fontWeight: "bold" }}
+              >
+                Run Scenario
+              </h1>
+            </div>
+            <div
+              class="modal-body"
+              style={{ marginLeft: "0em", marginRight: "0em" }}
+            >
+              <div class="mb-3">
+                <label for="exampleFormControlInput1" class="form-label">
+                  Test name
+                </label>
+                <input
+                  class="form-control"
+                  id="testName"
+                  value={testName}
+                  onChange={(e)=>{setTestName(e.target.value)}}
+                  style={{ width: "100%" }}
+                />
+              </div>
+            </div>
+            <div
+              class="modal-footer"
+              style={{ marginLeft: "0em", marginRight: "0em" }}
+            >
+              <button
+                type="button"
+                class="btn btn-dark"
+                data-bs-dismiss="modal"
+                style={{ fontWeight: "bold" }}
+                onClick={()=>{runScenario.mutate({title:testName});setTestName("")}}
+              >
+                Confirm
+              </button>
+              <button
+                type="button"
+                class="btn btn-danger"
+                data-bs-dismiss="modal"
+                style={{ fontWeight: "bold" }}
+                onClick={()=>{setTestName("")}}
+              >
+                Cancel
+              </button>
             </div>
           </div>
         </div>

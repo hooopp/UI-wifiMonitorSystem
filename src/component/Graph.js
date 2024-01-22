@@ -4,6 +4,7 @@ import { FaTrashAlt } from "react-icons/fa";
 import { useMutation } from "react-query";
 import axios from "axios";
 import { TbReportSearch } from "react-icons/tb";
+import { TiCancel } from "react-icons/ti";
 
 function Graph({
   name,
@@ -18,7 +19,8 @@ function Graph({
   setSelectedGraph,
   loadGraphDetailRefetch,
   setReportIsClicked,
-  reportIsClicked
+  reportIsClicked,
+  cancelSimulation,
 }) {
   const deleteGraph = useMutation(
     () => {
@@ -60,21 +62,27 @@ function Graph({
               marginBottom: "0.25em",
               marginLeft: "6.5em",
             }}
-            onClick={() => {setSelectedGraph(id)}}
+            onClick={() => {
+              setSelectedGraph(id);
+            }}
           >
             <span style={{ fontSize: "1.5em" }}>&#x22EE;</span>
           </button>
           <ul className="dropdown-menu">
             <li>
-            <button
+              <button
                 className={`${styles.dropdownButton} dropdown-item`}
                 href="#"
                 data-bs-toggle="modal"
                 data-bs-target="#ViewGraphPopUp"
-                onClick={() => {loadGraphDetailRefetch().then(() => {setReportIsClicked(!reportIsClicked)})}}
+                onClick={() => {
+                  loadGraphDetailRefetch().then(() => {
+                    setReportIsClicked(!reportIsClicked);
+                  });
+                }}
               >
                 <div>
-                  <TbReportSearch 
+                  <TbReportSearch
                     style={{
                       marginRight: "0.3em",
                       marginLeft: "0.1em",
@@ -83,6 +91,24 @@ function Graph({
                     }}
                   />
                   <span>Report</span>
+                </div>
+              </button>
+              <button
+                className={`${styles.dropdownButton} dropdown-item`}
+                href="#"
+                onClick={() => {cancelSimulation.mutate()}}
+              >
+                <div>
+                  <TiCancel 
+                    style={{
+                      marginRight: "0.3em",
+                      marginLeft: "0.1em",
+                      marginBottom: "0.2em",
+                      fontSize: "1.25em",
+                      color: "orange"
+                    }}
+                  />
+                  <span style={{color:"orange"}}>Stop simulation</span>
                 </div>
               </button>
               <button
