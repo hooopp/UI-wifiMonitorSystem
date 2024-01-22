@@ -90,7 +90,7 @@ function NodePreviewAll({ name, ip, simulationDetail, nodeMode }) {
         marginBottom: "0.5em",
       }}
     >
-      <table class="table">
+      <table className="table">
         <tbody>
           <tr>
             <td>node name</td>

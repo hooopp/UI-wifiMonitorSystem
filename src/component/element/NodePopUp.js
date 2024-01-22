@@ -6,7 +6,7 @@ import axios from "axios";
 import { useQuery } from "react-query";
 import { Modal } from "../../bootstrap/js/bootstrap.js";
 
-function NodePopUp({ selectedScenario, refetchLoadNode }) {
+function NodePopUp({ selectedScenario, refetchLoadNode, loadNodePreviewData, refetchLoadNodePreview }) {
   const [clientType, setClientType] = useState("Deterministic");
   const [nodeMode, setNodeMode] = useState("AP");
   const [borderColor1, setBorderColor1] = useState("#333");
@@ -274,15 +274,15 @@ function NodePopUp({ selectedScenario, refetchLoadNode }) {
                     }}
                   />
                 </div>
-                <div style={{display:"flex"}}>
-                  <div className="mb-3">
-                    <label
-                      htmlFor="ssid"
-                      className="form-label"
-                      style={{ marginLeft: "0em", marginRight: "0em" }}
-                    >
-                      SSID
-                    </label>
+                <div className="mb-3">
+                  <label
+                    htmlFor="ssid"
+                    className="form-label"
+                    style={{ marginLeft: "0em", marginRight: "0em" }}
+                  >
+                    SSID
+                  </label>
+                  <div style={{ display: "flex" }}>
                     <input
                       type="text"
                       className="form-control"
@@ -292,24 +292,36 @@ function NodePopUp({ selectedScenario, refetchLoadNode }) {
                       onChange={(e) => {
                         setSsid(e.target.value);
                       }}
-                      style={{width:"27em"}}
+                      style={{ width: "26em", marginRight: "0.5em" }}
                     />
-                  </div>
-                  <div class="dropdown" style={{position:"relative",top:"0.5em"}}>
-                    <button
-                      class="btn btn-secondary dropdown-toggle"
-                      type="button"
-                      data-bs-toggle="dropdown"
-                      aria-expanded="false"
+                    <div
+                      className="dropdown"
+                      style={{
+                        position: "relative",
+                      }}
                     >
-                    </button>
-                    <ul class="dropdown-menu">
-                      <li>
-                        <a class="dropdown-item" href="#">
-                          Action
-                        </a>
-                      </li>
-                    </ul>
+                      <button
+                        className="btn btn-secondary dropdown-toggle"
+                        type="button"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                        onClick={() => {
+                          refetchLoadNodePreview();
+                        }}
+                      ></button>
+                      <ul className="dropdown-menu">
+                        {loadNodePreviewData &&
+                          Object.entries(loadNodePreviewData.network_info).map(
+                            ([key, value], index) => {
+                              return(<li key={index}>
+                                <a className="dropdown-item" href="#" onClick={()=>{setSsid(key)}}>
+                                  {key}
+                                </a>
+                              </li>);
+                            }
+                          )}
+                      </ul>
+                    </div>
                   </div>
                 </div>
                 <div className="mb-3">

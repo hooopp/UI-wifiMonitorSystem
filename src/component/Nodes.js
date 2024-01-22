@@ -12,12 +12,11 @@ import { FaArrowAltCircleLeft } from "react-icons/fa";
 import { FaArrowAltCircleRight } from "react-icons/fa";
 import NodePreview from "./element/NodePreview";
 
-function Nodes({ selectedScenario }) {
+function Nodes({ selectedScenario, loadNodePreviewData, refetchLoadNodePreview}) {
   const [editNodeId, setEditNodeId] = useState();
   const [editButonClicked, setEditButtonClicked] = useState(false);
   const [searchVariable, setSearchVariable] = useState("");
   const [page, setPage] = useState(1);
-  const [prevPage, setPrevPage] = useState(1);
 
   const loadNodeDetail = async () => {
     const { data } = await axios.get(
@@ -119,6 +118,8 @@ function Nodes({ selectedScenario }) {
       <NodePopUp
         selectedScenario={selectedScenario}
         refetchLoadNode={refetchLoadNode}
+        loadNodePreviewData={loadNodePreviewData}
+        refetchLoadNodePreview={refetchLoadNodePreview}
       />
       <NodePopUpEdit
         id={editNodeId}
@@ -127,6 +128,7 @@ function Nodes({ selectedScenario }) {
         loadNodeDetailData={loadNodeDetailData}
         loadNodeDetailStatus={loadNodeDetailStatus}
         editButonClicked={editButonClicked}
+        loadNodePreviewData={loadNodePreviewData}
       />
       {/* headerNode */}
       <div

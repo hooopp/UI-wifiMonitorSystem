@@ -102,7 +102,10 @@ function Main({ selectedScenario }) {
               height: "50px",
             }}
           >
-            {loadScenarioDetailData && (loadScenarioDetailData.scenario_name.length > 25 ? `${loadScenarioDetailData.scenario_name.substring(0, 25)}...` : loadScenarioDetailData.scenario_name)}
+            {loadScenarioDetailData &&
+              (loadScenarioDetailData.scenario_name.length > 25
+                ? `${loadScenarioDetailData.scenario_name.substring(0, 25)}...`
+                : loadScenarioDetailData.scenario_name)}
           </span>
           <div>
             <button
@@ -114,7 +117,7 @@ function Main({ selectedScenario }) {
                 refetchLoadNodePreview();
               }}
             >
-              <span style={{fontWeight:"bold"}}>Preview All</span>
+              <span style={{ fontWeight: "bold" }}>Preview All</span>
             </button>
             <button
               className="btn btn-dark"
@@ -125,9 +128,9 @@ function Main({ selectedScenario }) {
                 <svg
                   style={{ width: "20", height: "20", marginRight: "0.25em" }}
                 >
-                  <image href={start} width="15" height="15"/>
+                  <image href={start} width="15" height="15" />
                 </svg>
-                <span style={{fontWeight:"bold"}}>Start</span>
+                <span style={{ fontWeight: "bold" }}>Start</span>
               </div>
             </button>
           </div>
@@ -200,7 +203,13 @@ function Main({ selectedScenario }) {
             setSelectedWifiType={setSelectedWifiType}
           />
         )}
-        {mode === 1 && <Nodes selectedScenario={selectedScenario} />}
+        {mode === 1 && (
+          <Nodes
+            selectedScenario={selectedScenario}
+            loadNodePreviewData={loadNodePreviewData}
+            refetchLoadNodePreview={refetchLoadNodePreview}
+          />
+        )}
         {mode === 2 && <Graphs selectedScenario={selectedScenario} />}
       </div>
       <div
@@ -271,7 +280,7 @@ function Main({ selectedScenario }) {
                               {Object.entries(info.aps).map(
                                 ([ap, apInfo], index) => {
                                   return (
-                                    <div>
+                                    <div key={index}>
                                       <NodePreviewAll
                                         nodeMode={"ap"}
                                         name={apInfo.alias_name}
@@ -307,7 +316,7 @@ function Main({ selectedScenario }) {
                             {Object.entries(info.clients).map(
                               ([client, clientInfo], index) => {
                                 return (
-                                  <div>
+                                  <div key={index}>
                                     <NodePreviewAll
                                       nodeMode={"client"}
                                       name={clientInfo.alias_name}
