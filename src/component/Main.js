@@ -102,7 +102,7 @@ function Main({ selectedScenario }) {
               height: "50px",
             }}
           >
-            {loadScenarioDetailData && loadScenarioDetailData.scenario_name}
+            {loadScenarioDetailData && (loadScenarioDetailData.scenario_name.length > 25 ? `${loadScenarioDetailData.scenario_name.substring(0, 25)}...` : loadScenarioDetailData.scenario_name)}
           </span>
           <div>
             <button

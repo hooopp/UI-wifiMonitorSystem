@@ -223,21 +223,21 @@ const Sidebar = ({ setSelectedScenario, selectedScenario }) => {
         aria-labelledby="staticBackdropLabel"
         aria-hidden="true"
       >
-        <div class="modal-dialog">
-          <div class="modal-content">
+        <div className="modal-dialog">
+          <div className="modal-content">
             <div
-              class="modal-header"
+              className="modal-header"
               style={{ marginLeft: "0em", marginRight: "0em" }}
             >
               <h1
-                class="modal-title fs-5"
+                className="modal-title fs-5"
                 id="staticBackdropLabel"
                 style={{ fontWeight: "bold" }}
               >
                 Import JSON
               </h1>
             </div>
-            <div class="modal-body">
+            <div className="modal-body">
               <div style={{display:"flex"}}>
                 <div style={{width:"23em"}}>
                   <input
@@ -269,7 +269,7 @@ const Sidebar = ({ setSelectedScenario, selectedScenario }) => {
               </div>
             </div>
             <div
-              class="modal-footer"
+              className="modal-footer"
               style={{ marginLeft: "0em", marginRight: "0em" }}
             >
               <button
@@ -281,7 +281,7 @@ const Sidebar = ({ setSelectedScenario, selectedScenario }) => {
               </button>
               <button
                 type="button"
-                class="btn btn-danger"
+                className="btn btn-danger"
                 data-bs-dismiss="modal"
               >
                 Cancel
@@ -311,7 +311,7 @@ const Sidebar = ({ setSelectedScenario, selectedScenario }) => {
               <span>
                 <button
                   type="button"
-                  class="btn btn-secondary"
+                  className="btn btn-secondary"
                   data-bs-toggle="modal"
                   data-bs-target="#importModal"
                 >

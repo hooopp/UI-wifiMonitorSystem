@@ -5,27 +5,37 @@ import axios from "axios";
 import { FaTrashAlt } from "react-icons/fa";
 import { useMutation } from "react-query";
 
-function Scenario({data, refetchLoadScenario, setSelectedScenario, loadScenarioData, page, setPage, selectedScenario}) {
-  const deleteScenario = useMutation(() => {
-    return axios.delete(
-      `http://127.0.0.1:8000/scenario/${data.id}`
-    );
-  }, {
-    onSuccess: () => {
-      refetchLoadScenario().then(()=>{
-        if (loadScenarioData.length === 1) {
-          setPage(page - 1);
-        }
-      });
+function Scenario({
+  data,
+  refetchLoadScenario,
+  setSelectedScenario,
+  loadScenarioData,
+  page,
+  setPage,
+  selectedScenario,
+}) {
+  const deleteScenario = useMutation(
+    () => {
+      return axios.delete(`http://127.0.0.1:8000/scenario/${data.id}`);
+    },
+    {
+      onSuccess: () => {
+        refetchLoadScenario().then(() => {
+          if (loadScenarioData.length === 1) {
+            setPage(page - 1);
+          }
+        });
+      },
     }
-  });
+  );
 
   const deleteFuction = () => {
-    if (selectedScenario === data.id) {
+    if (selectedScenario == data.id) {
+      console.log("delete");
       setSelectedScenario("");
     }
     return deleteScenario.mutate();
-  }
+  };
 
   return (
     <div>
@@ -43,7 +53,15 @@ function Scenario({data, refetchLoadScenario, setSelectedScenario, loadScenarioD
             className="scenarioName"
             style={{ margin: "auto", marginLeft: "0em" }}
           >
-            <a href="#" style={{ textDecoration: "none", color:"black"}} onClick={() => {setSelectedScenario(data.id);}}>{data.name}</a>
+            <a
+              href="#"
+              style={{ textDecoration: "none", color: "black" }}
+              onClick={() => {
+                setSelectedScenario(data.id);
+              }}
+            >
+              {data.name.length > 25 ? `${data.name.substring(0, 25)}...` : data.name}
+            </a>
           </div>
           <div className="btn-group">
             <button
@@ -62,7 +80,11 @@ function Scenario({data, refetchLoadScenario, setSelectedScenario, loadScenarioD
             </button>
             <ul className="dropdown-menu">
               <li>
-                <button className={`${styles.dropdownButton} dropdown-item`} href="#" style={{color:"#333"}}>
+                <button
+                  className={`${styles.dropdownButton} dropdown-item`}
+                  href="#"
+                  style={{ color: "#333" }}
+                >
                   <div>
                     <svg
                       style={{

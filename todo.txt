@@ -1,4 +1,3 @@
-- แก้ edit ไม่โหลดข้อมูลกดครั้งแรก
 - add node ไม่เช็ค ssid กับ password
 - ssid dropdown
 - flow data in visualization
