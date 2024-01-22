@@ -11,6 +11,8 @@ function NodePopUpEdit({
   refetchLoadNode,
   loadNodeDetailData,
   editButonClicked,
+  loadNodePreviewData,
+  refetchLoadNodePreview,
 }) {
   const [value, setValue] = useState("");
   const [clientType, setClientType] = useState("Deterministic");
@@ -325,15 +327,47 @@ function NodePopUpEdit({
                   >
                     SSID
                   </label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    placeholder="SSID"
-                    value={ssid}
-                    onChange={(e) => {
-                      setSsid(e.target.value);
-                    }}
-                  />
+                  <div style={{ display: "flex" }}>
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="SSID"
+                      id="ssid"
+                      value={ssid}
+                      onChange={(e) => {
+                        setSsid(e.target.value);
+                      }}
+                      style={{ width: "26em", marginRight: "0.5em" }}
+                    />
+                    <div
+                      className="dropdown"
+                      style={{
+                        position: "relative",
+                      }}
+                    >
+                      <button
+                        className="btn btn-secondary dropdown-toggle"
+                        type="button"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                        onClick={() => {
+                          refetchLoadNodePreview();
+                        }}
+                      ></button>
+                      <ul className="dropdown-menu">
+                        {loadNodePreviewData &&
+                          Object.entries(loadNodePreviewData.network_info).map(
+                            ([key, value], index) => {
+                              return(<li key={index}>
+                                <a className="dropdown-item" href="#" onClick={()=>{setSsid(key)}}>
+                                  {key}
+                                </a>
+                              </li>);
+                            }
+                          )}
+                      </ul>
+                    </div>
+                  </div>
                 </div>
                 <div className="mb-3">
                   <label

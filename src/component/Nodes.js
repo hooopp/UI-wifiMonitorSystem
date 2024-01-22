@@ -129,6 +129,7 @@ function Nodes({ selectedScenario, loadNodePreviewData, refetchLoadNodePreview})
         loadNodeDetailStatus={loadNodeDetailStatus}
         editButonClicked={editButonClicked}
         loadNodePreviewData={loadNodePreviewData}
+        refetchLoadNodePreview={refetchLoadNodePreview}
       />
       {/* headerNode */}
       <div
