@@ -413,7 +413,7 @@ function NodePopUpEdit({
               {nodeMode === "Client" ? (
                 <div className={styles.selectClientType}>
                   <div style={{ marginBottom: "0.5em" }}>
-                    Select Scenario Type
+                  Select Simulation Type
                   </div>
                   <div
                     className="form-check"

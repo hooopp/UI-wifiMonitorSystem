@@ -349,20 +349,20 @@ function Main({ selectedScenario }) {
       </div>
       {/* modal */}
       <div
-        class="modal fade"
+        className="modal fade"
         id="runScenario"
-        tabindex="-1"
+        tabIndex="-1"
         aria-labelledby="exampleModalLabel"
         aria-hidden="true"
       >
-        <div class="modal-dialog">
-          <div class="modal-content">
+        <div className="modal-dialog">
+          <div className="modal-content">
             <div
-              class="modal-header"
+              className="modal-header"
               style={{ marginLeft: "0em", marginRight: "0em" }}
             >
               <h1
-                class="modal-title fs-5"
+                className="modal-title fs-5"
                 id="title"
                 style={{ fontWeight: "bold" }}
               >
@@ -370,15 +370,15 @@ function Main({ selectedScenario }) {
               </h1>
             </div>
             <div
-              class="modal-body"
+              className="modal-body"
               style={{ marginLeft: "0em", marginRight: "0em" }}
             >
-              <div class="mb-3">
-                <label for="exampleFormControlInput1" class="form-label">
+              <div className="mb-3">
+                <label htmlFor="exampleFormControlInput1" className="form-label">
                   Test name
                 </label>
                 <input
-                  class="form-control"
+                  className="form-control"
                   id="testName"
                   value={testName}
                   onChange={(e)=>{setTestName(e.target.value)}}
@@ -387,12 +387,12 @@ function Main({ selectedScenario }) {
               </div>
             </div>
             <div
-              class="modal-footer"
+              className="modal-footer"
               style={{ marginLeft: "0em", marginRight: "0em" }}
             >
               <button
                 type="button"
-                class="btn btn-dark"
+                className="btn btn-dark"
                 data-bs-dismiss="modal"
                 style={{ fontWeight: "bold" }}
                 onClick={()=>{runScenario.mutate({title:testName});setTestName("")}}
@@ -401,7 +401,7 @@ function Main({ selectedScenario }) {
               </button>
               <button
                 type="button"
-                class="btn btn-danger"
+                className="btn btn-danger"
                 data-bs-dismiss="modal"
                 style={{ fontWeight: "bold" }}
                 onClick={()=>{setTestName("")}}

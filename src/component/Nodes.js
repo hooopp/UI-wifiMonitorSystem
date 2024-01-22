@@ -147,7 +147,7 @@ function Nodes({ selectedScenario, loadNodePreviewData, refetchLoadNodePreview})
           name
         </span>
         <span>ip</span>
-        <span>type</span>
+        <span>mode</span>
         <span>ssid</span>
         <div></div>
       </div>

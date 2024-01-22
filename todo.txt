@@ -1,2 +1,3 @@
 - import JSON
 - flow data in visualization
+- alert ip ซ้ำกัน
