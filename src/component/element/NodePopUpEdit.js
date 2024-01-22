@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import styles from "./NodePopUpEdit.module.css";
 import { useState } from "react";
 import { useMutation } from "react-query";
@@ -37,6 +37,7 @@ function NodePopUpEdit({
   const [fileAveragePacketSize, setFileAveragePacketSize] = useState(0);
   const [changeMode, setChangeMode] = useState(false);
   const [changeClientType, setChangeClientType] = useState(false);
+  const closeRef = useRef();
 
   const editNode = useMutation((data) => {
     return axios.patch(
@@ -45,7 +46,17 @@ function NodePopUpEdit({
     );
   });
 
+  const isValidIP = (ip) => {
+    const ipRegex =
+      /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+    return ipRegex.test(ip);
+  };
+
   const editNodeFunction = () => {
+    if (isValidIP(ipAddress) === false) {
+      alert("IP Address is not valid");
+      return;
+    }
     if (nodeMode === "AP") {
       editNode.mutate(
         {
@@ -58,6 +69,7 @@ function NodePopUpEdit({
         {
           onSuccess: () => {
             refetchLoadNode();
+            closeRef.current.click();
           },
         }
       );
@@ -81,6 +93,7 @@ function NodePopUpEdit({
           {
             onSuccess: () => {
               refetchLoadNode();
+              closeRef.current.click();
             },
           }
         );
@@ -107,6 +120,7 @@ function NodePopUpEdit({
           {
             onSuccess: () => {
               refetchLoadNode();
+              closeRef.current.click();
             },
           }
         );
@@ -126,6 +140,7 @@ function NodePopUpEdit({
           {
             onSuccess: () => {
               refetchLoadNode();
+              closeRef.current.click();
             },
           }
         );
@@ -591,8 +606,15 @@ function NodePopUpEdit({
             >
               <button
                 type="button"
-                className="btn btn-dark"
+                className="close"
                 data-bs-dismiss="modal"
+                aria-label="Close"
+                ref={closeRef}
+                style={{ border: "none" }}
+              ></button>
+              <button
+                type="button"
+                className="btn btn-dark"
                 onClick={() => {
                   editNodeFunction();
                 }}

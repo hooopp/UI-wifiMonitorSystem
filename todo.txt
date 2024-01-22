@@ -1,4 +1,5 @@
 - add node ไม่เช็ค ssid กับ password
+- frequency and tx power on ap 
 - ssid dropdown
 - flow data in visualization
 - import JSON

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import logo from "../img/logo.svg";
 import Scenario from "./Scenario";
 import styles from "./Sidebar.module.css";
@@ -23,7 +23,7 @@ const Sidebar = ({ setSelectedScenario, selectedScenario }) => {
   const [password, setPassword] = React.useState("");
   const [selectedWifiType, setSelectedWifiType] =
     React.useState("2.4GHz_onDetail");
-    const [selectedWifiTypeAP, setSelectedWifiTypeAP] =
+  const [selectedWifiTypeAP, setSelectedWifiTypeAP] =
     React.useState("2.4GHz_onDetail");
   const [searchVariable, setSearchVariable] = React.useState("");
 
@@ -31,6 +31,7 @@ const Sidebar = ({ setSelectedScenario, selectedScenario }) => {
     return axios.post("http://127.0.0.1:8000/scenario", data);
   });
 
+  const closeRef = useRef();
   const loadScenario = async () => {
     const { data } = await axios.get(
       `http://127.0.0.1:8000/scenario?page_size=9&page=${page}${
@@ -54,8 +55,8 @@ const Sidebar = ({ setSelectedScenario, selectedScenario }) => {
   };
 
   const checkFileStructure = () => {
-    console.log(fileContent)
-  }
+    console.log(fileContent);
+  };
 
   const handleUpload = () => {
     if (!selectedFile) {
@@ -238,8 +239,8 @@ const Sidebar = ({ setSelectedScenario, selectedScenario }) => {
               </h1>
             </div>
             <div className="modal-body">
-              <div style={{display:"flex"}}>
-                <div style={{width:"23em"}}>
+              <div style={{ display: "flex" }}>
+                <div style={{ width: "23em" }}>
                   <input
                     style={{ display: "none" }}
                     id="file-upload"
@@ -251,7 +252,7 @@ const Sidebar = ({ setSelectedScenario, selectedScenario }) => {
                     Choose File
                   </label>
                   {selectedFile && (
-                    <span style={{marginLeft:"0.5em"}}>
+                    <span style={{ marginLeft: "0.5em" }}>
                       {selectedFile.name.length > 20
                         ? selectedFile.name.substring(0, 20) + "... .json"
                         : selectedFile.name}
@@ -388,8 +389,21 @@ const Sidebar = ({ setSelectedScenario, selectedScenario }) => {
             >
               <button
                 type="button"
+                className="close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+                ref={closeRef}
+                style={{ border: "none" }}
+              ></button>
+              <button
+                type="button"
                 className="btn btn-dark"
                 onClick={() => {
+                  if (!ssid || !password) {
+                    alert("SSID and Password cannot be empty");
+                    return;
+                  }
+
                   mutation.mutate(
                     {
                       scenario_name: scenarioName,
@@ -405,11 +419,11 @@ const Sidebar = ({ setSelectedScenario, selectedScenario }) => {
                       onSuccess: (data) => {
                         setSelectedScenario(data.data.scenario_id);
                         refetchLoadScenario();
+                        closeRef.current.click();
                       },
                     }
                   );
                 }}
-                data-bs-dismiss="modal"
                 style={{ fontWeight: "bold" }}
               >
                 Confirm
