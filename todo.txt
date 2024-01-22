@@ -1,3 +1,4 @@
 - import JSON
+- export JSON
+- log update
 - flow data in visualization
-- alert ip ซ้ำกัน

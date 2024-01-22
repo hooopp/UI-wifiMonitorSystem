@@ -12,6 +12,8 @@ import { FaArrowAltCircleLeft } from "react-icons/fa";
 import { FaArrowAltCircleRight } from "react-icons/fa";
 import { TbFileImport } from "react-icons/tb";
 import { parse, set, sub } from "date-fns";
+import { FaCheck } from "react-icons/fa";
+import { MdDownloadForOffline } from "react-icons/md";
 
 const Sidebar = ({ setSelectedScenario, selectedScenario }) => {
   const [selectedOption, setSelectedOption] = useState("onDetail1");
@@ -27,6 +29,7 @@ const Sidebar = ({ setSelectedScenario, selectedScenario }) => {
   const [selectedWifiTypeAP, setSelectedWifiTypeAP] =
     React.useState("2.4GHz_onDetail");
   const [searchVariable, setSearchVariable] = React.useState("");
+  const [isFileValid, setIsFileValid] = React.useState(false);
   const mutation = useMutation((data) => {
     return axios.post("http://127.0.0.1:8000/scenario", data);
   });
@@ -41,6 +44,56 @@ const Sidebar = ({ setSelectedScenario, selectedScenario }) => {
     return data;
   };
 
+  const template = {
+    scenarioName: "scenario_name",
+    scenarioDesc: "scenario_description",
+    scenarioType: "host",
+    ssid: "ssid",
+    password: "password",
+    frequency: "2.4GHz",
+    nodes: [
+      {
+        name: "node_name",
+        ip: "ip",
+        ssid: "ssid",
+        mode: "ap",
+        txPower: 1,
+        frequency: "2.4GHz",
+      },
+      {
+        name: "node_name",
+        ip: "ip",
+        ssid: "ssid",
+        mode: "client",
+        simulationType: "deterministic",
+        averageIntervalTime: 0,
+        averagePacketSize: 0,
+        timeOut: 0,
+      },
+      {
+        name: "node_name",
+        ip: "ip",
+        ssid: "ssid",
+        mode: "client",
+        simulationType: "web",
+        averageInterTime: 0,
+        averagePacketSize: 0,
+        averageNewPacketSize: 0,
+        probabilityOfLoadNewPacket: 0,
+        timeOut: 0,
+      },
+      {
+        name: "node_name",
+        ip: "ip",
+        ssid: "ssid",
+        mode: "client",
+        simulationType: "file",
+        averagePacketSize: 0,
+        timeOut: 0,
+      },
+    ],
+  };
+
   const {
     data: loadScenarioData,
     status: loadScenarioStatus,
@@ -49,10 +102,6 @@ const Sidebar = ({ setSelectedScenario, selectedScenario }) => {
 
   const [selectedFile, setSelectedFile] = useState(null);
   const [fileContent, setFileContent] = useState(null);
-
-  const handleFileUpload = (event) => {
-    setSelectedFile(event.target.files[0]);
-  };
 
   const isValidIP = (ip) => {
     const ipRegex =
@@ -74,15 +123,18 @@ const Sidebar = ({ setSelectedScenario, selectedScenario }) => {
             message += "- no ssid\n";
           }
           if (fileContent.hasOwnProperty("password")) {
-          }else{
+          } else {
             message += "- no password\n";
           }
-          if (fileContent.hasOwnProperty("frequency")){
-            if (fileContent.frequency === "2.4GHz" || fileContent.frequency === "5GHz"){
-            }else{
+          if (fileContent.hasOwnProperty("frequency")) {
+            if (
+              fileContent.frequency === "2.4GHz" ||
+              fileContent.frequency === "5GHz"
+            ) {
+            } else {
               message += "- frequency should be 2.4GHz or 5GHz\n";
             }
-          }else{
+          } else {
             message += "- no frequency\n";
           }
         }
@@ -93,171 +145,302 @@ const Sidebar = ({ setSelectedScenario, selectedScenario }) => {
       message += "- no scenarioType\n";
     }
     // nodeCheckpart
-    let ipNode =[];
+    let ipNode = [];
     for (let i = 0; i < fileContent.nodes.length; i++) {
       var submessage = `on index ${i}\n`;
       if (fileContent.nodes[i].hasOwnProperty("ip")) {
         if (isValidIP(fileContent.nodes[i].ip)) {
-          if (ipNode.includes(fileContent.nodes[i].ip)){
+          if (ipNode.includes(fileContent.nodes[i].ip)) {
             submessage += "\t ip is duplicated\n";
           }
         } else {
           submessage += "\t ip is not valid\n";
         }
-      }else{
+      } else {
         submessage += "\t no ip\n";
       }
       ipNode.push(fileContent.nodes[i].ip);
       if (fileContent.nodes[i].hasOwnProperty("ssid")) {
-      }else{
+      } else {
         submessage += "\t no ssid\n";
       }
       if (fileContent.nodes[i].hasOwnProperty("mode")) {
-        if (fileContent.nodes[i].mode === "ap" || fileContent.nodes[i].mode === "client"){
+        if (
+          fileContent.nodes[i].mode === "ap" ||
+          fileContent.nodes[i].mode === "client"
+        ) {
           if (fileContent.nodes[i].mode === "ap") {
             if (fileContent.nodes[i].hasOwnProperty("txPower")) {
               let value = fileContent.nodes[i].txPower;
               if (Number.isInteger(value) && value > 0 && value <= 20) {
-              }else{
-                submessage += "\t txPower should be integer and more than 0 and less than 20\n";
+              } else {
+                submessage +=
+                  "\t txPower should be integer and more than 0 and less than 20\n";
               }
-            }else{
+            } else {
               submessage += "\t no txPower\n";
             }
-            if (fileContent.nodes[i].hasOwnProperty("frequency")){
-              if (fileContent.nodes[i].frequency === "2.4GHz" || fileContent.nodes[i].frequency === "5GHz"){
-              }else{
+            if (fileContent.nodes[i].hasOwnProperty("frequency")) {
+              if (
+                fileContent.nodes[i].frequency === "2.4GHz" ||
+                fileContent.nodes[i].frequency === "5GHz"
+              ) {
+              } else {
                 submessage += "\t frequency should be 2.4GHz or 5GHz\n";
               }
-            }else{
+            } else {
               submessage += "\t no frequency\n";
             }
           }
-          if (fileContent.nodes[i].mode === "client"){
+          if (fileContent.nodes[i].mode === "client") {
             if (fileContent.nodes[i].hasOwnProperty("simulationType")) {
-              if (fileContent.nodes[i].simulationType === "deterministic" || fileContent.nodes[i].simulationType === "web" || fileContent.nodes[i].simulationType === "file"){
-                if (fileContent.nodes[i].simulationType === "deterministic"){
-                  if (fileContent.nodes[i].hasOwnProperty("averageIntervalTime")) {
+              if (
+                fileContent.nodes[i].simulationType === "deterministic" ||
+                fileContent.nodes[i].simulationType === "web" ||
+                fileContent.nodes[i].simulationType === "file"
+              ) {
+                if (fileContent.nodes[i].simulationType === "deterministic") {
+                  if (
+                    fileContent.nodes[i].hasOwnProperty("averageIntervalTime")
+                  ) {
                     let value = fileContent.nodes[i].averageIntervalTime;
-                    if  (Number.isInteger(value) && value >= 0) {
-                    }else{
-                      submessage += "\t averageIntervalTime should be integer and more than 0\n";
+                    if (Number.isInteger(value) && value >= 0) {
+                    } else {
+                      submessage +=
+                        "\t averageIntervalTime should be integer and more than 0\n";
                     }
-                  }else{
+                  } else {
                     submessage += "\t no averageIntervalTime\n";
                   }
-                  if (fileContent.nodes[i].hasOwnProperty("averagePacketSize")) {
+                  if (
+                    fileContent.nodes[i].hasOwnProperty("averagePacketSize")
+                  ) {
                     let value = fileContent.nodes[i].averagePacketSize;
-                    if  (Number.isInteger(value) && value >= 0) {
-                    }else{
-                      submessage += "\t averagePacketSize should be integer and more than 0\n";
+                    if (Number.isInteger(value) && value >= 0) {
+                    } else {
+                      submessage +=
+                        "\t averagePacketSize should be integer and more than 0\n";
                     }
-                  }else{
+                  } else {
                     submessage += "\t no averagePacketSize\n";
                   }
                   if (fileContent.nodes[i].hasOwnProperty("timeOut")) {
                     let value = fileContent.nodes[i].timeOut;
-                    if  (Number.isInteger(value) && value >= 0) {
-                    }else{
-                      submessage += "\t timeOut should be integer and more than 0\n";
+                    if (Number.isInteger(value) && value >= 0) {
+                    } else {
+                      submessage +=
+                        "\t timeOut should be integer and more than 0\n";
                     }
-                  }else{
+                  } else {
                     submessage += "\t no timeOut\n";
                   }
                 }
-                if (fileContent.nodes[i].simulationType === "web"){
+                if (fileContent.nodes[i].simulationType === "web") {
                   if (fileContent.nodes[i].hasOwnProperty("averageInterTime")) {
                     let value = fileContent.nodes[i].averageInterTime;
-                    if  (Number.isInteger(value) && value >= 0) {
-                    }else{
-                      submessage += "\t averageInterTime should be integer and more than 0\n";
+                    if (Number.isInteger(value) && value >= 0) {
+                    } else {
+                      submessage +=
+                        "\t averageInterTime should be integer and more than 0\n";
                     }
-                  }else{
+                  } else {
                     submessage += "\t no averageInterTime\n";
                   }
-                  if (fileContent.nodes[i].hasOwnProperty("averagePacketSize")) {
+                  if (
+                    fileContent.nodes[i].hasOwnProperty("averagePacketSize")
+                  ) {
                     let value = fileContent.nodes[i].averagePacketSize;
-                    if  (Number.isInteger(value) && value >= 0) {
-                    }else{
-                      submessage += "\t averagePacketSize should be integer and more than 0\n";
+                    if (Number.isInteger(value) && value >= 0) {
+                    } else {
+                      submessage +=
+                        "\t averagePacketSize should be integer and more than 0\n";
                     }
-                  }else{
+                  } else {
                     submessage += "\t no averagePacketSize\n";
                   }
-                  if (fileContent.nodes[i].hasOwnProperty("averageNewPacketSize")) {
+                  if (
+                    fileContent.nodes[i].hasOwnProperty("averageNewPacketSize")
+                  ) {
                     let value = fileContent.nodes[i].averageNewPacketSize;
-                    if  (Number.isInteger(value) && value >= 0) {
-                    }else{
-                      submessage += "\t averageNewPacketSize should be integer and more than 0\n";
+                    if (Number.isInteger(value) && value >= 0) {
+                    } else {
+                      submessage +=
+                        "\t averageNewPacketSize should be integer and more than 0\n";
                     }
-                  }else{
+                  } else {
                     submessage += "\t no averageNewPacketSize\n";
                   }
-                  if (fileContent.nodes[i].hasOwnProperty("probabilityOfLoadNewPacket")) {
+                  if (
+                    fileContent.nodes[i].hasOwnProperty(
+                      "probabilityOfLoadNewPacket"
+                    )
+                  ) {
                     let value = fileContent.nodes[i].probabilityOfLoadNewPacket;
-                    if  (Number(value) === value && value % 1 !== 0 && value >= 0) {
-                    }else{
-                      submessage += "\t probabilityOfLoadNewPacket should be integer and more than 0\n";
+                    if (
+                      Number(value) === value &&
+                      value % 1 !== 0 &&
+                      value >= 0
+                    ) {
+                    } else {
+                      submessage +=
+                        "\t probabilityOfLoadNewPacket should be integer and more than 0\n";
                     }
-                  }else{
+                  } else {
                     submessage += "\t no probabilityOfLoadNewPacket\n";
                   }
                   if (fileContent.nodes[i].hasOwnProperty("timeOut")) {
                     let value = fileContent.nodes[i].timeOut;
-                    if  (Number.isInteger(value) && value >= 0) {
-                    }else{
-                      submessage += "\t timeOut should be integer and more than 0\n";
+                    if (Number.isInteger(value) && value >= 0) {
+                    } else {
+                      submessage +=
+                        "\t timeOut should be integer and more than 0\n";
                     }
-                  }else{
+                  } else {
                     submessage += "\t no timeOut\n";
                   }
                 }
-                if (fileContent.nodes[i].simulationType === "file"){
-                  if (fileContent.nodes[i].hasOwnProperty("averagePacketSize")) {
+                if (fileContent.nodes[i].simulationType === "file") {
+                  if (
+                    fileContent.nodes[i].hasOwnProperty("averagePacketSize")
+                  ) {
                     let value = fileContent.nodes[i].averagePacketSize;
-                    if  (Number.isInteger(value) && value >= 0) {
-                    }else{
-                      submessage += "\t averagePacketSize should be integer and more than 0\n";
+                    if (Number.isInteger(value) && value >= 0) {
+                    } else {
+                      submessage +=
+                        "\t averagePacketSize should be integer and more than 0\n";
                     }
-                  }else{
+                  } else {
                     submessage += "\t no averagePacketSize\n";
                   }
                   if (fileContent.nodes[i].hasOwnProperty("timeOut")) {
                     let value = fileContent.nodes[i].timeOut;
-                    if  (Number.isInteger(value) && value >= 0) {
-                    }else{
-                      submessage += "\t timeOut should be integer and more than 0\n";
+                    if (Number.isInteger(value) && value >= 0) {
+                    } else {
+                      submessage +=
+                        "\t timeOut should be integer and more than 0\n";
                     }
-                  }else{
+                  } else {
                     submessage += "\t no timeOut\n";
                   }
                 }
-              }else{
-                submessage += "\t simulationType should be deterministic, web or file\n";
+              } else {
+                submessage +=
+                  "\t simulationType should be deterministic, web or file\n";
               }
-            }else{
+            } else {
               submessage += "\t no simulationTyp\n";
             }
           }
-        }else{
+        } else {
           submessage += "\t mode should be ap or client\n";
         }
-      }else{
+      } else {
         submessage += "\t no mode\n";
       }
-      console.log(submessage)
-      if (submessage !== `on index ${i}\n`){
+      console.log(submessage);
+      if (submessage !== `on index ${i}\n`) {
         message += submessage;
       }
     }
 
+    const addScenario = useMutation((data) => {
+      return axios.post(
+        `http://127.0.0.1:8000/scenario/`,
+        data
+      );
+    });
+
+    const addNode = useMutation((data) => {
+      return axios.post(
+        `http://127.0.0.1:8000/scenario/${selectedScenario}/node`,
+        data
+      );
+    });
+
+    const importScenario = () => {
+      addScenario.mutate(
+        {
+          scenario_name: fileContent.scenarioName,
+          scenario_desc: fileContent.scenarioDesc,
+          is_using_target_ap: fileContent.scenarioType === "host" ? true : false,
+          target_ap_ssid: fileContent.ssid,
+          target_ap_password: fileContent.password,
+          target_ap_radio: fileContent.frequency === "2.4GHz" ? "2.4G" : "5G",
+        },
+        {
+          onSuccess: (data) => {
+            for (let i = 0; i < fileContent.nodes.length; i++) {
+              if (fileContent.nodes[i].mode === "ap") {
+                addNode.mutate(
+                  {
+                    node_name: fileContent.nodes[i].name,
+                    ip: fileContent.nodes[i].ip,
+                    ssid: fileContent.nodes[i].ssid,
+                    mode: fileContent.nodes[i].mode,
+                    tx_power: parseInt(fileContent.nodes[i].txPower),
+                    frequency: fileContent.nodes[i].frequency === "2.4GHz" ? "2.4G" : "5G",
+                  },
+                  {
+                    onSuccess: (data) => {
+                    },
+                  }
+                );
+              }
+              if (fileContent.nodes[i].mode === "client") {
+                if (fileContent.nodes[i].simulationType === "deterministic"){
+                  addNode.mutate(
+                    {
+                      node_name: fileContent.nodes[i].name,
+                      ip: fileContent.nodes[i].ip,
+                      ssid: fileContent.nodes[i].ssid,
+                      mode: fileContent.nodes[i].mode,
+                      simulation_type: fileContent.nodes[i].simulationType,
+                      average_interval_time: fileContent.nodes[i].averageIntervalTime,
+                      average_packet_size: fileContent.nodes[i].averagePacketSize,
+                      time_out: fileContent.nodes[i].timeOut,
+                    },
+                    {
+                      onSuccess: (data) => {
+                      },
+                    }
+                  );
+                }
+                if (fileContent.nodes[i].simulationType === "web"){
+                }
+                if (fileContent.nodes[i].simulationType === "file"){
+                }
+              }
+            }
+          },
+        }
+      );
+    }
 
     if (message !== "") {
       alert("File is not valided\n" + message);
+      setIsFileValid(false);
       return;
     } else {
       alert("File is valided");
+      setIsFileValid(true);
     }
+  };
+
+  function downloadData(data) {
+    const json = JSON.stringify(data);
+    const blob = new Blob([json], { type: "application/json" });
+    const href = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = href;
+    link.download = "template.json";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
+  const handleFileUpload = (event) => {
+    setSelectedFile(event.target.files[0]);
+    event.target.value = null;
   };
 
   const handleUpload = () => {
@@ -442,6 +625,15 @@ const Sidebar = ({ setSelectedScenario, selectedScenario }) => {
               >
                 Import JSON
               </h1>
+              <button
+                className="btn btn-secondary"
+                onClick={() => {
+                  downloadData(template);
+                }}
+              >
+                <MdDownloadForOffline style={{ fontSize: "1.5em" }} />
+                <span style={{ marginLeft: "0.5em" }}>template</span>
+              </button>
             </div>
             <div className="modal-body">
               <div style={{ display: "flex" }}>
@@ -482,6 +674,8 @@ const Sidebar = ({ setSelectedScenario, selectedScenario }) => {
                 type="button"
                 className="btn btn-dark"
                 data-bs-dismiss="modal"
+                disabled={!isFileValid}
+                onClick={() => {importScenario()}}
               >
                 Confirm
               </button>

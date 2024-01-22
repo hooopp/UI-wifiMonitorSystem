@@ -39,7 +39,6 @@ function NodePopUp({
   const [timeOut, setTimeOut] = useState(0);
 
   const addNode = useMutation((data) => {
-    console.log(data);
     return axios.post(
       `http://127.0.0.1:8000/scenario/${selectedScenario}/node`,
       data
