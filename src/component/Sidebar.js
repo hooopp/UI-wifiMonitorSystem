@@ -33,6 +33,7 @@ const Sidebar = ({ setSelectedScenario, selectedScenario }) => {
   const mutation = useMutation((data) => {
     return axios.post("http://127.0.0.1:8000/scenario", data);
   });
+  const [loopNode, setLoopNode] = React.useState("");
 
   const closeRef = useRef();
   const loadScenario = async () => {
@@ -236,8 +237,8 @@ const Sidebar = ({ setSelectedScenario, selectedScenario }) => {
                   }
                 }
                 if (fileContent.nodes[i].simulationType === "web") {
-                  if (fileContent.nodes[i].hasOwnProperty("averageInterTime")) {
-                    let value = fileContent.nodes[i].averageInterTime;
+                  if (fileContent.nodes[i].hasOwnProperty("averageIntervalTime")) {
+                    let value = fileContent.nodes[i].averageIntervalTime;
                     if (Number.isInteger(value) && value >= 0) {
                     } else {
                       submessage +=
@@ -343,79 +344,6 @@ const Sidebar = ({ setSelectedScenario, selectedScenario }) => {
       }
     }
 
-    const addScenario = useMutation((data) => {
-      return axios.post(
-        `http://127.0.0.1:8000/scenario/`,
-        data
-      );
-    });
-
-    const addNode = useMutation((data) => {
-      return axios.post(
-        `http://127.0.0.1:8000/scenario/${selectedScenario}/node`,
-        data
-      );
-    });
-
-    const importScenario = () => {
-      addScenario.mutate(
-        {
-          scenario_name: fileContent.scenarioName,
-          scenario_desc: fileContent.scenarioDesc,
-          is_using_target_ap: fileContent.scenarioType === "host" ? true : false,
-          target_ap_ssid: fileContent.ssid,
-          target_ap_password: fileContent.password,
-          target_ap_radio: fileContent.frequency === "2.4GHz" ? "2.4G" : "5G",
-        },
-        {
-          onSuccess: (data) => {
-            for (let i = 0; i < fileContent.nodes.length; i++) {
-              if (fileContent.nodes[i].mode === "ap") {
-                addNode.mutate(
-                  {
-                    node_name: fileContent.nodes[i].name,
-                    ip: fileContent.nodes[i].ip,
-                    ssid: fileContent.nodes[i].ssid,
-                    mode: fileContent.nodes[i].mode,
-                    tx_power: parseInt(fileContent.nodes[i].txPower),
-                    frequency: fileContent.nodes[i].frequency === "2.4GHz" ? "2.4G" : "5G",
-                  },
-                  {
-                    onSuccess: (data) => {
-                    },
-                  }
-                );
-              }
-              if (fileContent.nodes[i].mode === "client") {
-                if (fileContent.nodes[i].simulationType === "deterministic"){
-                  addNode.mutate(
-                    {
-                      node_name: fileContent.nodes[i].name,
-                      ip: fileContent.nodes[i].ip,
-                      ssid: fileContent.nodes[i].ssid,
-                      mode: fileContent.nodes[i].mode,
-                      simulation_type: fileContent.nodes[i].simulationType,
-                      average_interval_time: fileContent.nodes[i].averageIntervalTime,
-                      average_packet_size: fileContent.nodes[i].averagePacketSize,
-                      time_out: fileContent.nodes[i].timeOut,
-                    },
-                    {
-                      onSuccess: (data) => {
-                      },
-                    }
-                  );
-                }
-                if (fileContent.nodes[i].simulationType === "web"){
-                }
-                if (fileContent.nodes[i].simulationType === "file"){
-                }
-              }
-            }
-          },
-        }
-      );
-    }
-
     if (message !== "") {
       alert("File is not valided\n" + message);
       setIsFileValid(false);
@@ -424,6 +352,34 @@ const Sidebar = ({ setSelectedScenario, selectedScenario }) => {
       alert("File is valided");
       setIsFileValid(true);
     }
+  };
+
+  const addScenario = useMutation((data) => {
+    return axios.post(`http://127.0.0.1:8000/scenario/`, data);
+  });
+
+  const addNode = useMutation((data) => {
+    return axios.post(`http://127.0.0.1:8000/scenario/${loopNode}/node`, data);
+  });
+
+  const importScenario = () => {
+    addScenario.mutate(
+      {
+        scenario_name: fileContent.scenarioName,
+        scenario_desc: fileContent.scenarioDesc,
+        is_using_target_ap: fileContent.scenarioType === "host" ? true : false,
+        target_ap_ssid: fileContent.ssid,
+        target_ap_password: fileContent.password,
+        target_ap_radio: fileContent.frequency === "2.4GHz" ? "2.4G" : "5G",
+      },
+      {
+        onSuccess: (data) => {
+          setLoopNode(data.data.scenario_id);
+          setSelectedScenario(data.data.scenario_id);
+          window.location.reload();
+        },
+      }
+    );
   };
 
   function downloadData(data) {
@@ -480,6 +436,104 @@ const Sidebar = ({ setSelectedScenario, selectedScenario }) => {
       }
     });
   }, [page]);
+
+  useEffect(() => {
+    if (loadScenarioData) {
+      for (let i = 0; i < fileContent.nodes.length; i++) {
+        if (fileContent.nodes[i].mode === "ap") {
+          addNode.mutate(
+            {
+              alias_name: fileContent.nodes[i].name,
+              control_ip_addr: fileContent.nodes[i].ip,
+              network_ssid: fileContent.nodes[i].ssid,
+              network_mode: "ap",
+              tx_power: parseInt(fileContent.nodes[i].txPower),
+              simulation_detail: {},
+              radio:
+                fileContent.nodes[i].frequency === "2.4GHz" ? "2.4G" : "5G",
+            },
+            {
+              onSuccess: (data) => {},
+            }
+          );
+        }
+        if (fileContent.nodes[i].mode === "client") {
+          if (fileContent.nodes[i].simulationType === "deterministic") {
+            addNode.mutate(
+              {
+                alias_name: fileContent.nodes[i].name,
+                control_ip_addr: fileContent.nodes[i].ip,
+                network_ssid: fileContent.nodes[i].ssid,
+                network_mode: "client",
+                simulation_detail: {
+                  simulation_type: "deterministic",
+                  average_interval_time: parseInt(
+                    fileContent.nodes[i].averageIntervalTime
+                  ),
+                  average_packet_size: parseInt(
+                    fileContent.nodes[i].averagePacketSize
+                  ),
+                  timeout: parseInt(fileContent.nodes[i].timeOut),
+                },
+              },
+              {
+                onSuccess: (data) => {},
+              }
+            );
+          }
+          if (fileContent.nodes[i].simulationType === "web") {
+            addNode.mutate(
+              {
+                alias_name: fileContent.nodes[i].name,
+                control_ip_addr: fileContent.nodes[i].ip,
+                network_ssid: fileContent.nodes[i].ssid,
+                network_mode: "client",
+                simulation_detail: {
+                  simulation_type: "web_application",
+                  average_interval_time: parseInt(
+                    fileContent.nodes[i].averageIntervalTime
+                  ),
+                  average_packet_size: parseInt(
+                    fileContent.nodes[i].averagePacketSize
+                  ),
+                  average_new_page_packet_size: parseInt(
+                    fileContent.nodes[i].averageNewPacketSize
+                  ),
+                  probability_of_load_new_page: parseFloat(
+                    fileContent.nodes[i].probabilityOfLoadNewPacket
+                  ),
+                  timeout: parseInt(fileContent.nodes[i].timeOut),
+                },
+              },
+              {
+                onSuccess: (data) => {},
+              }
+            );
+          }
+          if (fileContent.nodes[i].simulationType === "file") {
+            addNode.mutate(
+              {
+                alias_name: fileContent.nodes[i].name,
+                control_ip_addr: fileContent.nodes[i].ip,
+                network_ssid: fileContent.nodes[i].ssid,
+                network_mode: "client",
+                simulation_detail: {
+                  simulation_type: "file_transfer",
+                  average_packet_size: parseInt(
+                    fileContent.nodes[i].averagePacketSize
+                  ),
+                  timeout: parseInt(fileContent.nodes[i].timeOut),
+                },
+              },
+              {
+                onSuccess: (data) => {},
+              }
+            );
+          }
+        }
+      }
+    }
+  }, [loopNode]);
 
   return (
     <div className={styles.sidebar}>
@@ -675,7 +729,9 @@ const Sidebar = ({ setSelectedScenario, selectedScenario }) => {
                 className="btn btn-dark"
                 data-bs-dismiss="modal"
                 disabled={!isFileValid}
-                onClick={() => {importScenario()}}
+                onClick={() => {
+                  importScenario();
+                }}
               >
                 Confirm
               </button>

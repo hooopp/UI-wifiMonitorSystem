@@ -2,6 +2,7 @@ import React from "react";
 
 function NodePreview({ name, ip, simulationDetail, ssid, nodeMode }) {
   const ClientType = () => {
+    console.log(simulationDetail)
     if (simulationDetail.simulation_type === "deterministic") {
       return (
         <>

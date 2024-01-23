@@ -216,6 +216,9 @@ function NodePopUpEdit({
           setFileAveragePacketSize(
             loadNodeDetailData.simulation_detail.average_packet_size
           );
+          setBorderColor1("#dee2e6");
+          setBorderColor2("#dee2e6");
+          setBorderColor3("#333");
         }
       }
     }
