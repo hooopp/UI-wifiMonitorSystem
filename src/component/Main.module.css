@@ -13,7 +13,7 @@
 
 .Header {
     display: grid;
-    grid-template-columns: 700px 300px;
+    grid-template-columns: 540px 500px;
 }
 
 .Body {

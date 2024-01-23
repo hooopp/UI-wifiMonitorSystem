@@ -79,14 +79,7 @@ function NodePopUp({
             closeRef.current.click();
           },
           onError: (error) => {
-            if (
-              error.response.data.message ===
-              "(sqlite3.IntegrityError) UNIQUE constraint failed: node_configs.scenario_id, node_configs.control_ip_addr"
-            ) {
-              alert("ip is duplicated from another node");
-            }else{
-              alert("please contact admin")
-            }
+            alert("ip is duplicated from another node");
           },
         }
       );

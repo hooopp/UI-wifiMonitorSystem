@@ -12,6 +12,7 @@ import { FaChartSimple } from "react-icons/fa6";
 import { useMutation, useQuery } from "react-query";
 import axios from "axios";
 import { set } from "date-fns";
+import { TbFileExport } from "react-icons/tb";
 
 function Main({ selectedScenario }) {
   const [mode, setMode] = useState(0);
@@ -55,7 +56,8 @@ function Main({ selectedScenario }) {
 
   const runScenario = useMutation((data) => {
     return axios.post(
-      `http://127.0.0.1:8000/scenario/${selectedScenario}/simulation/run`,data
+      `http://127.0.0.1:8000/scenario/${selectedScenario}/simulation/run`,
+      data
     );
   });
 
@@ -119,11 +121,26 @@ function Main({ selectedScenario }) {
             <button
               className="btn btn-dark"
               role="button"
+              style={{ marginLeft: "1em" }}
+              onClick={()=>{}}
+            >
+              <div>
+                <TbFileExport style={{ fontSize: "1.25em" }} />
+                <span style={{ fontWeight: "bold", marginLeft: "0.25em" }}>
+                  Export
+                </span>
+              </div>
+            </button>
+
+            <button
+              className="btn btn-dark"
+              role="button"
               data-bs-toggle="modal"
               data-bs-target="#NodePreviewAll"
               onClick={() => {
                 refetchLoadNodePreview();
               }}
+              style={{ marginLeft: "1em" }}
             >
               <span style={{ fontWeight: "bold" }}>Preview All</span>
             </button>
@@ -374,14 +391,19 @@ function Main({ selectedScenario }) {
               style={{ marginLeft: "0em", marginRight: "0em" }}
             >
               <div className="mb-3">
-                <label htmlFor="exampleFormControlInput1" className="form-label">
+                <label
+                  htmlFor="exampleFormControlInput1"
+                  className="form-label"
+                >
                   Test name
                 </label>
                 <input
                   className="form-control"
                   id="testName"
                   value={testName}
-                  onChange={(e)=>{setTestName(e.target.value)}}
+                  onChange={(e) => {
+                    setTestName(e.target.value);
+                  }}
                   style={{ width: "100%" }}
                 />
               </div>
@@ -395,7 +417,10 @@ function Main({ selectedScenario }) {
                 className="btn btn-dark"
                 data-bs-dismiss="modal"
                 style={{ fontWeight: "bold" }}
-                onClick={()=>{runScenario.mutate({title:testName});setTestName("")}}
+                onClick={() => {
+                  runScenario.mutate({ title: testName });
+                  setTestName("");
+                }}
               >
                 Confirm
               </button>
@@ -404,7 +429,9 @@ function Main({ selectedScenario }) {
                 className="btn btn-danger"
                 data-bs-dismiss="modal"
                 style={{ fontWeight: "bold" }}
-                onClick={()=>{setTestName("")}}
+                onClick={() => {
+                  setTestName("");
+                }}
               >
                 Cancel
               </button>

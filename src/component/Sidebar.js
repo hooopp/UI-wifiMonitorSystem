@@ -854,7 +854,7 @@ const Sidebar = ({ setSelectedScenario, selectedScenario }) => {
                 type="button"
                 className="btn btn-dark"
                 onClick={() => {
-                  if (!ssid || !password) {
+                  if ((!ssid || !password) && selectedOption==="onDetail2") {
                     alert("SSID and Password cannot be empty");
                     return;
                   }

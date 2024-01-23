@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import styles from "./ViewGraphPopUp.module.css";
 import RechartGraph from "./RechartGraph";
 import { set } from "date-fns";
+import { TbFileExport } from "react-icons/tb";
 
 function ViewGraphPopUp({ reportIsClicked, loadGraphRefetch }) {
   const [name, setName] = React.useState("");
@@ -183,7 +184,7 @@ function ViewGraphPopUp({ reportIsClicked, loadGraphRefetch }) {
     const href = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = href;
-    link.download = "data.json";
+    link.download = `${name}_${createdTime}.json`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -331,11 +332,20 @@ function ViewGraphPopUp({ reportIsClicked, loadGraphRefetch }) {
                       type="button"
                       data-bs-toggle="dropdown"
                       aria-expanded="false"
-                      style={{marginLeft:"1em"}}
+                      style={{ marginLeft: "1em" }}
                     >
                       <span style={{ fontWeight: "bold" }}>select nodes</span>
                     </button>
-                    <button className="btn btn-dark" style={{fontWeight:"bold", marginLeft:"0.5em"}} onClick={()=>{downloadData(simulationData)}}>export JSON</button>
+                    <button
+                      className="btn btn-dark"
+                      style={{ fontWeight: "bold", marginLeft: "0.5em" }}
+                      onClick={() => {
+                        downloadData(simulationData);
+                      }}
+                    >
+                      <TbFileExport style={{ fontSize: "1.25em" }} />
+                      <span style={{marginLeft:"0.25em"}}>export</span>
+                    </button>
                     <ul className="dropdown-menu" style={{ width: "18em" }}>
                       {simulationData.nodes.map((node, index) => {
                         return (
