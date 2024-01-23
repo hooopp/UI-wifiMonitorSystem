@@ -26,7 +26,7 @@ function Main({ selectedScenario }) {
   const [isEdit, setIsEdit] = useState(false);
   const [selectedWifiType, setSelectedWifiType] = useState("2.4GHz");
   const [testName, setTestName] = useState("");
-  const [isExportclicked, setIsExportClicked] = useState(true);
+  const [isExportClicked, setIsExportClicked] = useState("");
 
   const loadScenarioDetail = async () => {
     const { data } = await axios.get(
@@ -80,10 +80,102 @@ function Main({ selectedScenario }) {
     );
   });
 
+  const {
+    data: exportScenarioData,
+    status: exportScenarioStatus,
+    refetch: refetchExportScenario,
+  } = useQuery("exportScenario", loadScenarioDetail, { enabled: false });
+
+  const {
+    data: exportNodeData,
+    status: exportNodeStatus,
+    refetch: refetchExportNode,
+  } = useQuery("exportNode", loadNodePreview, { enabled: false });
+
+  useEffect(() => {
+    if (isExportClicked === "") return;
+    refetchExportScenario().then(({ data: exportScenarioData }) => {
+      refetchExportNode().then(({ data: exportNodeData }) => {
+        console.log(exportScenarioData);
+        console.log(exportNodeData);
+        var exportData = {
+          scenarioName: exportScenarioData.scenario_name,
+          scenarioDesc: exportScenarioData.scenario_desc,
+          scenarioType:
+            exportNodeData.is_using_target_ap === true ? "host" : "ap",
+        };
+        if (exportNodeData.is_using_target_ap === true) {
+          exportData["ssid"] = exportScenarioData.target_ap_ssid;
+          exportData["password"] = exportScenarioData.target_ap_password;
+          exportData["frequency"] =
+            exportScenarioData.target_ap_radio === "5G" ? "5GHz" : "2.4GHz";
+        }
+        exportData["nodes"] = [];
+        Object.entries(exportNodeData.network_info).map(
+          ([key, value], index) => {
+            Object.entries(value.aps).map(([key2, value2], index2) => {
+              exportData["nodes"].push({
+                name: value2.alias_name,
+                ip: key2,
+                mode: "ap",
+                ssid: key,
+                txPower: parseInt(value2.tx_power),
+                frequency: value2.radio === "5G" ? "5GHz" : "2.4GHz",
+              });
+            });
+            Object.entries(value.clients).map(([key2, value2], index2) => {
+              if (value2.simulation_type === "deterministic") {
+                exportData["nodes"].push({
+                  name: value2.alias_name,
+                  ip: key2,
+                  ssid: key,
+                  mode: "client",
+                  simulationType: "deterministic",
+                  averageIntervalTime: parseInt(value2.average_interval_time),
+                  averagePacketSize: parseInt(value2.average_packet_size),
+                  timeOut: parseInt(value2.timeout),
+                });
+              }
+              if (value2.simulation_type === "web_application") {
+                exportData["nodes"].push({
+                  name: value2.alias_name,
+                  ip: key2,
+                  ssid: key,
+                  mode: "client",
+                  simulationType: "web",
+                  averageIntervalTime: parseInt(value2.average_interval_time),
+                  averagePacketSize: parseInt(value2.average_packet_size),
+                  averageNewPacketSize: parseInt(
+                    value2.average_new_page_packet_size
+                  ),
+                  probabilityOfLoadNewPacket: parseInt(
+                    value2.probability_of_load_new_page
+                  ),
+                  timeOut: parseInt(value2.timeout),
+                });
+              }
+              if (value2.simulation_type === "file_transfer") {
+                exportData["nodes"].push({
+                  name: value2.alias_name,
+                  ip: key2,
+                  ssid: key,
+                  mode: "client",
+                  simulationType: "file",
+                  averagePacketSize: parseInt(value2.average_packet_size),
+                  timeOut: parseInt(value2.timeout),
+                });
+              }
+            });
+          }
+        );
+        exportScenario(exportData);
+      });
+    });
+  }, [isExportClicked]);
+
   useEffect(() => {
     setMode(0);
     refetchLoadScenarioDetail().then(({ data: loadScenarioData }) => {
-      console.log(loadScenarioData);
       setScenarioName(loadScenarioData.scenario_name);
       setScenarioDesc(loadScenarioData.scenario_desc);
       setSelectedOption(
@@ -111,8 +203,6 @@ function Main({ selectedScenario }) {
     });
   }, [selectedScenario]);
 
-  
-
   return (
     <div className={styles.Main}>
       <div className={styles.Nav} style={{ backgroundColor: "white" }}>
@@ -136,7 +226,9 @@ function Main({ selectedScenario }) {
               className="btn btn-dark"
               role="button"
               style={{ marginLeft: "1em" }}
-              onClick={()=>{setIsExportClicked(!isExportclicked)}}
+              onClick={() => {
+                setIsExportClicked(!isExportClicked);
+              }}
             >
               <div>
                 <TbFileExport style={{ fontSize: "1.25em" }} />

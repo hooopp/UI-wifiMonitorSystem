@@ -278,13 +278,11 @@ const Sidebar = ({ setSelectedScenario, selectedScenario }) => {
                   ) {
                     let value = fileContent.nodes[i].probabilityOfLoadNewPacket;
                     if (
-                      Number(value) === value &&
-                      value % 1 !== 0 &&
-                      value >= 0
+                      typeof value === "number" && value >= 0 && value <= 1 
                     ) {
                     } else {
                       submessage +=
-                        "\t probabilityOfLoadNewPacket should be integer and more than 0\n";
+                        "\t probabilityOfLoadNewPacket should be number and range between 0 to 1\n";
                     }
                   } else {
                     submessage += "\t no probabilityOfLoadNewPacket\n";
@@ -329,7 +327,7 @@ const Sidebar = ({ setSelectedScenario, selectedScenario }) => {
                   "\t simulationType should be deterministic, web or file\n";
               }
             } else {
-              submessage += "\t no simulationTyp\n";
+              submessage += "\t no simulationType\n";
             }
           }
         } else {

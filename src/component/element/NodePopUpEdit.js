@@ -416,7 +416,7 @@ function NodePopUpEdit({
               {nodeMode === "Client" ? (
                 <div className={styles.selectClientType}>
                   <div style={{ marginBottom: "0.5em" }}>
-                  Select Simulation Type
+                    Select Simulation Type
                   </div>
                   <div
                     className="form-check"
@@ -574,8 +574,17 @@ function NodePopUpEdit({
                             className="form-control"
                             disabled={clientType !== "Web"}
                             value={webProabilityOfLoadNewPage}
+                            min={0}
+                            max={1}
+                            step={0.01} // This allows for float numbers with two decimal places
                             onChange={(e) => {
-                              setWebProabilityOfLoadNewPage(e.target.value);
+                              let value = parseFloat(e.target.value);
+                              if (value < 0) {
+                                value = 0;
+                              } else if (value > 1) {
+                                value = 1;
+                              }
+                              setWebProabilityOfLoadNewPage(value);
                             }}
                           />
                         </div>
