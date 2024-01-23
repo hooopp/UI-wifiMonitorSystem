@@ -26,6 +26,7 @@ function Main({ selectedScenario }) {
   const [isEdit, setIsEdit] = useState(false);
   const [selectedWifiType, setSelectedWifiType] = useState("2.4GHz");
   const [testName, setTestName] = useState("");
+  const [isExportclicked, setIsExportClicked] = useState(true);
 
   const loadScenarioDetail = async () => {
     const { data } = await axios.get(
@@ -33,6 +34,18 @@ function Main({ selectedScenario }) {
     );
     return data;
   };
+
+  function exportScenario(data) {
+    const json = JSON.stringify(data);
+    const blob = new Blob([json], { type: "application/json" });
+    const href = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = href;
+    link.download = `${scenarioName}.json`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
 
   const {
     data: loadScenarioDetailData,
@@ -44,7 +57,6 @@ function Main({ selectedScenario }) {
     const { data } = await axios.get(
       `http://localhost:8000/scenario/${selectedScenario}/node/preview`
     );
-    console.log(data);
     return data;
   };
 
@@ -57,6 +69,13 @@ function Main({ selectedScenario }) {
   const runScenario = useMutation((data) => {
     return axios.post(
       `http://127.0.0.1:8000/scenario/${selectedScenario}/simulation/run`,
+      data
+    );
+  });
+
+  const patchScenario = useMutation((data) => {
+    return axios.patch(
+      `http://127.0.0.1:8000/scenario/${selectedScenario}`,
       data
     );
   });
@@ -92,12 +111,7 @@ function Main({ selectedScenario }) {
     });
   }, [selectedScenario]);
 
-  const patchScenario = useMutation((data) => {
-    return axios.patch(
-      `http://127.0.0.1:8000/scenario/${selectedScenario}`,
-      data
-    );
-  });
+  
 
   return (
     <div className={styles.Main}>
@@ -122,7 +136,7 @@ function Main({ selectedScenario }) {
               className="btn btn-dark"
               role="button"
               style={{ marginLeft: "1em" }}
-              onClick={()=>{}}
+              onClick={()=>{setIsExportClicked(!isExportclicked)}}
             >
               <div>
                 <TbFileExport style={{ fontSize: "1.25em" }} />
