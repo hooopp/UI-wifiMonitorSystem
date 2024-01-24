@@ -19,10 +19,7 @@ function Graphs({ selectedScenario }) {
   const [reportIsClicked, setReportIsClicked] = React.useState(false);
   const [intervalRefetch, setIntervalRefetch] = React.useState(false);
   const [simulationData, setSimulationData] = React.useState(null);
-  const [listNode, setListNode] = React.useState([
-    { node: "192.168.1.1", color: "#8884d8", checked: true },
-    { node: "192.168.1.2", color: "#82ca9d", checked: true },
-  ]);
+  const [listNode, setListNode] = React.useState([]);
   const [selectedMetric, setSelectedMetric] = React.useState([
     ["TxPower", true],
     ["Signal", true],
@@ -79,7 +76,7 @@ function Graphs({ selectedScenario }) {
     };
     let maxDataLength = 0;
     let startTime = Infinity;
-    console.log(loadGraphDetailData)
+    console.log(loadGraphDetailData);
     let listNode = [];
     let index = 0;
     for (let ip in loadGraphDetailData.simulation_data) {
@@ -96,8 +93,8 @@ function Graphs({ selectedScenario }) {
       ) {
         startTime = loadGraphDetailData.simulation_data[ip]["Tx-Power"][0][0];
       }
-      listNode.push({node: ip, color: colors[index], checked: true});
-      index+=1;
+      listNode.push({ node: ip, color: colors[index], checked: true });
+      index += 1;
     }
     setListNode(listNode);
     startTime = new Date(startTime * 1000).toISOString().slice(11, -5);
@@ -246,9 +243,13 @@ function Graphs({ selectedScenario }) {
     enabled: intervalRefetch,
     refetchInterval: intervalRefetch ? 1000 : false,
     onSuccess: () => {
-      if (loadGraphDetailData && loadGraphDetailData.state === "finished" && loadGraphDetailData.id === selectedGraph) {
+      if (
+        loadGraphDetailData &&
+        loadGraphDetailData.state === "finished" &&
+        loadGraphDetailData.id === selectedGraph
+      ) {
         setIntervalRefetch(false);
-        transformData(loadGraphDetailData)
+        transformData(loadGraphDetailData);
       }
     },
   });

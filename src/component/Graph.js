@@ -21,7 +21,7 @@ function Graph({
   setReportIsClicked,
   reportIsClicked,
   cancelSimulation,
-  setIntervalRefetch
+  setIntervalRefetch,
 }) {
   const deleteGraph = useMutation(
     () => {
@@ -90,28 +90,28 @@ function Graph({
                       marginLeft: "0.1em",
                       marginBottom: "0.2em",
                       fontSize: "1.25em",
-                      color:"#0096FF"
                     }}
                   />
-                  <span style={{color:"#0096FF"}}>Report</span>
+                  <span>Report</span>
                 </div>
               </button>
               <button
                 className={`${styles.dropdownButton} dropdown-item`}
                 href="#"
-                onClick={() => {cancelSimulation.mutate()}}
+                onClick={() => {
+                  cancelSimulation.mutate();
+                }}
               >
                 <div>
-                  <TiCancel 
+                  <TiCancel
                     style={{
                       marginRight: "0.3em",
                       marginLeft: "0.1em",
                       marginBottom: "0.2em",
                       fontSize: "1.25em",
-                      color: "orange"
                     }}
                   />
-                  <span style={{color:"orange"}}>Stop simulation</span>
+                  <span>Stop simulation</span>
                 </div>
               </button>
               <button
