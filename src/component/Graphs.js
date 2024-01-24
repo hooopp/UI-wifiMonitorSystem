@@ -9,6 +9,7 @@ import { useQuery, useMutation } from "react-query";
 import axios from "axios";
 import { BiCommentDetail } from "react-icons/bi";
 import ViewGraphPopUp from "./element/ViewGraphPopUp";
+import GNF from "../img/GNF.svg";
 
 function Graphs({ selectedScenario }) {
   const [page, setPage] = React.useState(1);
@@ -18,7 +19,7 @@ function Graphs({ selectedScenario }) {
 
   const cancelSimulation = useMutation(() => {
     return axios.post(
-      `http://127.0.0.1:8000/scenario/${selectedScenario}/simulation/${selectedGraph}/cancel`,
+      `http://127.0.0.1:8000/scenario/${selectedScenario}/simulation/${selectedGraph}/cancel`
     );
   });
 
@@ -28,9 +29,6 @@ function Graphs({ selectedScenario }) {
         searchValue && `&search=${searchValue}`
       } `
     );
-    if (data.length === 0) {
-      setPage(page - 1);
-    }
     return data;
   };
 
@@ -51,10 +49,14 @@ function Graphs({ selectedScenario }) {
     data: loadGraphDetailData,
     status: loadGraphDetailStatus,
     refetch: loadGraphDetailRefetch,
-  } = useQuery("GraphDetail", loadGraphDetail, {enabled: false});
+  } = useQuery("GraphDetail", loadGraphDetail, { enabled: false });
 
   useEffect(() => {
-    loadGraphRefetch();
+    loadGraphRefetch().then(({ data: loadGraphData }) => {
+      if (loadGraphData.length === 0 && page > 1) {
+        setPage(page - 1);
+      }
+    });
   }, [page]);
 
   return (
@@ -107,8 +109,9 @@ function Graphs({ selectedScenario }) {
         ></div>
       </form>
       {/* graph */}
-      {loadGraphData &&
+      {loadGraphData && loadGraphData.length !== 0 ? (
         loadGraphData.map((graph) => (
+          <>
           <Graph
             key={graph.id}
             name={graph.title}
@@ -125,9 +128,9 @@ function Graphs({ selectedScenario }) {
             setReportIsClicked={setReportIsClicked}
             reportIsClicked={reportIsClicked}
             cancelSimulation={cancelSimulation}
+            
           />
-        ))}
-      {/* pagination */}
+          {/* pagination */}
       <button
         style={{
           backgroundColor: "transparent",
@@ -157,8 +160,21 @@ function Graphs({ selectedScenario }) {
         <span style={{ fontWeight: "bold" }}>Next </span>
         <FaArrowAltCircleRight style={{ fontSize: "2rem" }} />
       </button>
+          </>
+        ))
+      ) : (
+        <div className="logo-container" style={{marginLeft:"15em", marginTop:"4em"}}>
+            <svg width="500" height="500" viewBox="0 0 500 500">
+              <image href={GNF} x="0" y="0" width="100%" height="100%" />
+            </svg>
+          </div>
+      )}
       {/* viewGraphPopUp */}
-      <ViewGraphPopUp reportIsClicked={reportIsClicked} loadGraphDetailData={loadGraphDetailData} loadGraphRefetch={loadGraphRefetch}/>
+      <ViewGraphPopUp
+        reportIsClicked={reportIsClicked}
+        loadGraphDetailData={loadGraphDetailData}
+        loadGraphRefetch={loadGraphRefetch}
+      />
     </div>
   );
 }

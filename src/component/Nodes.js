@@ -11,8 +11,13 @@ import NodePopUpEdit from "./element/NodePopUpEdit";
 import { FaArrowAltCircleLeft } from "react-icons/fa";
 import { FaArrowAltCircleRight } from "react-icons/fa";
 import NodePreview from "./element/NodePreview";
+import NNF from "../img/NNF.svg";
 
-function Nodes({ selectedScenario, loadNodePreviewData, refetchLoadNodePreview}) {
+function Nodes({
+  selectedScenario,
+  loadNodePreviewData,
+  refetchLoadNodePreview,
+}) {
   const [editNodeId, setEditNodeId] = useState();
   const [editButonClicked, setEditButtonClicked] = useState(false);
   const [searchVariable, setSearchVariable] = useState("");
@@ -152,62 +157,69 @@ function Nodes({ selectedScenario, loadNodePreviewData, refetchLoadNodePreview})
         <div></div>
       </div>
       {/* Node */}
-
-      <div className="listNode">
-        {loadNodeData &&
-          loadNodeData.map((data, i) => (
-            <Node
-              key={i}
-              name={data.alias_name}
-              ip={data.control_ip_addr}
-              mode={data.network_mode}
-              ssid={data.network_ssid}
-              id={data.id}
-              selectedScenario={selectedScenario}
-              refetchLoadNode={refetchLoadNode}
-              setEditNodeId={setEditNodeId}
-              refetchLoadNodeDetail={refetchLoadNodeDetail}
-              editButonClicked={editButonClicked}
-              setEditButtonClicked={setEditButtonClicked}
-              page={page}
-              setPage={setPage}
-              loadNodeData={loadNodeData}
-            />
-          ))}
-        <button
-          style={{
-            backgroundColor: "transparent",
-            border: "none",
-            position: "absolute",
-            left: "20em",
-            top: "41em",
-          }}
-          disabled={page === 1 ? true : false}
-          onClick={() => {
-            setPage(page - 1);
-          }}
-        >
-          <FaArrowAltCircleLeft style={{ fontSize: "2rem" }} />
-          <span style={{ fontWeight: "bold" }}> Previous</span>
-        </button>
-        <button
-          style={{
-            color: "#333",
-            backgroundColor: "transparent",
-            border: "none",
-            width: "5em",
-            position: "absolute",
-            left: "35em",
-            top: "41em",
-          }}
-          onClick={() => {
-            setPage(page + 1);
-          }}
-        >
-          <span style={{ fontWeight: "bold" }}>Next </span>
-          <FaArrowAltCircleRight style={{ fontSize: "2rem" }} />
-        </button>
-      </div>
+      {loadNodeData && loadNodeData.length > 0 ? (
+        <div className="listNode">
+          {loadNodeData &&
+            loadNodeData.map((data, i) => (
+              <Node
+                key={i}
+                name={data.alias_name}
+                ip={data.control_ip_addr}
+                mode={data.network_mode}
+                ssid={data.network_ssid}
+                id={data.id}
+                selectedScenario={selectedScenario}
+                refetchLoadNode={refetchLoadNode}
+                setEditNodeId={setEditNodeId}
+                refetchLoadNodeDetail={refetchLoadNodeDetail}
+                editButonClicked={editButonClicked}
+                setEditButtonClicked={setEditButtonClicked}
+                page={page}
+                setPage={setPage}
+                loadNodeData={loadNodeData}
+              />
+            ))}
+          <button
+            style={{
+              backgroundColor: "transparent",
+              border: "none",
+              position: "absolute",
+              left: "20em",
+              top: "41em",
+            }}
+            disabled={page === 1 ? true : false}
+            onClick={() => {
+              setPage(page - 1);
+            }}
+          >
+            <FaArrowAltCircleLeft style={{ fontSize: "2rem" }} />
+            <span style={{ fontWeight: "bold" }}> Previous</span>
+          </button>
+          <button
+            style={{
+              color: "#333",
+              backgroundColor: "transparent",
+              border: "none",
+              width: "5em",
+              position: "absolute",
+              left: "35em",
+              top: "41em",
+            }}
+            onClick={() => {
+              setPage(page + 1);
+            }}
+          >
+            <span style={{ fontWeight: "bold" }}>Next </span>
+            <FaArrowAltCircleRight style={{ fontSize: "2rem" }} />
+          </button>
+        </div>
+      ) : (
+        <div className="logo-container" style={{marginLeft:"15em", marginTop:"-1em"}}>
+            <svg width="500" height="500" viewBox="0 0 500 500">
+              <image href={NNF} x="0" y="0" width="100%" height="100%" />
+            </svg>
+          </div>
+      )}
       <div
         className="modal fade"
         id="NodePreview"
@@ -222,7 +234,7 @@ function Nodes({ selectedScenario, loadNodePreviewData, refetchLoadNodePreview})
               style={{ marginLeft: "0em", marginRight: "0em" }}
             >
               <h1 className="modal-title fs-5" id="exampleModalLabel">
-                <span style={{fontWeight:"bold"}}>Preview Node</span>
+                <span style={{ fontWeight: "bold" }}>Preview Node</span>
               </h1>
               <button
                 type="button"

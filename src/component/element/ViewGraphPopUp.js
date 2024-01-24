@@ -401,7 +401,7 @@ function ViewGraphPopUp({ reportIsClicked, loadGraphRefetch }) {
                                     position: "relative",
                                     left: "-1em",
                                     margin: "0.25em 0em",
-                                    color: "black",
+                                    color: `${listNode[index].color}`,
                                   }}
                                   value={listNode[index].color}
                                   onChange={(e) => {

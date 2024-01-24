@@ -1,4 +1,2 @@
-- import JSON
-- export JSON
 - log update
-- flow data in visualization
+- flow data

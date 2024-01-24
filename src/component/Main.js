@@ -306,7 +306,7 @@ function Main({ selectedScenario }) {
               }}
             >
               <FaChartSimple style={{ marginRight: "4px" }} />
-              Graph
+              Report
             </a>
           </li>
         </ul>
