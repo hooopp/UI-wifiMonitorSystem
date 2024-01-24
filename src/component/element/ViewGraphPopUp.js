@@ -27,6 +27,7 @@ function ViewGraphPopUp({
     { node: "192.168.1.1", color: "#8884d8", checked: true },
     { node: "192.168.1.2", color: "#82ca9d", checked: true },
   ]);
+  const [selectedMetric, setSelectedMetric] = React.useState([["TxPower", true], ["Signal", true], ["Noise", true], ["BitRate", true]]);
   const [mode, setMode] = React.useState(0); // 0: detail, 1: nodes, 2: report
 
   const loadGraphDetailData = {
@@ -267,7 +268,7 @@ function ViewGraphPopUp({
                 onClick={() => {
                   setIntervalRefetch(false);
                   setAutoScroll(true);
-                  setSimulationData(null);
+                  // setSimulationData(null);
                 }}
               ></button>
             </div>
@@ -343,7 +344,7 @@ function ViewGraphPopUp({
                   </div>
                   <ul
                     className="nav nav-underline"
-                    style={{ marginTop: "0.5em", marginLeft: "2em" }}
+                    style={{ marginTop: "1em", marginLeft: "2em"}}
                   >
                     <li className="nav-item">
                       <a
@@ -376,6 +377,8 @@ function ViewGraphPopUp({
                       simulationData={simulationData}
                       listNode={listNode}
                       setListNode={setListNode}
+                      selectedMetric={selectedMetric}
+                      setSelectedMetric={setSelectedMetric}
                     />
                   ) : (
                     ""
