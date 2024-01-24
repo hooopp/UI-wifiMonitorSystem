@@ -90,9 +90,10 @@ function Graph({
                       marginLeft: "0.1em",
                       marginBottom: "0.2em",
                       fontSize: "1.25em",
+                      color:"#0096FF"
                     }}
                   />
-                  <span>Report</span>
+                  <span style={{color:"#0096FF"}}>Report</span>
                 </div>
               </button>
               <button

@@ -241,7 +241,6 @@ function NodePopUpEdit({
 
   useEffect(() => {
     if (clientType === "Deterministic") {
-      console.log("Deterministic");
       setBorderColor1("#333");
       setBorderColor2("#dee2e6");
       setBorderColor3("#dee2e6");
@@ -250,7 +249,6 @@ function NodePopUpEdit({
       setTimeOut(0);
     }
     if (clientType === "Web") {
-      console.log("Web");
       setBorderColor1("#dee2e6");
       setBorderColor2("#333");
       setBorderColor3("#dee2e6");
@@ -261,7 +259,6 @@ function NodePopUpEdit({
       setTimeOut(0);
     }
     if (clientType === "File") {
-      console.log("File");
       setBorderColor1("#dee2e6");
       setBorderColor2("#dee2e6");
       setBorderColor3("#333");

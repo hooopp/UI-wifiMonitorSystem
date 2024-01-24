@@ -15,9 +15,9 @@ function Chart({
     <div>
       <div style={{ margin: "1em", marginBottom: "0.5em" }}>
         <div style={{ display: "flex" }}>
-          <div class="dropdown" style={{ margin: "0em 1em" }}>
+          <div className="dropdown" style={{ margin: "0em 1em" }}>
             <button
-              class="btn btn-dark dropdown-toggle"
+              className="btn btn-dark dropdown-toggle"
               type="button"
               data-bs-toggle="dropdown"
               aria-expanded="false"
@@ -25,10 +25,10 @@ function Chart({
             >
               select metric
             </button>
-            <ul class="dropdown-menu" style={{ width: "10em" }}>
+            <ul className="dropdown-menu" style={{ width: "10em" }}>
               {selectedMetric.map((metric, index) => {
                 return (
-                  <li style={{ display: "flex" }}>
+                  <li key={index} style={{ display: "flex" }}>
                     <div
                       className={styles.autoScroll}
                       style={{ marginLeft: "0.5em" }}
@@ -58,7 +58,7 @@ function Chart({
                     </div>
                     <div style={{ marginLeft: "0em", textAlign: "left" }}>
                       <span
-                        class="dropdown-item-text"
+                        className="dropdown-item-text"
                         style={{ width: "10em" }}
                       >
                         {metric[0]}
@@ -174,7 +174,7 @@ function Chart({
       </div>
       {selectedMetric.map((metric, index) => {
         return metric[1] ? (
-          <>
+          <div key={index}>
             <div
               style={{
                 fontWeight: "bold",
@@ -188,7 +188,7 @@ function Chart({
               data={simulationData[metric[0]]}
               listNode={listNode}
             />
-          </>
+          </div>
         ) : null;
       })}
     </div>

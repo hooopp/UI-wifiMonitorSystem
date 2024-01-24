@@ -96,8 +96,6 @@ function Main({ selectedScenario }) {
     if (isExportClicked === "") return;
     refetchExportScenario().then(({ data: exportScenarioData }) => {
       refetchExportNode().then(({ data: exportNodeData }) => {
-        console.log(exportScenarioData);
-        console.log(exportNodeData);
         var exportData = {
           scenarioName: exportScenarioData.scenario_name,
           scenarioDesc: exportScenarioData.scenario_desc,

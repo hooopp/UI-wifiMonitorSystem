@@ -97,7 +97,7 @@ function Detail({
               <button
                 className="btn btn-dark"
                 role="button"
-                style={{ marginRight: "1em", fontWeight:"bold" }}
+                style={{ marginRight: "1em", fontWeight: "bold" }}
               >
                 <span
                   onClick={() => {
@@ -137,7 +137,7 @@ function Detail({
                   setIsEdit(false);
                   window.location.reload();
                 }}
-                style={{fontWeight:"bold"}}
+                style={{ fontWeight: "bold" }}
               >
                 <span>Cancel</span>
               </button>

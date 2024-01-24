@@ -31,7 +31,6 @@ function Scenario({
 
   const deleteFuction = () => {
     if (selectedScenario == data.id) {
-      console.log("delete");
       setSelectedScenario("");
     }
     return deleteScenario.mutate();

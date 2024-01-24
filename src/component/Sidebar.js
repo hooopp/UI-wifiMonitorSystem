@@ -336,7 +336,6 @@ const Sidebar = ({ setSelectedScenario, selectedScenario }) => {
       } else {
         submessage += "\t no mode\n";
       }
-      console.log(submessage);
       if (submessage !== `on index ${i}\n`) {
         message += submessage;
       }

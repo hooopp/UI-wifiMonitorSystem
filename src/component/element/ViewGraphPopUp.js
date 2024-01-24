@@ -8,8 +8,9 @@ import Graph from "../Graph";
 
 function ViewGraphPopUp({
   reportIsClicked,
-  loadGraphRefetch,
   setIntervalRefetch,
+  simulationData,
+  setSimulationData,
 }) {
   const [name, setName] = React.useState("");
   const [state, setState] = React.useState("");
@@ -23,13 +24,19 @@ function ViewGraphPopUp({
   const messagesEndRef = React.useRef(null);
   const [selecetdSsid, setSelectedSsid] = React.useState("");
   const [selecetdNode, setSelectedNode] = React.useState("");
+
   const [listNode, setListNode] = React.useState([
     { node: "192.168.1.1", color: "#8884d8", checked: true },
     { node: "192.168.1.2", color: "#82ca9d", checked: true },
   ]);
-  const [selectedMetric, setSelectedMetric] = React.useState([["TxPower", true], ["Signal", true], ["Noise", true], ["BitRate", true]]);
-  const [mode, setMode] = React.useState(0); // 0: detail, 1: nodes, 2: report
+  const [selectedMetric, setSelectedMetric] = React.useState([
+    ["TxPower", true],
+    ["Signal", true],
+    ["Noise", true],
+    ["BitRate", true],
+  ]);
 
+  const [mode, setMode] = React.useState(0);
   const loadGraphDetailData = {
     id: 13,
     state: "finished",
@@ -133,50 +140,6 @@ function ViewGraphPopUp({
     created_at: "2024-01-04T15:25:05.881919",
   };
 
-  const [simulationData, setSimulationData] = React.useState({
-    nodes: ["192.168.1.1", "192.168.1.2"],
-    TxPower: [
-      { timeStamp: "08:25:15", "192.168.1.1": "6", "192.168.1.2": "7" },
-      { timeStamp: "08:25:16", "192.168.1.1": "3", "192.168.1.2": "5" },
-      { timeStamp: "08:25:17", "192.168.1.1": "4", "192.168.1.2": "6" },
-      { timeStamp: "08:25:18", "192.168.1.1": "7", "192.168.1.2": "7" },
-      { timeStamp: "08:25:19", "192.168.1.1": "8", "192.168.1.2": "5" },
-      { timeStamp: "08:25:20", "192.168.1.1": "5", "192.168.1.2": "6" },
-      { timeStamp: "08:25:21", "192.168.1.1": "5", "192.168.1.2": 0 },
-      { timeStamp: "08:25:22", "192.168.1.1": "6", "192.168.1.2": 0 },
-    ],
-    Signal: [
-      { timeStamp: "08:25:15", "192.168.1.1": "4", "192.168.1.2": "6" },
-      { timeStamp: "08:25:16", "192.168.1.1": "7", "192.168.1.2": "7" },
-      { timeStamp: "08:25:17", "192.168.1.1": "8", "192.168.1.2": "5" },
-      { timeStamp: "08:25:18", "192.168.1.1": "5", "192.168.1.2": "6" },
-      { timeStamp: "08:25:19", "192.168.1.1": "5", "192.168.1.2": "7" },
-      { timeStamp: "08:25:20", "192.168.1.1": "6", "192.168.1.2": "5" },
-      { timeStamp: "08:25:21", "192.168.1.1": "6", "192.168.1.2": 0 },
-      { timeStamp: "08:25:22", "192.168.1.1": "3", "192.168.1.2": 0 },
-    ],
-    Noise: [
-      { timeStamp: "08:25:15", "192.168.1.1": "8", "192.168.1.2": "7" },
-      { timeStamp: "08:25:16", "192.168.1.1": "5", "192.168.1.2": "5" },
-      { timeStamp: "08:25:17", "192.168.1.1": "5", "192.168.1.2": "6" },
-      { timeStamp: "08:25:18", "192.168.1.1": "6", "192.168.1.2": "7" },
-      { timeStamp: "08:25:19", "192.168.1.1": "6", "192.168.1.2": "5" },
-      { timeStamp: "08:25:20", "192.168.1.1": "3", "192.168.1.2": "6" },
-      { timeStamp: "08:25:21", "192.168.1.1": "4", "192.168.1.2": 0 },
-      { timeStamp: "08:25:22", "192.168.1.1": "7", "192.168.1.2": 0 },
-    ],
-    BitRate: [
-      { timeStamp: "08:25:15", "192.168.1.1": "5", "192.168.1.2": "5" },
-      { timeStamp: "08:25:16", "192.168.1.1": "6", "192.168.1.2": "6" },
-      { timeStamp: "08:25:17", "192.168.1.1": "6", "192.168.1.2": "7" },
-      { timeStamp: "08:25:18", "192.168.1.1": "3", "192.168.1.2": "5" },
-      { timeStamp: "08:25:19", "192.168.1.1": "4", "192.168.1.2": "6" },
-      { timeStamp: "08:25:20", "192.168.1.1": "7", "192.168.1.2": "7" },
-      { timeStamp: "08:25:21", "192.168.1.1": "8", "192.168.1.2": 0 },
-      { timeStamp: "08:25:22", "192.168.1.1": "5", "192.168.1.2": 0 },
-    ],
-  });
-
   function getRandomColor() {
     return (
       "#" +
@@ -268,7 +231,7 @@ function ViewGraphPopUp({
                 onClick={() => {
                   setIntervalRefetch(false);
                   setAutoScroll(true);
-                  // setSimulationData(null);
+                  setSimulationData(null);
                 }}
               ></button>
             </div>
@@ -344,7 +307,7 @@ function ViewGraphPopUp({
                   </div>
                   <ul
                     className="nav nav-underline"
-                    style={{ marginTop: "1em", marginLeft: "2em"}}
+                    style={{ marginTop: "1em", marginLeft: "2em" }}
                   >
                     <li className="nav-item">
                       <a
@@ -373,6 +336,7 @@ function ViewGraphPopUp({
                   </ul>
                   {mode === 0 ? (
                     <Chart
+                      key={1}
                       downloadData={downloadData}
                       simulationData={simulationData}
                       listNode={listNode}

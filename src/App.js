@@ -17,7 +17,6 @@ function App() {
     const storedScenario = localStorage.getItem("selectedScenario");
     if (storedScenario) {
       setSelectedScenario(storedScenario);
-      console.log(storedScenario);
     }
   }, []);
 
