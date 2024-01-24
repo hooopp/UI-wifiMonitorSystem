@@ -1,10 +1,16 @@
 import React, { useEffect } from "react";
 import styles from "./ViewGraphPopUp.module.css";
 import RechartGraph from "./RechartGraph";
+import Chart from "./Chart";
 import { set } from "date-fns";
 import { TbFileExport } from "react-icons/tb";
+import Graph from "../Graph";
 
-function ViewGraphPopUp({ reportIsClicked, loadGraphRefetch }) {
+function ViewGraphPopUp({
+  reportIsClicked,
+  loadGraphRefetch,
+  setIntervalRefetch,
+}) {
   const [name, setName] = React.useState("");
   const [state, setState] = React.useState("");
   const [createdTime, setCreatedTime] = React.useState("");
@@ -21,6 +27,7 @@ function ViewGraphPopUp({ reportIsClicked, loadGraphRefetch }) {
     { node: "192.168.1.1", color: "#8884d8", checked: true },
     { node: "192.168.1.2", color: "#82ca9d", checked: true },
   ]);
+  const [mode, setMode] = React.useState(0); // 0: detail, 1: nodes, 2: report
 
   const loadGraphDetailData = {
     id: 13,
@@ -125,7 +132,7 @@ function ViewGraphPopUp({ reportIsClicked, loadGraphRefetch }) {
     created_at: "2024-01-04T15:25:05.881919",
   };
 
-  const simulationData = {
+  const [simulationData, setSimulationData] = React.useState({
     nodes: ["192.168.1.1", "192.168.1.2"],
     TxPower: [
       { timeStamp: "08:25:15", "192.168.1.1": "6", "192.168.1.2": "7" },
@@ -167,7 +174,7 @@ function ViewGraphPopUp({ reportIsClicked, loadGraphRefetch }) {
       { timeStamp: "08:25:21", "192.168.1.1": "8", "192.168.1.2": 0 },
       { timeStamp: "08:25:22", "192.168.1.1": "5", "192.168.1.2": 0 },
     ],
-  };
+  });
 
   function getRandomColor() {
     return (
@@ -191,14 +198,19 @@ function ViewGraphPopUp({ reportIsClicked, loadGraphRefetch }) {
   }
 
   useEffect(() => {
-    if (reportIsClicked) {
+    if (loadGraphDetailData) {
       setName(loadGraphDetailData.title);
       setState(loadGraphDetailData.state);
-      setStateMessage(loadGraphDetailData.state_message);
       setCreatedTime(loadGraphDetailData.created_at);
       setStateMessage(loadGraphDetailData.state_message);
     }
   }, [reportIsClicked]);
+
+  useEffect(() => {
+    if (loadGraphDetailData) {
+      setStateMessage(loadGraphDetailData.state_message);
+    }
+  }, [loadGraphDetailData]);
 
   useEffect(() => {
     if (autoScroll) {
@@ -208,10 +220,8 @@ function ViewGraphPopUp({ reportIsClicked, loadGraphRefetch }) {
             messagesEndRef.current.scrollHeight;
         }
       };
-
       const modalElement = document.getElementById("ViewGraphPopUp");
       modalElement.addEventListener("shown.bs.modal", handleShown);
-
       return () => {
         modalElement.removeEventListener("shown.bs.modal", handleShown);
       };
@@ -254,6 +264,11 @@ function ViewGraphPopUp({ reportIsClicked, loadGraphRefetch }) {
                 className="btn-close"
                 data-bs-dismiss="modal"
                 aria-label="Close"
+                onClick={() => {
+                  setIntervalRefetch(false);
+                  setAutoScroll(true);
+                  setSimulationData(null);
+                }}
               ></button>
             </div>
             <div className="modal-body" style={{ margin: "0em" }}>
@@ -309,177 +324,66 @@ function ViewGraphPopUp({ reportIsClicked, loadGraphRefetch }) {
                   </pre>
                 </div>
               </div>
-              <div
-                style={{
-                  borderRadius: "10px",
-                  border: "1px solid #dee2e6",
-                  margin: "0.5m",
-                }}
-              >
+              {simulationData !== null ? (
                 <div
                   style={{
-                    margin: "0.5em 0em -0.5em 1em",
-                    fontWeight: "bold",
-                    fontSize: "1.5em",
+                    borderRadius: "10px",
+                    border: "1px solid #dee2e6",
+                    margin: "0.5m",
                   }}
                 >
-                  Visualization
-                </div>
-                <div style={{ margin: "1em", marginBottom: "0.5em" }}>
-                  <div className="dropdown">
-                    <button
-                      className="btn btn-dark dropdown-toggle"
-                      type="button"
-                      data-bs-toggle="dropdown"
-                      aria-expanded="false"
-                      style={{ marginLeft: "1em" }}
-                    >
-                      <span style={{ fontWeight: "bold" }}>select nodes</span>
-                    </button>
-                    <button
-                      className="btn btn-dark"
-                      style={{ fontWeight: "bold", marginLeft: "0.5em" }}
-                      onClick={() => {
-                        downloadData(simulationData);
-                      }}
-                    >
-                      <TbFileExport style={{ fontSize: "1.25em" }} />
-                      <span style={{marginLeft:"0.25em"}}>export</span>
-                    </button>
-                    <ul className="dropdown-menu" style={{ width: "18em" }}>
-                      {simulationData.nodes.map((node, index) => {
-                        return (
-                          <li key={index}>
-                            <div style={{ display: "flex" }}>
-                              <div className={styles.autoScroll}>
-                                <input
-                                  className="form-check-input"
-                                  type="checkbox"
-                                  id={index}
-                                  value=""
-                                  aria-label=""
-                                  style={{
-                                    position: "relative",
-                                    left: "0.3em",
-                                  }}
-                                  checked={listNode[index].checked}
-                                  onChange={(e) => {
-                                    setListNode(
-                                      listNode.map((item, i) => {
-                                        if (i === index) {
-                                          return {
-                                            ...item,
-                                            checked: !item.checked,
-                                          };
-                                        } else {
-                                          return item;
-                                        }
-                                      })
-                                    );
-                                  }}
-                                />
-                              </div>
-                              <div>
-                                <span
-                                  className="dropdown-item-text"
-                                  style={{
-                                    width: "10em",
-                                    paddingLeft: "0em",
-                                    position: "relative",
-                                    left: "0.5em",
-                                  }}
-                                >
-                                  {node}
-                                </span>
-                              </div>
-                              <div className="mb3">
-                                <input
-                                  className="form-control"
-                                  id={`inputColor${index}`}
-                                  style={{
-                                    width: "6em",
-                                    position: "relative",
-                                    left: "-1em",
-                                    margin: "0.25em 0em",
-                                    color: `${listNode[index].color}`,
-                                  }}
-                                  value={listNode[index].color}
-                                  onChange={(e) => {
-                                    setListNode(
-                                      listNode.map((item, i) => {
-                                        if (i === index) {
-                                          return {
-                                            ...item,
-                                            color: e.target.value,
-                                          };
-                                        } else {
-                                          return item;
-                                        }
-                                      })
-                                    );
-                                  }}
-                                />
-                              </div>
-                            </div>
-                          </li>
-                        );
-                      })}
-                    </ul>
+                  <div
+                    style={{
+                      margin: "0.5em 0em -0.5em 1em",
+                      fontWeight: "bold",
+                      fontSize: "1.5em",
+                    }}
+                  >
+                    Visualization
                   </div>
+                  <ul
+                    className="nav nav-underline"
+                    style={{ marginTop: "0.5em", marginLeft: "2em" }}
+                  >
+                    <li className="nav-item">
+                      <a
+                        className={`nav-link ${mode === 0 ? "active" : ""}`}
+                        href="#"
+                        style={{ color: "black" }}
+                        onClick={() => {
+                          setMode(0);
+                        }}
+                      >
+                        Charts
+                      </a>
+                    </li>
+                    <li className="nav-item">
+                      <a
+                        className={`nav-link ${mode === 1 ? "active" : ""}`}
+                        href="#"
+                        style={{ color: "black" }}
+                        onClick={() => {
+                          setMode(1);
+                        }}
+                      >
+                        Summary
+                      </a>
+                    </li>
+                  </ul>
+                  {mode === 0 ? (
+                    <Chart
+                      downloadData={downloadData}
+                      simulationData={simulationData}
+                      listNode={listNode}
+                      setListNode={setListNode}
+                    />
+                  ) : (
+                    ""
+                  )}
                 </div>
-                <div
-                  style={{
-                    fontWeight: "bold",
-                    marginLeft: "2em",
-                    marginBottom: "1em",
-                  }}
-                >
-                  Tx Power
-                </div>
-                <RechartGraph
-                  data={simulationData["TxPower"]}
-                  listNode={listNode}
-                />
-                <div
-                  style={{
-                    fontWeight: "bold",
-                    marginLeft: "2em",
-                    marginBottom: "1em",
-                  }}
-                >
-                  Signal
-                </div>
-                <RechartGraph
-                  data={simulationData["Signal"]}
-                  listNode={listNode}
-                />
-                <div
-                  style={{
-                    fontWeight: "bold",
-                    marginLeft: "2em",
-                    marginBottom: "1em",
-                  }}
-                >
-                  Noise
-                </div>
-                <RechartGraph
-                  data={simulationData["Noise"]}
-                  listNode={listNode}
-                />
-                <div
-                  style={{
-                    fontWeight: "bold",
-                    marginLeft: "2em",
-                    marginBottom: "1em",
-                  }}
-                >
-                  Bit Rate
-                </div>
-                <RechartGraph
-                  data={simulationData["BitRate"]}
-                  listNode={listNode}
-                />
-              </div>
+              ) : (
+                <div></div>
+              )}
             </div>
           </div>
         </div>

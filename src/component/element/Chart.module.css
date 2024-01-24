@@ -1,0 +1,15 @@
+.dropdown-item.no-focus:active, .dropdown-item.no-focus:focus {
+    background-color: transparent !important;
+    color: inherit;
+  }
+
+  .autoScroll input[type="checkbox"]:checked{
+    background-color: #333;
+    border-color: grey;
+    box-shadow: 0 0 5px grey;
+  }
+
+  .autoScroll input[type="checkbox"] {
+    box-shadow: 0 0 5px white; /* Change 'grey' to your desired color */
+    border-color: #dee2e6;
+  }

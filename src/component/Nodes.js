@@ -179,7 +179,15 @@ function Nodes({
                 loadNodeData={loadNodeData}
               />
             ))}
-          <button
+        </div>
+      ) : (
+        <div className="logo-container" style={{marginLeft:"15em", marginTop:"-1em"}}>
+            <svg width="500" height="500" viewBox="0 0 500 500">
+              <image href={NNF} x="0" y="0" width="100%" height="100%" />
+            </svg>
+          </div>
+      )}
+      <button
             style={{
               backgroundColor: "transparent",
               border: "none",
@@ -212,14 +220,6 @@ function Nodes({
             <span style={{ fontWeight: "bold" }}>Next </span>
             <FaArrowAltCircleRight style={{ fontSize: "2rem" }} />
           </button>
-        </div>
-      ) : (
-        <div className="logo-container" style={{marginLeft:"15em", marginTop:"-1em"}}>
-            <svg width="500" height="500" viewBox="0 0 500 500">
-              <image href={NNF} x="0" y="0" width="100%" height="100%" />
-            </svg>
-          </div>
-      )}
       <div
         className="modal fade"
         id="NodePreview"

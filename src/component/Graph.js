@@ -21,6 +21,7 @@ function Graph({
   setReportIsClicked,
   reportIsClicked,
   cancelSimulation,
+  setIntervalRefetch
 }) {
   const deleteGraph = useMutation(
     () => {
@@ -78,6 +79,7 @@ function Graph({
                 onClick={() => {
                   loadGraphDetailRefetch().then(() => {
                     setReportIsClicked(!reportIsClicked);
+                    setIntervalRefetch(true);
                   });
                 }}
               >

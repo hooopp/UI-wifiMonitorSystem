@@ -16,6 +16,7 @@ function Graphs({ selectedScenario }) {
   const [searchValue, setSearchValue] = React.useState("");
   const [selectedGraph, setSelectedGraph] = React.useState("");
   const [reportIsClicked, setReportIsClicked] = React.useState(false);
+  const [intervalRefetch, setIntervalRefetch] = React.useState(false);
 
   const cancelSimulation = useMutation(() => {
     return axios.post(
@@ -42,6 +43,7 @@ function Graphs({ selectedScenario }) {
     const { data } = await axios.get(
       `http://localhost:8000/scenario/${selectedScenario}/simulation/${selectedGraph}`
     );
+    console.log(data);
     return data;
   };
 
@@ -49,7 +51,10 @@ function Graphs({ selectedScenario }) {
     data: loadGraphDetailData,
     status: loadGraphDetailStatus,
     refetch: loadGraphDetailRefetch,
-  } = useQuery("GraphDetail", loadGraphDetail, { enabled: false });
+  } = useQuery("GraphDetail", loadGraphDetail, {
+    enabled: intervalRefetch,
+    refetchInterval: intervalRefetch ? 1000 : false,
+  });
 
   useEffect(() => {
     loadGraphRefetch().then(({ data: loadGraphData }) => {
@@ -110,10 +115,9 @@ function Graphs({ selectedScenario }) {
       </form>
       {/* graph */}
       {loadGraphData && loadGraphData.length !== 0 ? (
-        loadGraphData.map((graph) => (
-          <>
+        loadGraphData.map((graph, index) => (
           <Graph
-            key={graph.id}
+            key={index}
             name={graph.title}
             createdTime={graph.created_at}
             status={graph.state}
@@ -128,9 +132,20 @@ function Graphs({ selectedScenario }) {
             setReportIsClicked={setReportIsClicked}
             reportIsClicked={reportIsClicked}
             cancelSimulation={cancelSimulation}
-            
+            setIntervalRefetch={setIntervalRefetch}
           />
-          {/* pagination */}
+        ))
+      ) : (
+        <div
+          className="logo-container"
+          style={{ marginLeft: "15em", marginTop: "4em" }}
+        >
+          <svg width="500" height="500" viewBox="0 0 500 500">
+            <image href={GNF} x="0" y="0" width="100%" height="100%" />
+          </svg>
+        </div>
+      )}
+      {/* pagination */}
       <button
         style={{
           backgroundColor: "transparent",
@@ -160,20 +175,12 @@ function Graphs({ selectedScenario }) {
         <span style={{ fontWeight: "bold" }}>Next </span>
         <FaArrowAltCircleRight style={{ fontSize: "2rem" }} />
       </button>
-          </>
-        ))
-      ) : (
-        <div className="logo-container" style={{marginLeft:"15em", marginTop:"4em"}}>
-            <svg width="500" height="500" viewBox="0 0 500 500">
-              <image href={GNF} x="0" y="0" width="100%" height="100%" />
-            </svg>
-          </div>
-      )}
       {/* viewGraphPopUp */}
       <ViewGraphPopUp
         reportIsClicked={reportIsClicked}
         loadGraphDetailData={loadGraphDetailData}
         loadGraphRefetch={loadGraphRefetch}
+        setIntervalRefetch={setIntervalRefetch}
       />
     </div>
   );

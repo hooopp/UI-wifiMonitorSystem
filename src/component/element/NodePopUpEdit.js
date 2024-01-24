@@ -346,7 +346,7 @@ function NodePopUpEdit({
                       type="text"
                       className="form-control"
                       placeholder="SSID"
-                      id="ssid"
+                      id="ssidEdit"
                       value={ssid}
                       onChange={(e) => {
                         setSsid(e.target.value);
