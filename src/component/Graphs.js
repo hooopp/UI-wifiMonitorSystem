@@ -10,6 +10,7 @@ import axios from "axios";
 import { BiCommentDetail } from "react-icons/bi";
 import ViewGraphPopUp from "./element/ViewGraphPopUp";
 import GNF from "../img/GNF.svg";
+import { set } from "date-fns";
 
 function Graphs({ selectedScenario }) {
   const [page, setPage] = React.useState(1);
@@ -18,6 +19,16 @@ function Graphs({ selectedScenario }) {
   const [reportIsClicked, setReportIsClicked] = React.useState(false);
   const [intervalRefetch, setIntervalRefetch] = React.useState(false);
   const [simulationData, setSimulationData] = React.useState(null);
+  const [listNode, setListNode] = React.useState([
+    { node: "192.168.1.1", color: "#8884d8", checked: true },
+    { node: "192.168.1.2", color: "#82ca9d", checked: true },
+  ]);
+  const [selectedMetric, setSelectedMetric] = React.useState([
+    ["TxPower", true],
+    ["Signal", true],
+    ["Noise", true],
+    ["BitRate", true],
+  ]);
   const colors = [
     "#fd7f6f",
     "#7eb0d5",
@@ -69,6 +80,8 @@ function Graphs({ selectedScenario }) {
     let maxDataLength = 0;
     let startTime = Infinity;
     console.log(loadGraphDetailData)
+    let listNode = [];
+    let index = 0;
     for (let ip in loadGraphDetailData.simulation_data) {
       simulationData.nodes.push(ip);
       if (
@@ -83,7 +96,10 @@ function Graphs({ selectedScenario }) {
       ) {
         startTime = loadGraphDetailData.simulation_data[ip]["Tx-Power"][0][0];
       }
+      listNode.push({node: ip, color: colors[index], checked: true});
+      index+=1;
     }
+    setListNode(listNode);
     startTime = new Date(startTime * 1000).toISOString().slice(11, -5);
     for (let i = 0; i < maxDataLength; i++) {
       simulationData.TxPower.push({ timeStamp: startTime });
@@ -364,6 +380,10 @@ function Graphs({ selectedScenario }) {
         setIntervalRefetch={setIntervalRefetch}
         simulationData={simulationData}
         setSimulationData={setSimulationData}
+        listNode={listNode}
+        setListNode={setListNode}
+        selectedMetric={selectedMetric}
+        setSelectedMetric={setSelectedMetric}
       />
     </div>
   );

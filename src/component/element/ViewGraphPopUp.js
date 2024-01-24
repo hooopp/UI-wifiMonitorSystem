@@ -11,6 +11,10 @@ function ViewGraphPopUp({
   setIntervalRefetch,
   simulationData,
   setSimulationData,
+  listNode,
+  setListNode,
+  selectedMetric,
+  setSelectedMetric
 }) {
   const [name, setName] = React.useState("");
   const [state, setState] = React.useState("");
@@ -24,17 +28,6 @@ function ViewGraphPopUp({
   const messagesEndRef = React.useRef(null);
   const [selecetdSsid, setSelectedSsid] = React.useState("");
   const [selecetdNode, setSelectedNode] = React.useState("");
-
-  const [listNode, setListNode] = React.useState([
-    { node: "192.168.1.1", color: "#8884d8", checked: true },
-    { node: "192.168.1.2", color: "#82ca9d", checked: true },
-  ]);
-  const [selectedMetric, setSelectedMetric] = React.useState([
-    ["TxPower", true],
-    ["Signal", true],
-    ["Noise", true],
-    ["BitRate", true],
-  ]);
 
   const [mode, setMode] = React.useState(0);
   const loadGraphDetailData = {
