@@ -13,6 +13,7 @@ import { useMutation, useQuery } from "react-query";
 import axios from "axios";
 import { set } from "date-fns";
 import { TbFileExport } from "react-icons/tb";
+import { MdPreview } from "react-icons/md";
 
 function Main({ selectedScenario }) {
   const [mode, setMode] = useState(0);
@@ -246,7 +247,8 @@ function Main({ selectedScenario }) {
               }}
               style={{ marginLeft: "1em" }}
             >
-              <span style={{ fontWeight: "bold" }}>Preview All</span>
+              <MdPreview style={{ fontSize: "1.25em" }}/>
+              <span style={{ fontWeight: "bold", marginLeft: "0.25em" }}>Preview All</span>
             </button>
             <button
               className="btn btn-dark"
@@ -257,7 +259,7 @@ function Main({ selectedScenario }) {
             >
               <div>
                 <svg
-                  style={{ width: "20", height: "20", marginRight: "0.25em" }}
+                  style={{ width: "20", height: "20", marginRight: "0.25em", marginTop: "0.25em"}}
                 >
                   <image href={start} width="15" height="15" />
                 </svg>

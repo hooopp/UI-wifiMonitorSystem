@@ -78,7 +78,7 @@ function Scenario({
               <span style={{ fontSize: "1.5em" }}>&#x22EE;</span>
             </button>
             <ul className="dropdown-menu">
-              <li>
+              {/* <li>
                 <button
                   className={`${styles.dropdownButton} dropdown-item`}
                   href="#"
@@ -97,7 +97,7 @@ function Scenario({
                     Duplicate
                   </div>
                 </button>
-              </li>
+              </li> */}
               <li>
                 <button
                   className={`${styles.dropdownButton} dropdown-item`}

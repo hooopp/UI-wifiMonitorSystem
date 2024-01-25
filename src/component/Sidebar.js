@@ -237,7 +237,9 @@ const Sidebar = ({ setSelectedScenario, selectedScenario }) => {
                   }
                 }
                 if (fileContent.nodes[i].simulationType === "web") {
-                  if (fileContent.nodes[i].hasOwnProperty("averageIntervalTime")) {
+                  if (
+                    fileContent.nodes[i].hasOwnProperty("averageIntervalTime")
+                  ) {
                     let value = fileContent.nodes[i].averageIntervalTime;
                     if (Number.isInteger(value) && value >= 0) {
                     } else {
@@ -277,9 +279,7 @@ const Sidebar = ({ setSelectedScenario, selectedScenario }) => {
                     )
                   ) {
                     let value = fileContent.nodes[i].probabilityOfLoadNewPacket;
-                    if (
-                      typeof value === "number" && value >= 0 && value <= 1 
-                    ) {
+                    if (typeof value === "number" && value >= 0 && value <= 1) {
                     } else {
                       submessage +=
                         "\t probabilityOfLoadNewPacket should be number and range between 0 to 1\n";
@@ -615,6 +615,11 @@ const Sidebar = ({ setSelectedScenario, selectedScenario }) => {
                 }}
               />
             ))}
+          {loadScenarioStatus === "loading" && (
+            <p class="placeholder-glow">
+              <span class="placeholder col-12"></span>
+            </p>
+          )}
         </div>
       </div>
 
@@ -851,7 +856,7 @@ const Sidebar = ({ setSelectedScenario, selectedScenario }) => {
                 type="button"
                 className="btn btn-dark"
                 onClick={() => {
-                  if ((!ssid || !password) && selectedOption==="onDetail2") {
+                  if ((!ssid || !password) && selectedOption === "onDetail2") {
                     alert("SSID and Password cannot be empty");
                     return;
                   }
