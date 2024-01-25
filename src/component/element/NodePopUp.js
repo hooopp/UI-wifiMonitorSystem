@@ -122,12 +122,12 @@ function NodePopUp({
               simulation_type: "web_application",
               average_interval_time: parseFloat(webAverageIntervalTime),
               average_packet_size: parseFloat(webAveragePacketSize),
-              average_new_page_packet_size: parseFloat(
-                webAverageNewPagePacketSize
-              ),
-              probability_of_load_new_page: parseFloat(
-                webProabilityOfLoadNewPage
-              ),
+              // average_new_page_packet_size: parseFloat(
+              //   webAverageNewPagePacketSize
+              // ),
+              // probability_of_load_new_page: parseFloat(
+              //   webProabilityOfLoadNewPage
+              // ),
               timeout: parseFloat(timeOut),
             },
           },
@@ -512,7 +512,7 @@ function NodePopUp({
                             }}
                           />
                         </div>
-                        <div className="mb-3" style={{ marginTop: "1em" }}>
+                        {/* <div className="mb-3" style={{ marginTop: "1em" }}>
                           <label className="form-label">
                             Average New Page Packet Size
                           </label>
@@ -548,7 +548,7 @@ function NodePopUp({
                               setWebProabilityOfLoadNewPage(value);
                             }}
                           />
-                        </div>
+                        </div> */}
                         <div className="mb-3" style={{ marginTop: "1em" }}>
                           <label className="form-label">Time Out</label>
                           <input
@@ -632,7 +632,7 @@ function NodePopUp({
                     marginBottom: "1em",
                   }}
                 >
-                  <div style={{ marginBottom: "0.5em" }}>Tx-power</div>
+                  <div style={{ marginBottom: "0.5em" }}>Tx Power</div>
                   <input
                     type="number"
                     className="form-control"

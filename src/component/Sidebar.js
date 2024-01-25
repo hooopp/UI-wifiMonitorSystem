@@ -261,32 +261,32 @@ const Sidebar = ({ setSelectedScenario, selectedScenario }) => {
                   } else {
                     submessage += "\t no averagePacketSize\n";
                   }
-                  if (
-                    fileContent.nodes[i].hasOwnProperty("averageNewPacketSize")
-                  ) {
-                    let value = fileContent.nodes[i].averageNewPacketSize;
-                    if (Number.isInteger(value) && value >= 0) {
-                    } else {
-                      submessage +=
-                        "\t averageNewPacketSize should be integer and more than 0\n";
-                    }
-                  } else {
-                    submessage += "\t no averageNewPacketSize\n";
-                  }
-                  if (
-                    fileContent.nodes[i].hasOwnProperty(
-                      "probabilityOfLoadNewPacket"
-                    )
-                  ) {
-                    let value = fileContent.nodes[i].probabilityOfLoadNewPacket;
-                    if (typeof value === "number" && value >= 0 && value <= 1) {
-                    } else {
-                      submessage +=
-                        "\t probabilityOfLoadNewPacket should be number and range between 0 to 1\n";
-                    }
-                  } else {
-                    submessage += "\t no probabilityOfLoadNewPacket\n";
-                  }
+                  // if (
+                  //   fileContent.nodes[i].hasOwnProperty("averageNewPacketSize")
+                  // ) {
+                  //   let value = fileContent.nodes[i].averageNewPacketSize;
+                  //   if (Number.isInteger(value) && value >= 0) {
+                  //   } else {
+                  //     submessage +=
+                  //       "\t averageNewPacketSize should be integer and more than 0\n";
+                  //   }
+                  // } else {
+                  //   submessage += "\t no averageNewPacketSize\n";
+                  // }
+                  // if (
+                  //   fileContent.nodes[i].hasOwnProperty(
+                  //     "probabilityOfLoadNewPacket"
+                  //   )
+                  // ) {
+                  //   let value = fileContent.nodes[i].probabilityOfLoadNewPacket;
+                  //   if (typeof value === "number" && value >= 0 && value <= 1) {
+                  //   } else {
+                  //     submessage +=
+                  //       "\t probabilityOfLoadNewPacket should be number and range between 0 to 1\n";
+                  //   }
+                  // } else {
+                  //   submessage += "\t no probabilityOfLoadNewPacket\n";
+                  // }
                   if (fileContent.nodes[i].hasOwnProperty("timeOut")) {
                     let value = fileContent.nodes[i].timeOut;
                     if (Number.isInteger(value) && value >= 0) {
@@ -493,12 +493,12 @@ const Sidebar = ({ setSelectedScenario, selectedScenario }) => {
                   average_packet_size: parseInt(
                     fileContent.nodes[i].averagePacketSize
                   ),
-                  average_new_page_packet_size: parseInt(
-                    fileContent.nodes[i].averageNewPacketSize
-                  ),
-                  probability_of_load_new_page: parseFloat(
-                    fileContent.nodes[i].probabilityOfLoadNewPacket
-                  ),
+                  // average_new_page_packet_size: parseInt(
+                  //   fileContent.nodes[i].averageNewPacketSize
+                  // ),
+                  // probability_of_load_new_page: parseFloat(
+                  //   fileContent.nodes[i].probabilityOfLoadNewPacket
+                  // ),
                   timeout: parseInt(fileContent.nodes[i].timeOut),
                 },
               },
@@ -721,6 +721,19 @@ const Sidebar = ({ setSelectedScenario, selectedScenario }) => {
                   Check
                 </button>
               </div>
+              {fileContent !== null ? <div class="mb-3" style={{ marginTop: "0.5em" }}>
+                <label for="exampleFormControlTextarea1" class="form-label">
+                  File Detail
+                </label>
+                <textarea
+                  class="form-control"
+                  id="exampleFormControlTextarea1"
+                  rows="3"
+                  value={JSON.stringify(fileContent, null, 2)}
+                  disabled
+                  style={{ resize: "none", whiteSpace: "pre-wrap", height:"20em" }}
+                ></textarea>
+              </div> : ""}
             </div>
             <div
               className="modal-footer"
@@ -738,9 +751,10 @@ const Sidebar = ({ setSelectedScenario, selectedScenario }) => {
                 Confirm
               </button>
               <button
-                type="button"
+                type="button  "
                 className="btn btn-danger"
                 data-bs-dismiss="modal"
+                onClick={()=>{setFileContent(null)}}
               >
                 Cancel
               </button>

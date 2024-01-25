@@ -42,7 +42,7 @@ function NodePreviewAll({ name, ip, simulationDetail, nodeMode }) {
             <td>average packet size</td>
             <td>{simulationDetail.average_packet_size.toLocaleString()} MB</td>
           </tr>
-          <tr>
+          {/* <tr>
             <td>average new packet size</td>
             <td>
               {simulationDetail.average_new_page_packet_size.toLocaleString()}{" "}
@@ -54,7 +54,7 @@ function NodePreviewAll({ name, ip, simulationDetail, nodeMode }) {
             <td>
               {simulationDetail.probability_of_load_new_page.toLocaleString()}
             </td>
-          </tr>
+          </tr> */}
           <tr>
             <td>time out</td>
             <td>{simulationDetail.timeout.toLocaleString()} msec</td>
@@ -124,7 +124,7 @@ function NodePreviewAll({ name, ip, simulationDetail, nodeMode }) {
               </tr>
               <tr>
                 <td>time out</td>
-                <td>{simulationDetail.timeout}</td>
+                <td>{simulationDetail.timeout} msec</td>
               </tr>
             </>
           )}

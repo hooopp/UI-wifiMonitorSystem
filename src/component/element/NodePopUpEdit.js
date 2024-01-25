@@ -119,12 +119,12 @@ function NodePopUpEdit({
               simulation_type: "web_application",
               average_interval_time: parseFloat(webAverageIntervalTime),
               average_packet_size: parseFloat(webAveragePacketSize),
-              average_new_page_packet_size: parseFloat(
-                webAverageNewPagePacketSize
-              ),
-              probability_of_load_new_page: parseFloat(
-                webProabilityOfLoadNewPage
-              ),
+              // average_new_page_packet_size: parseFloat(
+              //   webAverageNewPagePacketSize
+              // ),
+              // probability_of_load_new_page: parseFloat(
+              //   webProabilityOfLoadNewPage
+              // ),
               timeout: parseFloat(timeOut),
             },
           },
@@ -202,12 +202,12 @@ function NodePopUpEdit({
           setWebAveragePacketSize(
             loadNodeDetailData.simulation_detail.average_packet_size
           );
-          setWebAverageNewPagePacketSize(
-            loadNodeDetailData.simulation_detail.average_new_page_packet_size
-          );
-          setWebProabilityOfLoadNewPage(
-            loadNodeDetailData.simulation_detail.probability_of_load_new_page
-          );
+          // setWebAverageNewPagePacketSize(
+          //   loadNodeDetailData.simulation_detail.average_new_page_packet_size
+          // );
+          // setWebProabilityOfLoadNewPage(
+          //   loadNodeDetailData.simulation_detail.probability_of_load_new_page
+          // );
           setBorderColor1("#dee2e6");
           setBorderColor2("#333");
           setBorderColor3("#dee2e6");
@@ -548,7 +548,7 @@ function NodePopUpEdit({
                             }}
                           />
                         </div>
-                        <div className="mb-3" style={{ marginTop: "1em" }}>
+                        {/* <div className="mb-3" style={{ marginTop: "1em" }}>
                           <label className="form-label">
                             Average New Page Packet Size
                           </label>
@@ -584,7 +584,7 @@ function NodePopUpEdit({
                               setWebProabilityOfLoadNewPage(value);
                             }}
                           />
-                        </div>
+                        </div> */}
                         <div className="mb-3" style={{ marginTop: "1em" }}>
                           <label className="form-label">Time Out</label>
                           <input
@@ -670,7 +670,7 @@ function NodePopUpEdit({
                     marginBottom: "1em",
                   }}
                 >
-                  <div style={{ marginBottom: "0.5em" }}>Tx-power</div>
+                  <div style={{ marginBottom: "0.5em" }}>Tx Power</div>
                   <input
                     type="number"
                     className="form-control"

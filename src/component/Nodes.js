@@ -259,6 +259,8 @@ function Nodes({
                 nodeMode={
                   loadNodeDetailData ? loadNodeDetailData.network_mode : ""
                 }
+                txPower={loadNodeDetailData ? loadNodeDetailData.tx_power : ""}
+                frequency = {loadNodeDetailData ? loadNodeDetailData.radio === "2.4G" ? "2.4GHz" : "5GHz":""}
               />
             </div>
           </div>

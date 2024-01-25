@@ -1,6 +1,6 @@
 import React from "react";
 
-function NodePreview({ name, ip, simulationDetail, ssid, nodeMode }) {
+function NodePreview({ name, ip, simulationDetail, ssid, nodeMode, txPower, frequency }) {
   const ClientType = () => {
     if (simulationDetail.simulation_type === "deterministic") {
       return (
@@ -38,14 +38,14 @@ function NodePreview({ name, ip, simulationDetail, ssid, nodeMode }) {
             <td>average packet size</td>
             <td>{simulationDetail.average_packet_size.toLocaleString()} MB</td>
           </tr>
-          <tr>
+          {/* <tr>
             <td>average new packet size</td>
             <td>{simulationDetail.average_new_page_packet_size.toLocaleString()} MB</td>
           </tr>
           <tr>
             <td>propability of load new page</td>
             <td>{simulationDetail.probability_of_load_new_page.toLocaleString()}</td>
-          </tr>
+          </tr> */}
           <tr>
             <td>time out</td>
             <td>{simulationDetail.timeout.toLocaleString()} msec</td>
@@ -95,6 +95,14 @@ function NodePreview({ name, ip, simulationDetail, ssid, nodeMode }) {
           <tr>
             <td>mode</td>
             <td>{nodeMode === "client" ? "Client" : "AP"}</td>
+          </tr>
+          <tr>
+            <td>Tx Power</td>
+            <td>{txPower}</td>
+          </tr>
+          <tr>
+            <td>Frequency</td>
+            <td>{frequency}</td>
           </tr>
           {nodeMode === "client" ? ClientType() : ""}
         </tbody>

@@ -144,12 +144,12 @@ function Main({ selectedScenario }) {
                   simulationType: "web",
                   averageIntervalTime: parseInt(value2.average_interval_time),
                   averagePacketSize: parseInt(value2.average_packet_size),
-                  averageNewPacketSize: parseInt(
-                    value2.average_new_page_packet_size
-                  ),
-                  probabilityOfLoadNewPacket: parseInt(
-                    value2.probability_of_load_new_page
-                  ),
+                  // averageNewPacketSize: parseInt(
+                  //   value2.average_new_page_packet_size
+                  // ),
+                  // probabilityOfLoadNewPacket: parseInt(
+                  //   value2.probability_of_load_new_page
+                  // ),
                   timeOut: parseInt(value2.timeout),
                 });
               }
