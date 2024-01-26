@@ -545,7 +545,7 @@ function ChartApp({ monitorSide, setMonitorSide, downloadData }) {
           />
         </div>
       )}
-      {monitorSide === "serverMonitoredByClient" && (
+      {monitorSide === "serverMonitoredByClient" && selectedMetric[2][1] && (
         <div>
           <div
             style={{
@@ -567,7 +567,7 @@ function ChartApp({ monitorSide, setMonitorSide, downloadData }) {
           />
         </div>
       )}
-      {monitorSide === "serverMonitoredByClient" && (
+      {monitorSide === "serverMonitoredByClient" && selectedMetric[3][1] && (
         <div>
           <div
             style={{

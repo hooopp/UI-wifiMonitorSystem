@@ -1,3 +1,4 @@
+import { Legend } from "chart.js";
 import React from "react";
 import {
   AreaChart,
@@ -6,6 +7,7 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
+  Label,
 } from "recharts";
 
 function RechartGraph({ data, listNode }) {
@@ -29,6 +31,7 @@ function RechartGraph({ data, listNode }) {
         </defs>
         <XAxis dataKey="timeStamp" />
         <YAxis />
+        <Legend/>
         <CartesianGrid strokeDasharray="3 3" />
         <Tooltip />
         {listNode.map((node,index) => {
