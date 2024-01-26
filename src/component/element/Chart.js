@@ -23,7 +23,7 @@ function Chart({
               aria-expanded="false"
               style={{ fontWeight: "bold" }}
             >
-              select metric
+              select metrics
             </button>
             <ul className="dropdown-menu" style={{ width: "10em" }}>
               {selectedMetric.map((metric, index) => {
@@ -104,7 +104,7 @@ function Chart({
                           aria-label=""
                           style={{
                             position: "relative",
-                            left: "0.3em",
+                            left: "0.5em",
                           }}
                           checked={listNode[index].checked}
                           onChange={(e) => {
@@ -130,7 +130,7 @@ function Chart({
                             width: "10em",
                             paddingLeft: "0em",
                             position: "relative",
-                            left: "0.5em",
+                            left: "0.7em",
                           }}
                         >
                           {node}

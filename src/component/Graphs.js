@@ -120,7 +120,8 @@ function Graphs({ selectedScenario }) {
             loadGraphDetailData.simulation_data[ip]["Noise"][i][1];
           simulationData.BitRate[i][ip] =
             loadGraphDetailData.simulation_data[ip]["BitRate"][i][1];
-        } else {
+        } 
+        else {
           simulationData.TxPower[i][ip] = 0;
           simulationData.Signal[i][ip] = 0;
           simulationData.Noise[i][ip] = 0;
@@ -385,6 +386,7 @@ function Graphs({ selectedScenario }) {
         setListNode={setListNode}
         selectedMetric={selectedMetric}
         setSelectedMetric={setSelectedMetric}
+        loadGraphDetailData={loadGraphDetailData}
       />
     </div>
   );
