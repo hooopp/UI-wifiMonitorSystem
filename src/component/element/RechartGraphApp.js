@@ -22,7 +22,14 @@ function RechartGraphApp({ simulationDataApp, ssidMonitor }) {
             return ssid.nodes.map((node, index) => {
               if (node.checked) {
                 return (
-                  <linearGradient id={node.node} x1="0" y1="0" x2="0" y2="1">
+                  <linearGradient
+                    key={index}
+                    id={node.node}
+                    x1="0"
+                    y1="0"
+                    x2="0"
+                    y2="1"
+                  >
                     <stop
                       offset="5%"
                       stopColor={node.color}
@@ -44,6 +51,7 @@ function RechartGraphApp({ simulationDataApp, ssidMonitor }) {
             if (node.checked) {
               return (
                 <Area
+                  key={index}
                   type="monotone"
                   dataKey={node.node}
                   stroke={node.color}

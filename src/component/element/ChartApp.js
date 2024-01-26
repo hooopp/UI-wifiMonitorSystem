@@ -4,143 +4,21 @@ import styles from "./Chart.module.css";
 import { set } from "date-fns";
 import RechartGraphApp from "./RechartGraphApp";
 
-function ChartApp({ monitorSide, setMonitorSide, downloadData }) {
+function ChartApp({
+  monitorSide,
+  setMonitorSide,
+  downloadData,
+  simulationDataApp,
+  ssidMonitor,
+  setSsidMonitor
+}) {
   const [selectedMetric, setSelectedMetric] = React.useState([
     ["Latency", true],
     ["Packet Loss", true],
     ["Data Rate Web", true],
     ["Data Rate File", true],
   ]);
-  const [ssidMonitor, setSsidMonitor] = React.useState([
-    {
-      ssid: "ssid1",
-      checked: true,
-      nodes: [
-        { node: "192.168.1.1", checked: true, color: "red" },
-        { node: "192.168.1.2", checked: true, color: "blue" },
-      ],
-    },
-    {
-      ssid: "ssid2",
-      checked: true,
-      nodes: [
-        { node: "192.168.1.3", checked: true, color: "green" },
-        { node: "192.168.1.4", checked: true, color: "yellow" },
-      ],
-    },
-  ]);
 
-  const simulationDataApp = {
-    serverMonitoredByClient: {
-      ssid: ["ssid1", "ssid2"],
-      nodes: ["192.168.1.1", "192.168.1.2"],
-      DataRateWeb: [
-        {
-          timeStamp: "08:25:15",
-          "192.168.1.1": "2",
-          "192.168.1.2": "3",
-          "192.168.1.3": "6",
-          "192.168.1.4": "9",
-        },
-        {
-          timeStamp: "08:25:16",
-          "192.168.1.1": "2",
-          "192.168.1.2": "3",
-          "192.168.1.3": "6",
-          "192.168.1.4": "9",
-        },
-      ],
-      DataRateFile: [
-        {
-          timeStamp: "08:25:15",
-          "192.168.1.1": "2",
-          "192.168.1.2": "3",
-        },
-        {
-          timeStamp: "08:25:16",
-          "192.168.1.1": "2",
-          "192.168.1.2": "3",
-          "192.168.1.3": "6",
-          "192.168.1.4": "9",
-        },
-        {
-          timeStamp: "08:25:17",
-          "192.168.1.1": "4",
-          "192.168.1.2": "5",
-          "192.168.1.3": "6",
-          "192.168.1.4": "9",
-        },
-      ],
-      Latency: [
-        {
-          timeStamp: "08:25:15",
-          "192.168.1.1": "2",
-          "192.168.1.2": "3",
-          "192.168.1.3": "6",
-          "192.168.1.4": "9",
-        },
-        {
-          timeStamp: "08:25:16",
-          "192.168.1.1": "2",
-          "192.168.1.2": "3",
-          "192.168.1.3": "6",
-          "192.168.1.4": "9",
-        },
-      ],
-      PacketLoss: [
-        {
-          timeStamp: "08:25:15",
-          "192.168.1.1": "2",
-          "192.168.1.2": "3",
-          "192.168.1.3": "6",
-          "192.168.1.4": "9",
-        },
-        {
-          timeStamp: "08:25:16",
-          "192.168.1.1": "2",
-          "192.168.1.2": "3",
-          "192.168.1.3": "6",
-          "192.168.1.4": "9",
-        },
-      ],
-    },
-    clientMonitoredByServer: {
-      ssid: ["ssid1", "ssid2"],
-      nodes: ["192.168.1.1", "192.168.1.2"],
-      Latency: [
-        {
-          timeStamp: "08:25:15",
-          "192.168.1.1": "8",
-          "192.168.1.2": "12",
-          "192.168.1.3": "24",
-          "192.168.1.4": "36",
-        },
-        {
-          timeStamp: "08:25:16",
-          "192.168.1.1": "8",
-          "192.168.1.2": "12",
-          "192.168.1.3": "24",
-          "192.168.1.4": "36",
-        },
-      ],
-      PacketLoss: [
-        {
-          timeStamp: "08:25:15",
-          "192.168.1.1": "8",
-          "192.168.1.2": "12",
-          "192.168.1.3": "24",
-          "192.168.1.4": "36",
-        },
-        {
-          timeStamp: "08:25:16",
-          "192.168.1.1": "8",
-          "192.168.1.2": "12",
-          "192.168.1.3": "24",
-          "192.168.1.4": "36",
-        },
-      ],
-    },
-  };
   return (
     <div style={{ margin: "1em", marginBottom: "0.5em", marginTop: "0em" }}>
       <div className="mb-3">
@@ -310,13 +188,13 @@ function ChartApp({ monitorSide, setMonitorSide, downloadData }) {
           <ul className="dropdown-menu" style={{ width: "15em" }}>
             {ssidMonitor.map((ssid, index) => {
               return (
-                <li>
+                <li key={index}>
                   <div style={{ display: "flex" }}>
                     <div className={styles.autoScroll}>
                       <input
                         className="form-check-input"
                         type="checkbox"
-                        id={index}
+                        id={ssid + index}
                         value=""
                         aria-label=""
                         style={{
@@ -392,7 +270,7 @@ function ChartApp({ monitorSide, setMonitorSide, downloadData }) {
                           <input
                             className="form-check-input"
                             type="checkbox"
-                            id={nodeIndex}
+                            id={node + nodeIndex}
                             value=""
                             aria-label=""
                             style={{

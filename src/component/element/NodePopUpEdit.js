@@ -172,6 +172,9 @@ function NodePopUpEdit({
       setTxPower(loadNodeDetailData.tx_power);
       if (loadNodeDetailData.network_mode === "ap") {
         setNodeMode("AP");
+        setBorderColor1("#333");
+        setBorderColor2("#dee2e6");
+        setBorderColor3("#dee2e6");
       } else {
         setNodeMode("Client");
       }
@@ -234,9 +237,9 @@ function NodePopUpEdit({
     setFileAveragePacketSize(0);
     setClientType("Deterministic");
     setTimeOut(0);
-    setBorderColor1("#dee2e6");
+    setBorderColor1("#333");
     setBorderColor2("#dee2e6");
-    setBorderColor3("#333");
+    setBorderColor3("#dee2e6");
   }, [changeMode]);
 
   useEffect(() => {

@@ -616,8 +616,8 @@ const Sidebar = ({ setSelectedScenario, selectedScenario }) => {
               />
             ))}
           {loadScenarioStatus === "loading" && (
-            <p class="placeholder-glow">
-              <span class="placeholder col-12"></span>
+            <p className="placeholder-glow">
+              <span className="placeholder col-12"></span>
             </p>
           )}
         </div>
@@ -721,12 +721,12 @@ const Sidebar = ({ setSelectedScenario, selectedScenario }) => {
                   Check
                 </button>
               </div>
-              {fileContent !== null ? <div class="mb-3" style={{ marginTop: "0.5em" }}>
-                <label for="exampleFormControlTextarea1" class="form-label">
+              {fileContent !== null ? <div className="mb-3" style={{ marginTop: "0.5em" }}>
+                <label for="exampleFormControlTextarea1" className="form-label">
                   File Detail
                 </label>
                 <textarea
-                  class="form-control"
+                  className="form-control"
                   id="exampleFormControlTextarea1"
                   rows="3"
                   value={JSON.stringify(fileContent, null, 2)}

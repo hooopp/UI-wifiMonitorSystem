@@ -17,6 +17,9 @@ function ViewGraphPopUp({
   selectedMetric,
   setSelectedMetric,
   loadGraphDetailData,
+  simulationDataApp,
+  ssidMonitor,
+  setSsidMonitor,
 }) {
   const [name, setName] = React.useState("");
   const [state, setState] = React.useState("");
@@ -34,109 +37,6 @@ function ViewGraphPopUp({
   const [monitorSide, setMonitorSide] = React.useState(
     "serverMonitoredByClient"
   );
-  const simulationDataApp = {
-    serverMonitoredByClient: {
-      ssid: ["ssid1", "ssid2"],
-      nodes: ["192.168.1.1", "192.168.1.2"],
-      DataRateWeb: [
-        {
-          timeStamp: "08:25:15",
-          "192.168.1.1": "2",
-          "192.168.1.2": "3",
-          "192.168.1.3": "6",
-          "192.168.1.4": "9",
-        },
-        { timeStamp: "08:25:16", "192.168.1.1": "2", "192.168.1.2": "3" },
-      ],
-      DataRateFile: [
-        {
-          timeStamp: "08:25:15",
-          "192.168.1.1": "2",
-          "192.168.1.2": "3",
-          "192.168.1.3": "6",
-          "192.168.1.4": "9",
-        },
-        { timeStamp: "08:25:16", "192.168.1.1": "2", "192.168.1.2": "3" },
-      ],
-      Latency: [
-        {
-          timeStamp: "08:25:15",
-          "192.168.1.1": "2",
-          "192.168.1.2": "3",
-          "192.168.1.3": "6",
-          "192.168.1.4": "9",
-        },
-        {
-          timeStamp: "08:25:16",
-          "192.168.1.1": "2",
-          "192.168.1.2": "3",
-          "192.168.1.3": "6",
-          "192.168.1.4": "9",
-        },
-      ],
-      PacketLoss: [
-        {
-          timeStamp: "08:25:15",
-          "192.168.1.1": "2",
-          "192.168.1.2": "3",
-          "192.168.1.3": "6",
-          "192.168.1.4": "9",
-        },
-        {
-          timeStamp: "08:25:16",
-          "192.168.1.1": "2",
-          "192.168.1.2": "3",
-          "192.168.1.3": "6",
-          "192.168.1.4": "9",
-        },
-      ],
-    },
-    clientMonitoredByServer: {
-      ssid: ["ssid1", "ssid2"],
-      nodes: ["192.168.1.1", "192.168.1.2"],
-      latency: [
-        {
-          timeStamp: "08:25:15",
-          "192.168.1.1": "4",
-          "192.168.1.2": "6",
-          "192.168.1.3": "12",
-          "192.168.1.4": "18",
-        },
-        {
-          timeStamp: "08:25:16",
-          "192.168.1.1": "4",
-          "192.168.1.2": "6",
-          "192.168.1.3": "12",
-          "192.168.1.4": "18",
-        },
-      ],
-      packetLoss: [
-        {
-          timeStamp: "08:25:15",
-          "192.168.1.1": "4",
-          "192.168.1.2": "6",
-          "192.168.1.3": "12",
-          "192.168.1.4": "18",
-        },
-        {
-          timeStamp: "08:25:16",
-          "192.168.1.1": "4",
-          "192.168.1.2": "6",
-          "192.168.1.3": "12",
-          "192.168.1.4": "18",
-        },
-      ],
-    },
-  };
-
-  function getRandomColor() {
-    return (
-      "#" +
-      Math.floor(Math.random() * 16777215)
-        .toString(16)
-        .padStart(6, "0")
-    );
-  }
 
   function downloadData(data) {
     const json = JSON.stringify(data);
@@ -173,6 +73,9 @@ function ViewGraphPopUp({
             messagesEndRef.current.scrollHeight;
         }
       };
+      
+      handleShown();
+
       const modalElement = document.getElementById("ViewGraphPopUp");
       modalElement.addEventListener("shown.bs.modal", handleShown);
       return () => {
@@ -354,6 +257,8 @@ function ViewGraphPopUp({
                       setMonitorSide={setMonitorSide}
                       simulationDataApp={simulationDataApp}
                       downloadData={downloadData}
+                      ssidMonitor={ssidMonitor}
+                      setSsidMonitor={setSsidMonitor}
                     />
                   ) : (
                     ""

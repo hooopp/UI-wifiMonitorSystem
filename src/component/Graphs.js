@@ -20,12 +20,14 @@ function Graphs({ selectedScenario }) {
   const [intervalRefetch, setIntervalRefetch] = React.useState(false);
   const [simulationData, setSimulationData] = React.useState(null);
   const [listNode, setListNode] = React.useState([]);
+  const [ssidMonitor, setSsidMonitor] = React.useState([]);
   const [selectedMetric, setSelectedMetric] = React.useState([
     ["TxPower", true],
     ["Signal", true],
     ["Noise", true],
     ["BitRate", true],
   ]);
+  const [simulationDataApp, setSimulationDataApp] = React.useState(null);
   const colors = [
     "#fd7f6f",
     "#7eb0d5",
@@ -63,7 +65,196 @@ function Graphs({ selectedScenario }) {
     const { data } = await axios.get(
       `http://localhost:8000/scenario/${selectedScenario}/simulation/${selectedGraph}`
     );
+    console.log(data);
     return data;
+  };
+
+  const transformDataApp = (data) => {
+    let simulationDataApp1 = {
+      ssid: [],
+      nodes: [],
+      DataRateWeb: [],
+      DataRateFile: [],
+      Latency: [],
+      PacketLoss: [],
+    };
+    let simulationDataApp2 = {
+      ssid: [],
+      nodes: [],
+      DataRateWeb: [],
+      DataRateFile: [],
+      Latency: [],
+      PacketLoss: [],
+    };
+
+    let data1 = data.udp_deterministic_server_data_monitored_from_client;
+    let maxDataLength1 = 0;
+    let startTime1 = Infinity;
+
+    let data2 = data.udp_deterministic_client_data_monitored_from_server;
+    let maxDataLength2 = 0;
+    let startTime2 = Infinity;
+
+    let ssidMonitor = [];
+
+    var colorIndex = 0;
+
+    Object.entries(data1).map(([key, value]) => {
+      let nodes = [];
+      Object.entries(value).map(([key2, value2]) => {
+        simulationDataApp1.nodes.push(key2);
+        simulationDataApp2.nodes.push(key2);
+        nodes.push({ node: key2, color: colors[colorIndex], checked: true });
+        colorIndex += 1;
+      });
+      ssidMonitor.push({ ssid: key, checked: true, nodes: nodes });
+      simulationDataApp1.ssid.push(key);
+      simulationDataApp2.ssid.push(key);
+    });
+
+    setSsidMonitor(ssidMonitor);
+
+    Object.entries(data1).map(([key, value]) => {
+      Object.entries(value).map(([key2, value2]) => {
+        Object.entries(value2).map(([key3, value3]) => {
+          if (value3.length > maxDataLength1) {
+            maxDataLength1 = value3.length;
+          }
+          if (value3[0][0] < startTime1) {
+            startTime1 = value3[0][0];
+          }
+        });
+      });
+    });
+    Object.entries(data2).map(([key, value]) => {
+      Object.entries(value).map(([key2, value2]) => {
+        Object.entries(value2).map(([key3, value3]) => {
+          if (value3.length > maxDataLength2) {
+            maxDataLength2 = value3.length;
+          }
+          if (value3[0][0] < startTime2) {
+            startTime2 = value3[0][0];
+          }
+        });
+      });
+    });
+
+    startTime1 = new Date(startTime1 * 1000).toISOString().slice(11, -5);
+    startTime2 = new Date(startTime2 * 1000).toISOString().slice(11, -5);
+
+    for (let i = 0; i < maxDataLength1; i++) {
+      simulationDataApp1.DataRateWeb.push({ timeStamp: startTime1 });
+      simulationDataApp1.DataRateFile.push({ timeStamp: startTime1 });
+      simulationDataApp1.Latency.push({ timeStamp: startTime1 });
+      simulationDataApp1.PacketLoss.push({ timeStamp: startTime1 });
+      let parts = startTime1.split(":");
+      let date = new Date(0, 0, 0, parts[0], parts[1], parts[2]);
+      date.setSeconds(date.getSeconds() + 1);
+      startTime1 = date.toTimeString().split(" ")[0];
+    }
+    for (let i = 0; i < maxDataLength2; i++) {
+      simulationDataApp2.DataRateWeb.push({ timeStamp: startTime2 });
+      simulationDataApp2.DataRateFile.push({ timeStamp: startTime2 });
+      simulationDataApp2.Latency.push({ timeStamp: startTime2 });
+      simulationDataApp2.PacketLoss.push({ timeStamp: startTime2 });
+      let parts = startTime2.split(":");
+      let date = new Date(0, 0, 0, parts[0], parts[1], parts[2]);
+      date.setSeconds(date.getSeconds() + 1);
+      startTime2 = date.toTimeString().split(" ")[0];
+    }
+
+    Object.entries(data1).map(([ssid, value]) => {
+      Object.entries(value).map(([node, value2]) => {
+        Object.entries(value2).map(([metric, value3]) => {
+          if (metric === "lost_count") {
+            for (let i = 0; i < maxDataLength1; i++) {
+              if (i < value3.length) {
+                simulationDataApp1.PacketLoss[i][node] = value3[i][1];
+              } else {
+                simulationDataApp1.PacketLoss[i][node] = 0;
+              }
+            }
+          }
+          if (metric === "average_latency") {
+            for (let i = 0; i < maxDataLength1; i++) {
+              if (i < value3.length) {
+                simulationDataApp1.Latency[i][node] = value3[i][1];
+              } else {
+                simulationDataApp1.Latency[i][node] = 0;
+              }
+            }
+          }
+          if (metric === "file_average_data_rates") {
+            for (let i = 0; i < maxDataLength1; i++) {
+              if (i < value3.length) {
+                simulationDataApp1.DataRateFile[i][node] = value3[i][1];
+              } else {
+                simulationDataApp1.DataRateFile[i][node] = 0;
+              }
+            }
+          }
+          if (metric === "web_average_data_rates") {
+            for (let i = 0; i < maxDataLength1; i++) {
+              if (i < value3.length) {
+                simulationDataApp1.DataRateWeb[i][node] = value3[i][1];
+              } else {
+                simulationDataApp1.DataRateWeb[i][node] = 0;
+              }
+            }
+          }
+        });
+      });
+    });
+    Object.entries(data2).map(([ssid, value]) => {
+      Object.entries(value).map(([node, value2]) => {
+        Object.entries(value2).map(([metric, value3]) => {
+          if (metric === "lost_count") {
+            for (let i = 0; i < maxDataLength2; i++) {
+              if (i < value3.length) {
+                simulationDataApp2.PacketLoss[i][node] = value3[i][1];
+              } else {
+                simulationDataApp2.PacketLoss[i][node] = 0;
+              }
+            }
+          }
+          if (metric === "average_latency") {
+            for (let i = 0; i < maxDataLength2; i++) {
+              if (i < value3.length) {
+                simulationDataApp2.Latency[i][node] = value3[i][1];
+              } else {
+                simulationDataApp2.Latency[i][node] = 0;
+              }
+            }
+          }
+          if (metric === "file_average_data_rates") {
+            for (let i = 0; i < maxDataLength2; i++) {
+              if (i < value3.length) {
+                simulationDataApp2.DataRateFile[i][node] = value3[i][1];
+              } else {
+                simulationDataApp2.DataRateFile[i][node] = 0;
+              }
+            }
+          }
+          if (metric === "web_average_data_rates") {
+            for (let i = 0; i < maxDataLength2; i++) {
+              if (i < value3.length) {
+                simulationDataApp2.DataRateWeb[i][node] = value3[i][1];
+              } else {
+                simulationDataApp2.DataRateWeb[i][node] = 0;
+              }
+            }
+          }
+        });
+      });
+    });
+    console.log({
+      serverMonitoredByClient: simulationDataApp1,
+      clientMonitoredByServer: simulationDataApp2,
+    });
+    setSimulationDataApp({
+      serverMonitoredByClient: simulationDataApp1,
+      clientMonitoredByServer: simulationDataApp2,
+    });
   };
 
   const transformData = (loadGraphDetailData) => {
@@ -76,7 +267,6 @@ function Graphs({ selectedScenario }) {
     };
     let maxDataLength = 0;
     let startTime = Infinity;
-    console.log(loadGraphDetailData);
     let listNode = [];
     let index = 0;
     for (let ip in loadGraphDetailData.simulation_data) {
@@ -120,8 +310,7 @@ function Graphs({ selectedScenario }) {
             loadGraphDetailData.simulation_data[ip]["Noise"][i][1];
           simulationData.BitRate[i][ip] =
             loadGraphDetailData.simulation_data[ip]["BitRate"][i][1];
-        } 
-        else {
+        } else {
           simulationData.TxPower[i][ip] = 0;
           simulationData.Signal[i][ip] = 0;
           simulationData.Noise[i][ip] = 0;
@@ -129,7 +318,6 @@ function Graphs({ selectedScenario }) {
         }
       }
     }
-    console.log(simulationData);
     setSimulationData(simulationData);
   };
 
@@ -251,6 +439,7 @@ function Graphs({ selectedScenario }) {
       ) {
         setIntervalRefetch(false);
         transformData(loadGraphDetailData);
+        transformDataApp(loadGraphDetailData);
       }
     },
   });
@@ -387,6 +576,9 @@ function Graphs({ selectedScenario }) {
         selectedMetric={selectedMetric}
         setSelectedMetric={setSelectedMetric}
         loadGraphDetailData={loadGraphDetailData}
+        simulationDataApp={simulationDataApp}
+        ssidMonitor={ssidMonitor}
+        setSsidMonitor={setSsidMonitor}
       />
     </div>
   );
