@@ -2,6 +2,7 @@ import React from "react";
 import styles from "./Chart.module.css";
 import { TbFileExport } from "react-icons/tb";
 import RechartGraph from "./RechartGraph";
+import { useState, useEffect } from "react";
 
 function Chart({
   downloadData,
@@ -11,6 +12,25 @@ function Chart({
   selectedMetric,
   setSelectedMetric,
 }) {
+  const [dimensions, setDimensions] = useState({ 
+    height: window.innerHeight,
+    width: window.innerWidth
+  });
+
+  useEffect(() => {
+    function handleResize() {
+      setDimensions({
+        height: window.innerHeight,
+        width: window.innerWidth
+      });
+    }
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
   return (
     <div>
       <div style={{ margin: "1em", marginBottom: "0.5em" }}>

@@ -20,6 +20,8 @@ function ViewGraphPopUp({
   simulationDataApp,
   ssidMonitor,
   setSsidMonitor,
+  setHasShownAlert,
+  hasShownAlert,
 }) {
   const [name, setName] = React.useState("");
   const [state, setState] = React.useState("");
@@ -73,7 +75,7 @@ function ViewGraphPopUp({
             messagesEndRef.current.scrollHeight;
         }
       };
-      
+
       handleShown();
 
       const modalElement = document.getElementById("ViewGraphPopUp");
@@ -124,6 +126,7 @@ function ViewGraphPopUp({
                   setIntervalRefetch(false);
                   setAutoScroll(true);
                   setSimulationData(null);
+                  setHasShownAlert(false);
                 }}
               ></button>
             </div>
@@ -165,19 +168,21 @@ function ViewGraphPopUp({
                     </span>
                   </div>
                 </div>
-                <div
-                  ref={messagesEndRef}
-                  style={{
-                    overflowY: "scroll",
-                    width: "45em",
-                    height: "20em",
-                    backgroundColor: "#f8f9fa",
-                    marginBottom: "1em",
-                  }}
-                >
-                  <pre style={{ marginLeft: "1em", overflow: "unset" }}>
-                    {formattedMessage}
-                  </pre>
+                <div style={{ padding: "0em 1em" }}>
+                  <div
+                    ref={messagesEndRef}
+                    style={{
+                      overflowY: "scroll",
+                      width: "100%",
+                      height: "20em",
+                      backgroundColor: "#f8f9fa",
+                      marginBottom: "1em",
+                    }}
+                  >
+                    <pre style={{ marginLeft: "1em", overflow: "unset" }}>
+                      {formattedMessage}
+                    </pre>
+                  </div>
                 </div>
               </div>
               {simulationData !== null ? (
@@ -239,27 +244,31 @@ function ViewGraphPopUp({
                     </li> */}
                   </ul>
                   {mode === 0 ? (
-                    <Chart
-                      key={1}
-                      downloadData={downloadData}
-                      simulationData={simulationData}
-                      listNode={listNode}
-                      setListNode={setListNode}
-                      selectedMetric={selectedMetric}
-                      setSelectedMetric={setSelectedMetric}
-                    />
+                    <div style={{ width: "100%" }}>
+                      <Chart
+                        key={1}
+                        downloadData={downloadData}
+                        simulationData={simulationData}
+                        listNode={listNode}
+                        setListNode={setListNode}
+                        selectedMetric={selectedMetric}
+                        setSelectedMetric={setSelectedMetric}
+                      />
+                    </div>
                   ) : (
                     ""
                   )}
                   {mode === 1 ? (
-                    <ChartApp
-                      monitorSide={monitorSide}
-                      setMonitorSide={setMonitorSide}
-                      simulationDataApp={simulationDataApp}
-                      downloadData={downloadData}
-                      ssidMonitor={ssidMonitor}
-                      setSsidMonitor={setSsidMonitor}
-                    />
+                    <div style={{ width: "100%" }}>
+                      <ChartApp
+                        monitorSide={monitorSide}
+                        setMonitorSide={setMonitorSide}
+                        simulationDataApp={simulationDataApp}
+                        downloadData={downloadData}
+                        ssidMonitor={ssidMonitor}
+                        setSsidMonitor={setSsidMonitor}
+                      />
+                    </div>
                   ) : (
                     ""
                   )}

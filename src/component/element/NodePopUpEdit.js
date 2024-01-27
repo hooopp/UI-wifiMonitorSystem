@@ -237,6 +237,7 @@ function NodePopUpEdit({
     setFileAveragePacketSize(0);
     setClientType("Deterministic");
     setTimeOut(0);
+    setTxPower(1);
     setBorderColor1("#333");
     setBorderColor2("#dee2e6");
     setBorderColor3("#dee2e6");

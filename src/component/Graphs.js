@@ -65,7 +65,7 @@ function Graphs({ selectedScenario }) {
     const { data } = await axios.get(
       `http://localhost:8000/scenario/${selectedScenario}/simulation/${selectedGraph}`
     );
-    console.log(data);
+    // console.log(data);
     return data;
   };
 
@@ -99,6 +99,7 @@ function Graphs({ selectedScenario }) {
 
     var colorIndex = 0;
 
+    console.log(data1);
     Object.entries(data1).map(([key, value]) => {
       let nodes = [];
       Object.entries(value).map(([key2, value2]) => {
@@ -111,12 +112,23 @@ function Graphs({ selectedScenario }) {
       simulationDataApp1.ssid.push(key);
       simulationDataApp2.ssid.push(key);
     });
-
     setSsidMonitor(ssidMonitor);
 
+    let alertmsg = "";
     Object.entries(data1).map(([key, value]) => {
       Object.entries(value).map(([key2, value2]) => {
         Object.entries(value2).map(([key3, value3]) => {
+          if (value3.length === 0) {
+            alertmsg =
+              alertmsg +
+              "No data from " +
+              key2 +
+              " in " +
+              key +
+              "\n" +
+              "Please try again later\n";
+            return;
+          }
           if (value3.length > maxDataLength1) {
             maxDataLength1 = value3.length;
           }
@@ -126,6 +138,12 @@ function Graphs({ selectedScenario }) {
         });
       });
     });
+
+    if (alertmsg !== "" && !hasShownAlert) {
+      alert(alertmsg);
+      setHasShownAlert(true);
+    }
+
     Object.entries(data2).map(([key, value]) => {
       Object.entries(value).map(([key2, value2]) => {
         Object.entries(value2).map(([key3, value3]) => {
@@ -138,14 +156,14 @@ function Graphs({ selectedScenario }) {
         });
       });
     });
-    console.log(startTime1)
-    console.log(startTime2)
+    // console.log(startTime1);
+    // console.log(startTime2);
 
-    if (startTime1 === Infinity){
-      startTime1 = startTime2
+    if (startTime1 === Infinity) {
+      startTime1 = startTime2;
     }
-    if (startTime2 === Infinity){
-      startTime2 = startTime1
+    if (startTime2 === Infinity) {
+      startTime2 = startTime1;
     }
     startTime1 = new Date(startTime1 * 1000).toISOString().slice(11, -5);
     startTime2 = new Date(startTime2 * 1000).toISOString().slice(11, -5);
@@ -255,10 +273,10 @@ function Graphs({ selectedScenario }) {
         });
       });
     });
-    console.log({
-      serverMonitoredByClient: simulationDataApp1,
-      clientMonitoredByServer: simulationDataApp2,
-    });
+    // console.log({
+    //   serverMonitoredByClient: simulationDataApp1,
+    //   clientMonitoredByServer: simulationDataApp2,
+    // });
     setSimulationDataApp({
       serverMonitoredByClient: simulationDataApp1,
       clientMonitoredByServer: simulationDataApp2,
@@ -432,6 +450,8 @@ function Graphs({ selectedScenario }) {
     created_at: "2024-01-04T15:25:05.881919",
   };
 
+  const [hasShownAlert, setHasShownAlert] = React.useState(false);
+
   const {
     data: loadGraphDetailData,
     status: loadGraphDetailStatus,
@@ -446,6 +466,17 @@ function Graphs({ selectedScenario }) {
         loadGraphDetailData.id === selectedGraph
       ) {
         setIntervalRefetch(false);
+        if (
+          Object.keys(
+            loadGraphDetailData.udp_deterministic_server_data_monitored_from_client
+          ).length === 0
+        ) {
+          if (!hasShownAlert) {
+            setHasShownAlert(true);
+            alert("There is error occur in simulation, please try again later");
+          }
+          return;
+        }
         transformData(loadGraphDetailData);
         transformDataApp(loadGraphDetailData);
       }
@@ -587,6 +618,8 @@ function Graphs({ selectedScenario }) {
         simulationDataApp={simulationDataApp}
         ssidMonitor={ssidMonitor}
         setSsidMonitor={setSsidMonitor}
+        setHasShownAlert={setHasShownAlert}
+        hasShownAlert={hasShownAlert}
       />
     </div>
   );
