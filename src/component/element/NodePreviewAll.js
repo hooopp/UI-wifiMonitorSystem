@@ -17,11 +17,11 @@ function NodePreviewAll({ name, ip, simulationDetail, nodeMode }) {
           </tr>
           <tr>
             <td>average packet size</td>
-            <td>{simulationDetail.average_packet_size.toLocaleString()} MB</td>
+            <td>{simulationDetail.average_packet_size.toLocaleString()} Byte</td>
           </tr>
           <tr>
             <td>time out</td>
-            <td>{simulationDetail.timeout.toLocaleString()} msec</td>
+            <td>{simulationDetail.timeout.toLocaleString()} sec</td>
           </tr>
         </>
       );
@@ -40,13 +40,13 @@ function NodePreviewAll({ name, ip, simulationDetail, nodeMode }) {
           </tr>
           <tr>
             <td>average packet size</td>
-            <td>{simulationDetail.average_packet_size.toLocaleString()} MB</td>
+            <td>{simulationDetail.average_packet_size.toLocaleString()} Byte</td>
           </tr>
           {/* <tr>
             <td>average new packet size</td>
             <td>
               {simulationDetail.average_new_page_packet_size.toLocaleString()}{" "}
-              MB
+              Byte
             </td>
           </tr>
           <tr>
@@ -57,7 +57,7 @@ function NodePreviewAll({ name, ip, simulationDetail, nodeMode }) {
           </tr> */}
           <tr>
             <td>time out</td>
-            <td>{simulationDetail.timeout.toLocaleString()} msec</td>
+            <td>{simulationDetail.timeout.toLocaleString()} sec</td>
           </tr>
         </>
       );
@@ -70,11 +70,11 @@ function NodePreviewAll({ name, ip, simulationDetail, nodeMode }) {
           </tr>
           <tr>
             <td>average packet size</td>
-            <td>{simulationDetail.average_packet_size.toLocaleString()} MB</td>
+            <td>{simulationDetail.average_packet_size.toLocaleString()} Byte</td>
           </tr>
           <tr>
             <td>time out</td>
-            <td>{simulationDetail.timeout.toLocaleString()} msec</td>
+            <td>{simulationDetail.timeout.toLocaleString()} sec</td>
           </tr>
         </>
       );
@@ -124,7 +124,7 @@ function NodePreviewAll({ name, ip, simulationDetail, nodeMode }) {
               </tr>
               <tr>
                 <td>time out</td>
-                <td>{simulationDetail.timeout} msec</td>
+                <td>{simulationDetail.timeout} sec</td>
               </tr>
             </>
           )}

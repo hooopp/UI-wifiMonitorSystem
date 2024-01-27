@@ -15,11 +15,11 @@ function NodePreview({ name, ip, simulationDetail, ssid, nodeMode, txPower, freq
           </tr>
           <tr>
             <td>average packet size</td>
-            <td>{simulationDetail.average_packet_size.toLocaleString()} MB</td>
+            <td>{simulationDetail.average_packet_size.toLocaleString()} Byte</td>
           </tr>
           <tr>
             <td>time out</td>
-            <td>{simulationDetail.timeout.toLocaleString()} msec</td>
+            <td>{simulationDetail.timeout.toLocaleString()} sec</td>
           </tr>
         </>
       );
@@ -36,11 +36,11 @@ function NodePreview({ name, ip, simulationDetail, ssid, nodeMode, txPower, freq
           </tr>
           <tr>
             <td>average packet size</td>
-            <td>{simulationDetail.average_packet_size.toLocaleString()} MB</td>
+            <td>{simulationDetail.average_packet_size.toLocaleString()} Byte</td>
           </tr>
           {/* <tr>
             <td>average new packet size</td>
-            <td>{simulationDetail.average_new_page_packet_size.toLocaleString()} MB</td>
+            <td>{simulationDetail.average_new_page_packet_size.toLocaleString()} Byte</td>
           </tr>
           <tr>
             <td>propability of load new page</td>
@@ -48,7 +48,7 @@ function NodePreview({ name, ip, simulationDetail, ssid, nodeMode, txPower, freq
           </tr> */}
           <tr>
             <td>time out</td>
-            <td>{simulationDetail.timeout.toLocaleString()} msec</td>
+            <td>{simulationDetail.timeout.toLocaleString()} sec</td>
           </tr>
         </>
       )
@@ -61,11 +61,11 @@ function NodePreview({ name, ip, simulationDetail, ssid, nodeMode, txPower, freq
           </tr>
           <tr>
             <td>average packet size</td>
-            <td>{simulationDetail.average_packet_size.toLocaleString()} MB</td>
+            <td>{simulationDetail.average_packet_size.toLocaleString()} Byte</td>
           </tr>
           <tr>
             <td>time out</td>
-            <td>{simulationDetail.timeout.toLocaleString()} msec</td>
+            <td>{simulationDetail.timeout.toLocaleString()} sec</td>
           </tr>
         </>
       )

@@ -413,7 +413,7 @@ function NodePopUp({
                       <div>
                         <div className="mb-3" style={{ marginTop: "1em" }}>
                           <label className="form-label">
-                            Average Interval Time
+                            Average Interval Time (ms)
                           </label>
                           <input
                             type="number"
@@ -429,7 +429,7 @@ function NodePopUp({
                         </div>
                         <div className="mb-3" style={{ marginTop: "1em" }}>
                           <label className="form-label">
-                            Average Packet Size
+                            Average Packet Size (B)
                           </label>
                           <input
                             type="number"
@@ -442,7 +442,7 @@ function NodePopUp({
                           />
                         </div>
                         <div className="mb-3" style={{ marginTop: "1em" }}>
-                          <label className="form-label">Time Out</label>
+                          <label className="form-label">Time Out (s)</label>
                           <input
                             type="number"
                             className="form-control"
@@ -486,7 +486,7 @@ function NodePopUp({
                       <div>
                         <div className="mb-3" style={{ marginTop: "1em" }}>
                           <label className="form-label">
-                            Average Interval Time
+                            Average Interval Time (ms)
                           </label>
                           <input
                             type="number"
@@ -500,7 +500,7 @@ function NodePopUp({
                         </div>
                         <div className="mb-3" style={{ marginTop: "1em" }}>
                           <label className="form-label">
-                            Average Packet Size
+                            Average Packet Size (B)
                           </label>
                           <input
                             type="number"
@@ -550,7 +550,7 @@ function NodePopUp({
                           />
                         </div> */}
                         <div className="mb-3" style={{ marginTop: "1em" }}>
-                          <label className="form-label">Time Out</label>
+                          <label className="form-label">Time Out (s)</label>
                           <input
                             type="number"
                             className="form-control"
@@ -592,7 +592,7 @@ function NodePopUp({
                     {clientType === "File" ? (
                       <div className="mb-3" style={{ marginTop: "1em" }}>
                         <label className="form-label">
-                          Average Packet Size
+                          Average Packet Size (B)
                         </label>
                         <input
                           type="number"
@@ -604,7 +604,7 @@ function NodePopUp({
                           }}
                         />
                         <div className="mb-3" style={{ marginTop: "1em" }}>
-                          <label className="form-label">Time Out</label>
+                          <label className="form-label">Time Out (s)</label>
                           <input
                             type="number"
                             className="form-control"

@@ -138,7 +138,15 @@ function Graphs({ selectedScenario }) {
         });
       });
     });
+    console.log(startTime1)
+    console.log(startTime2)
 
+    if (startTime1 === Infinity){
+      startTime1 = startTime2
+    }
+    if (startTime2 === Infinity){
+      startTime2 = startTime1
+    }
     startTime1 = new Date(startTime1 * 1000).toISOString().slice(11, -5);
     startTime2 = new Date(startTime2 * 1000).toISOString().slice(11, -5);
 

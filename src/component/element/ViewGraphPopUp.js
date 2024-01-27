@@ -225,7 +225,7 @@ function ViewGraphPopUp({
                         Application Layer
                       </a>
                     </li>
-                    <li className="nav-item">
+                    {/* <li className="nav-item">
                       <a
                         className={`nav-link ${mode === 2 ? "active" : ""}`}
                         href="#"
@@ -236,7 +236,7 @@ function ViewGraphPopUp({
                       >
                         Summary
                       </a>
-                    </li>
+                    </li> */}
                   </ul>
                   {mode === 0 ? (
                     <Chart
