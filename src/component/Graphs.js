@@ -69,6 +69,10 @@ function Graphs({ selectedScenario }) {
     return data;
   };
 
+  function isNumber(str) {
+    return !isNaN(parseFloat(str)) && isFinite(str);
+  }
+
   const transformDataApp = (data) => {
     let simulationDataApp1 = {
       ssid: [],
@@ -99,7 +103,6 @@ function Graphs({ selectedScenario }) {
 
     var colorIndex = 0;
 
-    console.log(data1);
     Object.entries(data1).map(([key, value]) => {
       let nodes = [];
       Object.entries(value).map(([key2, value2]) => {
@@ -195,7 +198,11 @@ function Graphs({ selectedScenario }) {
           if (metric === "lost_count") {
             for (let i = 0; i < maxDataLength1; i++) {
               if (i < value3.length) {
-                simulationDataApp1.PacketLoss[i][node] = value3[i][1];
+                if (isNumber(value3[i][1])) {
+                  simulationDataApp1.PacketLoss[i][node] = Number(value3[i][1]);
+                }else{
+                  simulationDataApp1.PacketLoss[i][node] = undefined;
+                }
               } else {
                 simulationDataApp1.PacketLoss[i][node] = 0;
               }
@@ -204,7 +211,11 @@ function Graphs({ selectedScenario }) {
           if (metric === "average_latency") {
             for (let i = 0; i < maxDataLength1; i++) {
               if (i < value3.length) {
-                simulationDataApp1.Latency[i][node] = value3[i][1];
+                if (isNumber(value3[i][1])){
+                  simulationDataApp1.Latency[i][node] = Number(value3[i][1]);
+                }else{
+                  simulationDataApp1.Latency[i][node] = undefined;
+                }
               } else {
                 simulationDataApp1.Latency[i][node] = 0;
               }
@@ -213,7 +224,11 @@ function Graphs({ selectedScenario }) {
           if (metric === "file_average_data_rates") {
             for (let i = 0; i < maxDataLength1; i++) {
               if (i < value3.length) {
-                simulationDataApp1.DataRateFile[i][node] = value3[i][1];
+                if (isNumber(value3[i][1])){
+                  simulationDataApp1.DataRateFile[i][node] = Number(value3[i][1]);
+                }else{
+                  simulationDataApp1.DataRateFile[i][node] = undefined;
+                }
               } else {
                 simulationDataApp1.DataRateFile[i][node] = 0;
               }
@@ -222,7 +237,11 @@ function Graphs({ selectedScenario }) {
           if (metric === "web_average_data_rates") {
             for (let i = 0; i < maxDataLength1; i++) {
               if (i < value3.length) {
-                simulationDataApp1.DataRateWeb[i][node] = value3[i][1];
+                if(isNumber(value3[i][1])){
+                  simulationDataApp1.DataRateWeb[i][node] = Number(value3[i][1]);
+                }else{
+                  simulationDataApp1.DataRateWeb[i][node] = undefined;
+                }
               } else {
                 simulationDataApp1.DataRateWeb[i][node] = 0;
               }
@@ -237,7 +256,11 @@ function Graphs({ selectedScenario }) {
           if (metric === "lost_count") {
             for (let i = 0; i < maxDataLength2; i++) {
               if (i < value3.length) {
-                simulationDataApp2.PacketLoss[i][node] = value3[i][1];
+                if(isNumber(value3[i][1])){
+                  simulationDataApp2.PacketLoss[i][node] = Number(value3[i][1]);
+                }else{
+                  simulationDataApp2.PacketLoss[i][node] = undefined;
+                }
               } else {
                 simulationDataApp2.PacketLoss[i][node] = 0;
               }
@@ -246,7 +269,11 @@ function Graphs({ selectedScenario }) {
           if (metric === "average_latency") {
             for (let i = 0; i < maxDataLength2; i++) {
               if (i < value3.length) {
-                simulationDataApp2.Latency[i][node] = value3[i][1];
+                if(isNumber(value3[i][1])){
+                  simulationDataApp2.Latency[i][node] = Number(value3[i][1]);
+                }else{
+                  simulationDataApp2.Latency[i][node] = undefined;
+                }
               } else {
                 simulationDataApp2.Latency[i][node] = 0;
               }
@@ -255,7 +282,11 @@ function Graphs({ selectedScenario }) {
           if (metric === "file_average_data_rates") {
             for (let i = 0; i < maxDataLength2; i++) {
               if (i < value3.length) {
-                simulationDataApp2.DataRateFile[i][node] = value3[i][1];
+                if(isNumber(value3[i][1])){
+                  simulationDataApp2.DataRateFile[i][node] = Number(value3[i][1]);
+                }else{
+                  simulationDataApp2.DataRateFile[i][node] = undefined;
+                }
               } else {
                 simulationDataApp2.DataRateFile[i][node] = 0;
               }
@@ -328,14 +359,30 @@ function Graphs({ selectedScenario }) {
       var ipLength = loadGraphDetailData.simulation_data[ip]["Tx-Power"].length;
       for (let i = 0; i < maxDataLength; i++) {
         if (i < ipLength) {
-          simulationData.TxPower[i][ip] =
-            loadGraphDetailData.simulation_data[ip]["Tx-Power"][i][1];
-          simulationData.Signal[i][ip] =
-            loadGraphDetailData.simulation_data[ip]["Signal"][i][1];
-          simulationData.Noise[i][ip] =
-            loadGraphDetailData.simulation_data[ip]["Noise"][i][1];
-          simulationData.BitRate[i][ip] =
-            loadGraphDetailData.simulation_data[ip]["BitRate"][i][1];
+          if (isNumber(loadGraphDetailData.simulation_data[ip]["Tx-Power"][i][1])){
+            simulationData.TxPower[i][ip] =
+            Number(loadGraphDetailData.simulation_data[ip]["Tx-Power"][i][1]);
+          }else{
+            simulationData.TxPower[i][ip] = undefined;
+          }
+          if (isNumber(loadGraphDetailData.simulation_data[ip]["Signal"][i][1])){
+            simulationData.Signal[i][ip] =
+            Number(loadGraphDetailData.simulation_data[ip]["Signal"][i][1]);
+          }else{
+            simulationData.Signal[i][ip] = undefined;
+          }
+          if (isNumber(loadGraphDetailData.simulation_data[ip]["Noise"][i][1])){
+            simulationData.Noise[i][ip] =
+            Number(loadGraphDetailData.simulation_data[ip]["Noise"][i][1]);
+          }else{
+            simulationData.Noise[i][ip] = undefined;
+          }
+          if (isNumber(loadGraphDetailData.simulation_data[ip]["BitRate"][i][1])){ 
+            simulationData.BitRate[i][ip] =
+            Number(loadGraphDetailData.simulation_data[ip]["BitRate"][i][1]);
+          }else{
+            simulationData.BitRate[i][ip] = undefined;
+          }
         } else {
           simulationData.TxPower[i][ip] = 0;
           simulationData.Signal[i][ip] = 0;
@@ -345,109 +392,6 @@ function Graphs({ selectedScenario }) {
       }
     }
     setSimulationData(simulationData);
-  };
-
-  const unreal = {
-    id: 13,
-    state: "finished",
-    simulation_data: {
-      "192.168.1.1": {
-        "Tx-Power": [
-          [1704356715.2266462, "6"],
-          [1704356716.4962032, "3"],
-          [1704356717.7641122, "4"],
-          [1704356719.033403, "7"],
-          [1704356720.3017914, "8"],
-          [1704356721.5713918, "5"],
-          [1704356722.8393524, "5"],
-          [1704356724.1088338, "6"],
-        ],
-        Signal: [
-          [1704356717.7641122, "4"],
-          [1704356719.033403, "7"],
-          [1704356720.3017914, "8"],
-          [1704356721.5713918, "5"],
-          [1704356722.8393524, "5"],
-          [1704356724.1088338, "6"],
-          [1704356715.2266462, "6"],
-          [1704356716.4962032, "3"],
-        ],
-        Noise: [
-          [1704356720.3017914, "8"],
-          [1704356721.5713918, "5"],
-          [1704356722.8393524, "5"],
-          [1704356724.1088338, "6"],
-          [1704356715.2266462, "6"],
-          [1704356716.4962032, "3"],
-          [1704356717.7641122, "4"],
-          [1704356719.033403, "7"],
-        ],
-        BitRate: [
-          [1704356722.8393524, "5"],
-          [1704356724.1088338, "6"],
-          [1704356715.2266462, "6"],
-          [1704356716.4962032, "3"],
-          [1704356717.7641122, "4"],
-          [1704356719.033403, "7"],
-          [1704356720.3017914, "8"],
-          [1704356721.5713918, "5"],
-        ],
-      },
-      "192.168.1.2": {
-        "Tx-Power": [
-          [1704356715.2233462, "7"],
-          [1704356716.4952032, "5"],
-          [1704356717.7841122, "6"],
-          [1704356719.033403, "7"],
-          [1704356720.3012914, "5"],
-          [1704356721.575918, "6"],
-        ],
-        Signal: [
-          [1704356721.575918, "6"],
-          [1704356715.2233462, "7"],
-          [1704356716.4952032, "5"],
-          [1704356717.7841122, "6"],
-          [1704356719.033403, "7"],
-          [1704356720.3012914, "5"],
-        ],
-        Noise: [
-          [1704356715.2233462, "7"],
-          [1704356716.4952032, "5"],
-          [1704356717.7841122, "6"],
-          [1704356719.033403, "7"],
-          [1704356720.3012914, "5"],
-          [1704356721.575918, "6"],
-        ],
-        BitRate: [
-          [1704356716.4952032, "5"],
-          [1704356717.7841122, "6"],
-          [1704356719.033403, "7"],
-          [1704356720.3012914, "5"],
-          [1704356721.575918, "6"],
-          [1704356715.2233462, "7"],
-        ],
-      },
-    },
-    scenario_id: 2,
-    scenario_snapshot: {
-      "GalaxyNote10+25bc": {
-        is_target_ap: true,
-        aps: {},
-        clients: {
-          "192.168.1.1": {
-            simulation_type: "deterministic",
-            timeout: 300,
-            average_interval_time: 10,
-            average_packet_size: 128,
-            alias_name: "w9",
-          },
-        },
-      },
-    },
-    title: "test13",
-    state_message:
-      "192.168.1.1 : {'message': 'wifi is connected'}\nthis_device: connected to GalaxyNote10+25bc with ip_address 192.168.86.50\n192.168.1.1 : {'message': 'simulation task has been scheduled'}\nw9 deterministic_client 1704356715.2606883: hello change from term to INT\nthis_device deterministic_server 1704356715.0653534: hello change from term to INT\r\nthis_device deterministic_server 1704356715.0663533: server start at 0.0.0.0:8888\r\n[Errno 110] Connect call failed ('192.168.86.50', 8888)\nw9 deterministic_client 1704356847.4718745: \n\nexited\n\n\nthis_device deterministic_server 1704357020.093951: Closing server socket.\r\nthis_device deterministic_server 1704357020.094738: Cancel all pending tasks(handle_client tasks) for exit.\r\nWait for all tasks to terminate: [<coroutine object IocpProactor.accept.<locals>.accept_coro at 0x000002395AB7CF20>]\r\nthis_device deterministic_server 1704357020.0957787: All coroutines completed. Exiting.\r\nthis_device deterministic_server 1704357020.0977912: \r\n\r\nexited\r\n\r\n\r\n",
-    created_at: "2024-01-04T15:25:05.881919",
   };
 
   const [hasShownAlert, setHasShownAlert] = React.useState(false);
