@@ -132,7 +132,7 @@ function ChartApp({
                     className="dropdown-item-text"
                     style={{ width: "10em" }}
                   >
-                    Data Rate (Web)
+                    Web Data Rate
                   </span>
                 </div>
               </li>
@@ -166,7 +166,7 @@ function ChartApp({
                     className="dropdown-item-text"
                     style={{ width: "10em" }}
                   >
-                    Data Rate (File)
+                    File Data Rate
                   </span>
                 </div>
               </li>
@@ -389,7 +389,7 @@ function ChartApp({
               marginTop: "0.5em",
             }}
           >
-            Latency
+            Latency (ms)
           </div>
           <RechartGraphApp
             ssidMonitor={ssidMonitor}
@@ -411,7 +411,7 @@ function ChartApp({
               marginTop: "0.5em",
             }}
           >
-            Packet Loss
+            Packet Loss (packets)
           </div>
           <RechartGraphApp
             ssidMonitor={ssidMonitor}
@@ -433,7 +433,7 @@ function ChartApp({
               marginTop: "0.5em",
             }}
           >
-            Data Rate (Web)
+            Web Data Rate (kByte/s)
           </div>
           <RechartGraphApp
             ssidMonitor={ssidMonitor}
@@ -455,7 +455,7 @@ function ChartApp({
               marginTop: "0.5em",
             }}
           >
-            Data Rate (File)
+            File Data Rate (kByte/s)
           </div>
           <RechartGraphApp
             ssidMonitor={ssidMonitor}

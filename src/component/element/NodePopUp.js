@@ -429,7 +429,7 @@ function NodePopUp({
                         </div>
                         <div className="mb-3" style={{ marginTop: "1em" }}>
                           <label className="form-label">
-                            Average Packet Size (B)
+                            Average Packet Size (Byte)
                           </label>
                           <input
                             type="number"
@@ -500,7 +500,7 @@ function NodePopUp({
                         </div>
                         <div className="mb-3" style={{ marginTop: "1em" }}>
                           <label className="form-label">
-                            Average Packet Size (B)
+                            Average Packet Size (Byte)
                           </label>
                           <input
                             type="number"
@@ -592,7 +592,7 @@ function NodePopUp({
                     {clientType === "File" ? (
                       <div className="mb-3" style={{ marginTop: "1em" }}>
                         <label className="form-label">
-                          Average Packet Size (B)
+                          Average Packet Size (Byte)
                         </label>
                         <input
                           type="number"

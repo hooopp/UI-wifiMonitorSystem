@@ -6,22 +6,22 @@ function NodePreviewAll({ name, ip, simulationDetail, nodeMode }) {
       return (
         <>
           <tr>
-            <td>simulation type</td>
+            <td style={{width:"12em"}}>simulation type</td>
             <td>Deterministic</td>
           </tr>
           <tr>
-            <td>average interval time</td>
+            <td style={{width:"12em"}}>average interval time</td>
             <td>
-              {simulationDetail.average_interval_time.toLocaleString()} msec
+              {simulationDetail.average_interval_time.toLocaleString()} ms
             </td>
           </tr>
           <tr>
-            <td>average packet size</td>
+            <td style={{width:"12em"}}>average packet size</td>
             <td>{simulationDetail.average_packet_size.toLocaleString()} Byte</td>
           </tr>
           <tr>
-            <td>time out</td>
-            <td>{simulationDetail.timeout.toLocaleString()} sec</td>
+            <td style={{width:"12em"}}>time out</td>
+            <td>{simulationDetail.timeout.toLocaleString()} s</td>
           </tr>
         </>
       );
@@ -29,17 +29,17 @@ function NodePreviewAll({ name, ip, simulationDetail, nodeMode }) {
       return (
         <>
           <tr>
-            <td>simulation type</td>
+            <td style={{width:"12em"}}>simulation type</td>
             <td>Web</td>
           </tr>
           <tr>
-            <td>average interval time</td>
+            <td style={{width:"12em"}}>average interval time</td>
             <td>
               {simulationDetail.average_interval_time.toLocaleString()} msec
             </td>
           </tr>
           <tr>
-            <td>average packet size</td>
+            <td style={{width:"12em"}}>average packet size</td>
             <td>{simulationDetail.average_packet_size.toLocaleString()} Byte</td>
           </tr>
           {/* <tr>
@@ -56,8 +56,8 @@ function NodePreviewAll({ name, ip, simulationDetail, nodeMode }) {
             </td>
           </tr> */}
           <tr>
-            <td>time out</td>
-            <td>{simulationDetail.timeout.toLocaleString()} sec</td>
+            <td style={{width:"12em"}}>time out</td>
+            <td>{simulationDetail.timeout.toLocaleString()} s</td>
           </tr>
         </>
       );
@@ -65,16 +65,16 @@ function NodePreviewAll({ name, ip, simulationDetail, nodeMode }) {
       return (
         <>
           <tr>
-            <td>simulation type</td>
+            <td style={{width:"12em"}}>simulation type</td>
             <td>File</td>
           </tr>
           <tr>
-            <td>average packet size</td>
+            <td style={{width:"12em"}}>average packet size</td>
             <td>{simulationDetail.average_packet_size.toLocaleString()} Byte</td>
           </tr>
           <tr>
-            <td>time out</td>
-            <td>{simulationDetail.timeout.toLocaleString()} sec</td>
+            <td style={{width:"12em"}}>time out</td>
+            <td>{simulationDetail.timeout.toLocaleString()} s</td>
           </tr>
         </>
       );
@@ -93,11 +93,11 @@ function NodePreviewAll({ name, ip, simulationDetail, nodeMode }) {
       <table className="table">
         <tbody>
           <tr>
-            <td>node name</td>
+            <td style={{width:"12em"}}>node name</td>
             <td>{name}</td>
           </tr>
           <tr>
-            <td>ip</td>
+            <td style={{width:"12em"}}>ip</td>
             <td>{ip}</td>
           </tr>
           {nodeMode === "client" ? (
@@ -105,11 +105,11 @@ function NodePreviewAll({ name, ip, simulationDetail, nodeMode }) {
           ) : (
             <>
               <tr>
-                <td>wi-fi frequency</td>
+                <td style={{width:"12em"}}>wi-fi frequency</td>
                 <td>{simulationDetail.radio === "5G" ? "5GHz" : "2.4GHz"}</td>
               </tr>
               <tr>
-                <td>simulation types</td>
+                <td style={{width:"12em"}}>simulation types</td>
                 <td>
                   {simulationDetail.sever_types.map(type => {
                     if (type === "deterministic") {
@@ -123,8 +123,8 @@ function NodePreviewAll({ name, ip, simulationDetail, nodeMode }) {
                 </td>
               </tr>
               <tr>
-                <td>time out</td>
-                <td>{simulationDetail.timeout} sec</td>
+                <td style={{width:"12em"}}>time out</td>
+                <td>{simulationDetail.timeout} s</td>
               </tr>
             </>
           )}

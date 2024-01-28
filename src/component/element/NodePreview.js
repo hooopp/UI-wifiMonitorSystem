@@ -11,7 +11,7 @@ function NodePreview({ name, ip, simulationDetail, ssid, nodeMode, txPower, freq
           </tr>
           <tr>
             <td>average interval time</td>
-            <td>{simulationDetail.average_interval_time.toLocaleString()} msec</td>
+            <td>{simulationDetail.average_interval_time.toLocaleString()} ms</td>
           </tr>
           <tr>
             <td>average packet size</td>
@@ -19,7 +19,7 @@ function NodePreview({ name, ip, simulationDetail, ssid, nodeMode, txPower, freq
           </tr>
           <tr>
             <td>time out</td>
-            <td>{simulationDetail.timeout.toLocaleString()} sec</td>
+            <td>{simulationDetail.timeout.toLocaleString()} s</td>
           </tr>
         </>
       );
@@ -32,7 +32,7 @@ function NodePreview({ name, ip, simulationDetail, ssid, nodeMode, txPower, freq
           </tr>
           <tr>
             <td>average interval time</td>
-            <td>{simulationDetail.average_interval_time.toLocaleString()} msec</td>
+            <td>{simulationDetail.average_interval_time.toLocaleString()} ms</td>
           </tr>
           <tr>
             <td>average packet size</td>
@@ -48,7 +48,7 @@ function NodePreview({ name, ip, simulationDetail, ssid, nodeMode, txPower, freq
           </tr> */}
           <tr>
             <td>time out</td>
-            <td>{simulationDetail.timeout.toLocaleString()} sec</td>
+            <td>{simulationDetail.timeout.toLocaleString()} s</td>
           </tr>
         </>
       )
@@ -65,7 +65,7 @@ function NodePreview({ name, ip, simulationDetail, ssid, nodeMode, txPower, freq
           </tr>
           <tr>
             <td>time out</td>
-            <td>{simulationDetail.timeout.toLocaleString()} sec</td>
+            <td>{simulationDetail.timeout.toLocaleString()} s</td>
           </tr>
         </>
       )

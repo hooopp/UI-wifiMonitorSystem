@@ -6,6 +6,7 @@ import ChartApp from "./ChartApp";
 import { set } from "date-fns";
 import { TbFileExport } from "react-icons/tb";
 import Graph from "../Graph";
+import NodePreviewAll from "./NodePreviewAll";
 
 function ViewGraphPopUp({
   reportIsClicked,
@@ -230,7 +231,7 @@ function ViewGraphPopUp({
                         Application Layer
                       </a>
                     </li>
-                    {/* <li className="nav-item">
+                    <li className="nav-item">
                       <a
                         className={`nav-link ${mode === 2 ? "active" : ""}`}
                         href="#"
@@ -239,9 +240,9 @@ function ViewGraphPopUp({
                           setMode(2);
                         }}
                       >
-                        Summary
+                        Snap Shot
                       </a>
-                    </li> */}
+                    </li>
                   </ul>
                   {mode === 0 ? (
                     <div style={{ width: "100%" }}>
@@ -268,6 +269,112 @@ function ViewGraphPopUp({
                         ssidMonitor={ssidMonitor}
                         setSsidMonitor={setSsidMonitor}
                       />
+                    </div>
+                  ) : (
+                    ""
+                  )}
+                  {mode === 2 ? (
+                    <div
+                      className="modal-body"
+                      style={{ marginLeft: "0em", marginRight: "0em" }}
+                    >
+                      {loadGraphDetailData &&
+                        Object.entries(loadGraphDetailData.scenario_snapshot).map(
+                          ([network, info], index) => {
+                            return (
+                              <div
+                                key={index}
+                                style={{
+                                  borderRadius: "10px",
+                                  padding: "10px",
+                                  border: "1px solid #dee2e6",
+                                  marginBottom: "1em",
+                                }}
+                              >
+                                <div
+                                  style={{
+                                    marginBottom: "0.5em",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  ssid : {network}
+                                </div>
+                                {Object.keys(info.aps).length === 0 ? (
+                                  ""
+                                ) : (
+                                  <>
+                                    <div
+                                      style={{
+                                        borderRadius: "10px",
+                                        padding: "10px",
+                                        border: "1px solid #dee2e6",
+                                        marginBottom: "1em",
+                                      }}
+                                    >
+                                      <div
+                                        style={{
+                                          marginBottom: "0.5em",
+                                          fontWeight: "bold",
+                                        }}
+                                      >
+                                        AP
+                                      </div>
+                                      {Object.entries(info.aps).map(
+                                        ([ap, apInfo], index) => {
+                                          return (
+                                            <div key={index}>
+                                              <NodePreviewAll
+                                                nodeMode={"ap"}
+                                                name={apInfo.alias_name}
+                                                ip={ap}
+                                                simulationDetail={apInfo}
+                                              />
+                                            </div>
+                                          );
+                                        }
+                                      )}
+                                    </div>
+                                  </>
+                                )}
+                                {Object.keys(info.clients).length === 0 ? (
+                                  ""
+                                ) : (
+                                  <div
+                                    style={{
+                                      borderRadius: "10px",
+                                      padding: "10px",
+                                      border: "1px solid #dee2e6",
+                                      marginBottom: "1em",
+                                    }}
+                                  >
+                                    <div
+                                      style={{
+                                        marginBottom: "0.5em",
+                                        fontWeight: "bold",
+                                      }}
+                                    >
+                                      Client
+                                    </div>
+                                    {Object.entries(info.clients).map(
+                                      ([client, clientInfo], index) => {
+                                        return (
+                                          <div key={index}>
+                                            <NodePreviewAll
+                                              nodeMode={"client"}
+                                              name={clientInfo.alias_name}
+                                              ip={client}
+                                              simulationDetail={clientInfo}
+                                            />
+                                          </div>
+                                        );
+                                      }
+                                    )}
+                                  </div>
+                                )}
+                              </div>
+                            );
+                          }
+                        )}
                     </div>
                   ) : (
                     ""

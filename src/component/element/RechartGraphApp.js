@@ -20,7 +20,7 @@ function RechartGraphApp({ simulationDataApp, ssidMonitor }) {
         <defs>
           {ssidMonitor.map((ssid, index) => {
             return ssid.nodes.map((node, index) => {
-              if (node.checked) {
+              if (node.checked && simulationDataApp[0].hasOwnProperty(node.node)) {
                 return (
                   <linearGradient
                     key={index}
@@ -48,7 +48,7 @@ function RechartGraphApp({ simulationDataApp, ssidMonitor }) {
         <Tooltip />
         {ssidMonitor.map((ssid, index) => {
           return ssid.nodes.map((node, index) => {
-            if (node.checked) {
+            if (node.checked && simulationDataApp[0].hasOwnProperty(node.node)) {
               return (
                 <Area
                   key={index}

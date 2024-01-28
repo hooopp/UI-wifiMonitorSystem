@@ -97,13 +97,14 @@ function Main({ selectedScenario }) {
     if (isExportClicked === "") return;
     refetchExportScenario().then(({ data: exportScenarioData }) => {
       refetchExportNode().then(({ data: exportNodeData }) => {
+        console.log(exportScenarioData);
         var exportData = {
           scenarioName: exportScenarioData.scenario_name,
           scenarioDesc: exportScenarioData.scenario_desc,
           scenarioType:
-            exportNodeData.is_using_target_ap === true ? "host" : "ap",
+            exportScenarioData.is_using_target_ap === true ? "host" : "ap",
         };
-        if (exportNodeData.is_using_target_ap === true) {
+        if (exportScenarioData.is_using_target_ap === true) {
           exportData["ssid"] = exportScenarioData.target_ap_ssid;
           exportData["password"] = exportScenarioData.target_ap_password;
           exportData["frequency"] =
@@ -247,8 +248,10 @@ function Main({ selectedScenario }) {
               }}
               style={{ marginLeft: "1em" }}
             >
-              <MdPreview style={{ fontSize: "1.25em" }}/>
-              <span style={{ fontWeight: "bold", marginLeft: "0.25em" }}>Preview All</span>
+              <MdPreview style={{ fontSize: "1.25em" }} />
+              <span style={{ fontWeight: "bold", marginLeft: "0.25em" }}>
+                Preview All
+              </span>
             </button>
             <button
               className="btn btn-dark"
@@ -259,7 +262,12 @@ function Main({ selectedScenario }) {
             >
               <div>
                 <svg
-                  style={{ width: "20", height: "20", marginRight: "0.25em", marginTop: "0.25em"}}
+                  style={{
+                    width: "20",
+                    height: "20",
+                    marginRight: "0.25em",
+                    marginTop: "0.25em",
+                  }}
                 >
                   <image href={start} width="15" height="15" />
                 </svg>

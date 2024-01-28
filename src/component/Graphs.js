@@ -225,7 +225,7 @@ function Graphs({ selectedScenario }) {
             for (let i = 0; i < maxDataLength1; i++) {
               if (i < value3.length) {
                 if (isNumber(value3[i][1])){
-                  simulationDataApp1.DataRateFile[i][node] = Number(value3[i][1]);
+                  simulationDataApp1.DataRateFile[i][node] = Number(value3[i][1]/1000);
                 }else{
                   simulationDataApp1.DataRateFile[i][node] = undefined;
                 }
@@ -238,7 +238,7 @@ function Graphs({ selectedScenario }) {
             for (let i = 0; i < maxDataLength1; i++) {
               if (i < value3.length) {
                 if(isNumber(value3[i][1])){
-                  simulationDataApp1.DataRateWeb[i][node] = Number(value3[i][1]);
+                  simulationDataApp1.DataRateWeb[i][node] = Number(value3[i][1]/1000);
                 }else{
                   simulationDataApp1.DataRateWeb[i][node] = undefined;
                 }
@@ -283,7 +283,7 @@ function Graphs({ selectedScenario }) {
             for (let i = 0; i < maxDataLength2; i++) {
               if (i < value3.length) {
                 if(isNumber(value3[i][1])){
-                  simulationDataApp2.DataRateFile[i][node] = Number(value3[i][1]);
+                  simulationDataApp2.DataRateFile[i][node] = Number(value3[i][1]/1000);
                 }else{
                   simulationDataApp2.DataRateFile[i][node] = undefined;
                 }
@@ -295,7 +295,11 @@ function Graphs({ selectedScenario }) {
           if (metric === "web_average_data_rates") {
             for (let i = 0; i < maxDataLength2; i++) {
               if (i < value3.length) {
-                simulationDataApp2.DataRateWeb[i][node] = value3[i][1];
+                if(isNumber(value3[i][1])){
+                  simulationDataApp2.DataRateWeb[i][node] = Number(value3[i][1]/1000);
+                }else{
+                  simulationDataApp2.DataRateWeb[i][node] = undefined;
+                }
               } else {
                 simulationDataApp2.DataRateWeb[i][node] = 0;
               }

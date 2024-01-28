@@ -202,7 +202,7 @@ function Chart({
                 marginBottom: "1em",
               }}
             >
-              {metric[0]}
+              {metric[0]==="TxPower" ? "Tx Power (dBm)" : metric[0]==="Signal" ? "Signal (dBm)": metric[0]==="Noise" ? "Noise (dBm)" : metric[0] === "BitRate" ? "BitRate (MBit/s)" : ""}
             </div>
             <RechartGraph
               data={simulationData[metric[0]]}
