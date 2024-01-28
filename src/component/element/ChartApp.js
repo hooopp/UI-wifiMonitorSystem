@@ -183,7 +183,7 @@ function ChartApp({
             aria-expanded="false"
             style={{ fontWeight: "bold", marginLeft: "-1.5em" }}
           >
-            select ssid
+            select server
           </button>
           <ul className="dropdown-menu" style={{ width: "15em" }}>
             {ssidMonitor.map((ssid, index) => {
