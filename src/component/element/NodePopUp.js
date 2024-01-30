@@ -51,6 +51,17 @@ function NodePopUp({
     return ipRegex.test(ip);
   };
 
+  function generateRandomString() {
+    let result = '';
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  
+    for (let i = 0; i < 4; i++) {
+      result += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+  
+    return result;
+  }
+
   const addNodeFunction = () => {
     if (isValidIP(ipAddress) === false) {
       alert("IP Address is not valid");
@@ -60,7 +71,7 @@ function NodePopUp({
       addNode.mutate(
         {
           control_ip_addr: ipAddress,
-          alias_name: nodeName,
+          alias_name: nodeName === "" ? "Node#"+generateRandomString() : nodeName,
           network_mode: "ap",
           network_ssid: ssid,
           simulation_detail: {},
@@ -87,7 +98,7 @@ function NodePopUp({
       if (clientType === "Deterministic") {
         addNode.mutate(
           {
-            alias_name: nodeName,
+            alias_name: nodeName === "" ? "Node#"+generateRandomString() : nodeName,
             control_ip_addr: ipAddress,
             network_ssid: ssid,
             network_mode: "client",
@@ -114,7 +125,7 @@ function NodePopUp({
       } else if (clientType === "Web") {
         addNode.mutate(
           {
-            alias_name: nodeName,
+            alias_name: nodeName === "" ? "Node#"+generateRandomString() : nodeName,
             control_ip_addr: ipAddress,
             network_ssid: ssid,
             network_mode: "client",
@@ -145,7 +156,7 @@ function NodePopUp({
       } else {
         addNode.mutate(
           {
-            alias_name: nodeName,
+            alias_name: nodeName === "" ? "Node#"+generateRandomString() : nodeName,
             control_ip_addr: ipAddress,
             network_ssid: ssid,
             network_mode: "client",

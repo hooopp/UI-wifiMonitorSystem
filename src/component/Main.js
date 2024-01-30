@@ -173,6 +173,17 @@ function Main({ selectedScenario }) {
     });
   }, [isExportClicked]);
 
+  function generateRandomString() {
+    let result = '';
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  
+    for (let i = 0; i < 4; i++) {
+      result += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+  
+    return result;
+  }
+
   useEffect(() => {
     setMode(0);
     refetchLoadScenarioDetail().then(({ data: loadScenarioData }) => {
@@ -533,7 +544,7 @@ function Main({ selectedScenario }) {
                 style={{ fontWeight: "bold" }}
                 onClick={() => {
                   runScenario.mutate({ title: testName });
-                  setTestName("");
+                  setTestName("" === "" ? "Test"+generateRandomString() : "");
                 }}
               >
                 Confirm

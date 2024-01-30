@@ -157,7 +157,7 @@ function Nodes({
         <div></div>
       </div>
       {/* Node */}
-      {loadNodeData && loadNodeData.length > 0 ? (
+      {loadNodeStatus !== "loading" && loadNodeData && loadNodeData.length > 0 ? (
         <div className="listNode">
           {loadNodeData &&
             loadNodeData.map((data, i) => (
@@ -180,46 +180,49 @@ function Nodes({
               />
             ))}
         </div>
-      ) : (
-        <div className="logo-container" style={{marginLeft:"15em", marginTop:"-1em"}}>
-            <svg width="500" height="500" viewBox="0 0 500 500">
-              <image href={NNF} x="0" y="0" width="100%" height="100%" />
-            </svg>
-          </div>
+      ) :  (
+        <div
+          className="logo-container"
+          style={{ marginLeft: "15em", marginTop: "-1em" }}
+        >
+          <svg width="500" height="500" viewBox="0 0 500 500">
+            <image href={NNF} x="0" y="0" width="100%" height="100%" />
+          </svg>
+        </div>
       )}
       <button
-            style={{
-              backgroundColor: "transparent",
-              border: "none",
-              position: "absolute",
-              left: "20em",
-              top: "41em",
-            }}
-            disabled={page === 1 ? true : false}
-            onClick={() => {
-              setPage(page - 1);
-            }}
-          >
-            <FaArrowAltCircleLeft style={{ fontSize: "2rem" }} />
-            <span style={{ fontWeight: "bold" }}> Previous</span>
-          </button>
-          <button
-            style={{
-              color: "#333",
-              backgroundColor: "transparent",
-              border: "none",
-              width: "5em",
-              position: "absolute",
-              left: "35em",
-              top: "41em",
-            }}
-            onClick={() => {
-              setPage(page + 1);
-            }}
-          >
-            <span style={{ fontWeight: "bold" }}>Next </span>
-            <FaArrowAltCircleRight style={{ fontSize: "2rem" }} />
-          </button>
+        style={{
+          backgroundColor: "transparent",
+          border: "none",
+          position: "absolute",
+          left: "20em",
+          top: "41em",
+        }}
+        disabled={page === 1 ? true : false}
+        onClick={() => {
+          setPage(page - 1);
+        }}
+      >
+        <FaArrowAltCircleLeft style={{ fontSize: "2rem" }} />
+        <span style={{ fontWeight: "bold" }}> Previous</span>
+      </button>
+      <button
+        style={{
+          color: "#333",
+          backgroundColor: "transparent",
+          border: "none",
+          width: "5em",
+          position: "absolute",
+          left: "35em",
+          top: "41em",
+        }}
+        onClick={() => {
+          setPage(page + 1);
+        }}
+      >
+        <span style={{ fontWeight: "bold" }}>Next </span>
+        <FaArrowAltCircleRight style={{ fontSize: "2rem" }} />
+      </button>
       <div
         className="modal fade"
         id="NodePreview"
@@ -260,7 +263,13 @@ function Nodes({
                   loadNodeDetailData ? loadNodeDetailData.network_mode : ""
                 }
                 txPower={loadNodeDetailData ? loadNodeDetailData.tx_power : ""}
-                frequency = {loadNodeDetailData ? loadNodeDetailData.radio === "2.4G" ? "2.4GHz" : "5GHz":""}
+                frequency={
+                  loadNodeDetailData
+                    ? loadNodeDetailData.radio === "2.4G"
+                      ? "2.4GHz"
+                      : "5GHz"
+                    : ""
+                }
               />
             </div>
           </div>

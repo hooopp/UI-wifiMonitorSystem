@@ -46,7 +46,7 @@ function Graph({
         style={{ marginBottom: "0.5em", marginTop: "1em" }}
       >
         <div style={{ textAlign: "left", width: "200px", marginLeft: "1em" }}>
-          {name}
+          {name && (name.length > 20 ? `${name.substring(0, 20)}...` : name)}
         </div>
         <div style={{ width: "250px" }}>{createdTime}</div>
         <div style={{ width: "250px" }}>{status}</div>

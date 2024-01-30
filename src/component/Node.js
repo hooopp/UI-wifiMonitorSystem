@@ -45,11 +45,17 @@ function Node({
     <div>
       <div className={styles.Node} style={{ marginBottom: "0.5em" }}>
         <div style={{ textAlign: "left", width: "200px", marginLeft: "1em" }}>
-          {name}
+          {name &&
+              (name.length > 20
+                ? `${name.substring(0, 20)}...`
+                : name)}
         </div>
         <div>{ip}</div>
         <div>{mode}</div>
-        <div>{ssid}</div>
+        <div>{ssid &&
+              (name > 18
+                ? `${ssid.substring(0, 18)}...`
+                : ssid)}</div>
         <div className="btn-group">
           <button
             className="button-2"

@@ -70,7 +70,7 @@ function NodePopUpEdit({
       editNode.mutate(
         {
           control_ip_addr: ipAddress,
-          alias_name: nodeName,
+          alias_name: nodeName === "" ? "Node#"+generateRandomString() : nodeName,
           network_mode: "ap",
           network_ssid: ssid,
           simulation_detail: {},
@@ -88,7 +88,7 @@ function NodePopUpEdit({
       if (clientType === "Deterministic") {
         editNode.mutate(
           {
-            alias_name: nodeName,
+            alias_name: nodeName === "" ? "Node#"+generateRandomString() : nodeName,
             control_ip_addr: ipAddress,
             network_ssid: ssid,
             network_mode: "client",
@@ -111,7 +111,7 @@ function NodePopUpEdit({
       } else if (clientType === "Web") {
         editNode.mutate(
           {
-            alias_name: nodeName,
+            alias_name: nodeName === "" ? "Node#"+generateRandomString() : nodeName,
             control_ip_addr: ipAddress,
             network_ssid: ssid,
             network_mode: "client",
@@ -138,7 +138,7 @@ function NodePopUpEdit({
       } else {
         editNode.mutate(
           {
-            alias_name: nodeName,
+            alias_name: nodeName === "" ? "Node#"+generateRandomString() : nodeName,
             control_ip_addr: ipAddress,
             network_ssid: ssid,
             network_mode: "client",
@@ -162,6 +162,17 @@ function NodePopUpEdit({
   const handleRadioChange = (event) => {
     setClientType(event.target.value);
   };
+
+  function generateRandomString() {
+    let result = '';
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  
+    for (let i = 0; i < 4; i++) {
+      result += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+  
+    return result;
+  }
 
   useEffect(() => {
     if (loadNodeDetailData) {

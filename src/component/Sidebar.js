@@ -44,6 +44,7 @@ const Sidebar = ({ setSelectedScenario, selectedScenario }) => {
     );
     return data;
   };
+  const [isImported, setIsImport] = useState(false);
 
   const template = {
     scenarioName: "scenario_name",
@@ -351,6 +352,17 @@ const Sidebar = ({ setSelectedScenario, selectedScenario }) => {
     }
   };
 
+  function generateRandomString() {
+    let result = '';
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  
+    for (let i = 0; i < 4; i++) {
+      result += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+  
+    return result;
+  }
+
   const addScenario = useMutation((data) => {
     return axios.post(`http://127.0.0.1:8000/scenario/`, data);
   });
@@ -362,7 +374,7 @@ const Sidebar = ({ setSelectedScenario, selectedScenario }) => {
   const importScenario = () => {
     addScenario.mutate(
       {
-        scenario_name: fileContent.scenarioName,
+        scenario_name: fileContent.scenarioName === "" ? "Scenario#"+generateRandomString() : fileContent.scenarioName,
         scenario_desc: fileContent.scenarioDesc,
         is_using_target_ap: fileContent.scenarioType === "host" ? true : false,
         target_ap_ssid: fileContent.ssid,
@@ -435,7 +447,7 @@ const Sidebar = ({ setSelectedScenario, selectedScenario }) => {
   }, [page]);
 
   useEffect(() => {
-    if (loadScenarioData) {
+    if (loopNode) {
       for (let i = 0; i < fileContent.nodes.length; i++) {
         if (fileContent.nodes[i].mode === "ap") {
           addNode.mutate(
@@ -451,6 +463,9 @@ const Sidebar = ({ setSelectedScenario, selectedScenario }) => {
             },
             {
               onSuccess: (data) => {},
+            },
+            {
+              onError: (data) => {alert("error occur when add node, please import again")},
             }
           );
         }
@@ -475,6 +490,9 @@ const Sidebar = ({ setSelectedScenario, selectedScenario }) => {
               },
               {
                 onSuccess: (data) => {},
+              },
+              {
+                onError: (data) => {alert("error occur when add node, please import again")},
               }
             );
           }
@@ -504,6 +522,9 @@ const Sidebar = ({ setSelectedScenario, selectedScenario }) => {
               },
               {
                 onSuccess: (data) => {},
+              },
+              {
+                onError: (data) => {alert("error occur when add node, please import again")},
               }
             );
           }
@@ -524,6 +545,9 @@ const Sidebar = ({ setSelectedScenario, selectedScenario }) => {
               },
               {
                 onSuccess: (data) => {},
+              },
+              {
+                onError: (data) => {alert("error occur when add node, please import again")},
               }
             );
           }
@@ -877,7 +901,7 @@ const Sidebar = ({ setSelectedScenario, selectedScenario }) => {
 
                   mutation.mutate(
                     {
-                      scenario_name: scenarioName,
+                      scenario_name: scenarioName === "" ? "Scenario#"+generateRandomString() : scenarioName,
                       scenario_desc: scenarioDesc,
                       is_using_target_ap:
                         selectedOption === "onDetail1" ? false : true,
