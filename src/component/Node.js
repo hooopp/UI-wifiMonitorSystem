@@ -38,6 +38,10 @@ function Node({
           }
         });;
       },
+    },{
+      onError: (error) => {
+        alert(error.response.data.detail);
+      },
     }
   );
 

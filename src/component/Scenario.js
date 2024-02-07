@@ -26,6 +26,11 @@ function Scenario({
           }
         });
       },
+    },
+    {
+      onError: (error) => {
+        alert(error.response.data.detail);
+      },
     }
   );
 

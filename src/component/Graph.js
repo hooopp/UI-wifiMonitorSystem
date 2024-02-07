@@ -37,6 +37,10 @@ function Graph({
           }
         });
       },
+    },{
+      onError: (error) => {
+        alert(error.response.data.detail);
+      },
     }
   );
   return (

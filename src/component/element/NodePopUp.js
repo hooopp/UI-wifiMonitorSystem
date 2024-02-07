@@ -43,6 +43,10 @@ function NodePopUp({
       `http://127.0.0.1:8000/scenario/${selectedScenario}/node`,
       data
     );
+  },{
+    onError: (error) => {
+      alert(error.response.data.detail);
+    },
   });
 
   const isValidIP = (ip) => {

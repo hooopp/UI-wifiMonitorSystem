@@ -44,6 +44,8 @@ function Graphs({ selectedScenario }) {
     return axios.post(
       `http://127.0.0.1:8000/scenario/${selectedScenario}/simulation/${selectedGraph}/cancel`
     );
+  },{
+    onError: (error) => {alert(error.response.data.detail);}
   });
 
   const loadGraph = async () => {
@@ -159,8 +161,6 @@ function Graphs({ selectedScenario }) {
         });
       });
     });
-    // console.log(startTime1);
-    // console.log(startTime2);
 
     if (startTime1 === Infinity) {
       startTime1 = startTime2;
@@ -168,8 +168,13 @@ function Graphs({ selectedScenario }) {
     if (startTime2 === Infinity) {
       startTime2 = startTime1;
     }
+
+    // setTimeZone
     startTime1 = new Date(startTime1 * 1000).toISOString().slice(11, -5);
     startTime2 = new Date(startTime2 * 1000).toISOString().slice(11, -5);
+
+    // startTime1 = new Date(startTime1 * 1000 + 25200*1000).toISOString().slice(11, -5);
+    // startTime2 = new Date(startTime2 * 1000 + 25200*1000).toISOString().slice(11, -5);
 
     for (let i = 0; i < maxDataLength1; i++) {
       simulationDataApp1.DataRateWeb.push({ timeStamp: startTime1 });
@@ -348,7 +353,11 @@ function Graphs({ selectedScenario }) {
       index += 1;
     }
     setListNode(listNode);
+
+    // setTimeZone
     startTime = new Date(startTime * 1000).toISOString().slice(11, -5);
+    // startTime = new Date(startTime * 1000 + 25200*1000).toISOString().slice(11, -5);
+    
     for (let i = 0; i < maxDataLength; i++) {
       simulationData.TxPower.push({ timeStamp: startTime });
       simulationData.Signal.push({ timeStamp: startTime });

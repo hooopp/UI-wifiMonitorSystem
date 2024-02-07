@@ -30,9 +30,16 @@ const Sidebar = ({ setSelectedScenario, selectedScenario }) => {
     React.useState("2.4GHz_onDetail");
   const [searchVariable, setSearchVariable] = React.useState("");
   const [isFileValid, setIsFileValid] = React.useState(false);
-  const mutation = useMutation((data) => {
-    return axios.post("http://127.0.0.1:8000/scenario", data);
-  });
+  const mutation = useMutation(
+    (data) => {
+      return axios.post("http://127.0.0.1:8000/scenario", data);
+    },
+    {
+      onError: (error) => {
+        alert(error.response.data.detail);
+      },
+    }
+  );
   const [loopNode, setLoopNode] = React.useState("");
 
   const closeRef = useRef();
@@ -45,7 +52,6 @@ const Sidebar = ({ setSelectedScenario, selectedScenario }) => {
     return data;
   };
   const [isImported, setIsImport] = useState(false);
-
   const template = {
     scenarioName: "scenario_name",
     scenarioDesc: "scenario_description",
@@ -353,28 +359,33 @@ const Sidebar = ({ setSelectedScenario, selectedScenario }) => {
   };
 
   function generateRandomString() {
-    let result = '';
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-  
+    let result = "";
+    const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
     for (let i = 0; i < 4; i++) {
-      result += characters.charAt(Math.floor(Math.random() * characters.length));
+      result += characters.charAt(
+        Math.floor(Math.random() * characters.length)
+      );
     }
-  
+
     return result;
   }
 
   const addScenario = useMutation((data) => {
     return axios.post(`http://127.0.0.1:8000/scenario/`, data);
-  });
+  },{onError: (error) => {alert(error.response.data.detail);}});
 
   const addNode = useMutation((data) => {
     return axios.post(`http://127.0.0.1:8000/scenario/${loopNode}/node`, data);
-  });
+  },{onError: (error) => {alert(error.response.data.detail);}});
 
   const importScenario = () => {
     addScenario.mutate(
       {
-        scenario_name: fileContent.scenarioName === "" ? "Scenario#"+generateRandomString() : fileContent.scenarioName,
+        scenario_name:
+          fileContent.scenarioName === ""
+            ? "Scenario#" + generateRandomString()
+            : fileContent.scenarioName,
         scenario_desc: fileContent.scenarioDesc,
         is_using_target_ap: fileContent.scenarioType === "host" ? true : false,
         target_ap_ssid: fileContent.ssid,
@@ -465,7 +476,9 @@ const Sidebar = ({ setSelectedScenario, selectedScenario }) => {
               onSuccess: (data) => {},
             },
             {
-              onError: (data) => {alert("error occur when add node, please import again")},
+              onError: (data) => {
+                alert("error occur when add node, please import again");
+              },
             }
           );
         }
@@ -492,7 +505,9 @@ const Sidebar = ({ setSelectedScenario, selectedScenario }) => {
                 onSuccess: (data) => {},
               },
               {
-                onError: (data) => {alert("error occur when add node, please import again")},
+                onError: (data) => {
+                  alert("error occur when add node, please import again");
+                },
               }
             );
           }
@@ -524,7 +539,9 @@ const Sidebar = ({ setSelectedScenario, selectedScenario }) => {
                 onSuccess: (data) => {},
               },
               {
-                onError: (data) => {alert("error occur when add node, please import again")},
+                onError: (data) => {
+                  alert("error occur when add node, please import again");
+                },
               }
             );
           }
@@ -547,7 +564,9 @@ const Sidebar = ({ setSelectedScenario, selectedScenario }) => {
                 onSuccess: (data) => {},
               },
               {
-                onError: (data) => {alert("error occur when add node, please import again")},
+                onError: (data) => {
+                  alert("error occur when add node, please import again");
+                },
               }
             );
           }
@@ -745,19 +764,30 @@ const Sidebar = ({ setSelectedScenario, selectedScenario }) => {
                   Check
                 </button>
               </div>
-              {fileContent !== null ? <div className="mb-3" style={{ marginTop: "0.5em" }}>
-                <label for="exampleFormControlTextarea1" className="form-label">
-                  File Detail
-                </label>
-                <textarea
-                  className="form-control"
-                  id="exampleFormControlTextarea1"
-                  rows="3"
-                  value={JSON.stringify(fileContent, null, 2)}
-                  disabled
-                  style={{ resize: "none", whiteSpace: "pre-wrap", height:"20em" }}
-                ></textarea>
-              </div> : ""}
+              {fileContent !== null ? (
+                <div className="mb-3" style={{ marginTop: "0.5em" }}>
+                  <label
+                    for="exampleFormControlTextarea1"
+                    className="form-label"
+                  >
+                    File Detail
+                  </label>
+                  <textarea
+                    className="form-control"
+                    id="exampleFormControlTextarea1"
+                    rows="3"
+                    value={JSON.stringify(fileContent, null, 2)}
+                    disabled
+                    style={{
+                      resize: "none",
+                      whiteSpace: "pre-wrap",
+                      height: "20em",
+                    }}
+                  ></textarea>
+                </div>
+              ) : (
+                ""
+              )}
             </div>
             <div
               className="modal-footer"
@@ -778,7 +808,9 @@ const Sidebar = ({ setSelectedScenario, selectedScenario }) => {
                 type="button  "
                 className="btn btn-danger"
                 data-bs-dismiss="modal"
-                onClick={()=>{setFileContent(null)}}
+                onClick={() => {
+                  setFileContent(null);
+                }}
               >
                 Cancel
               </button>
@@ -901,7 +933,10 @@ const Sidebar = ({ setSelectedScenario, selectedScenario }) => {
 
                   mutation.mutate(
                     {
-                      scenario_name: scenarioName === "" ? "Scenario#"+generateRandomString() : scenarioName,
+                      scenario_name:
+                        scenarioName === ""
+                          ? "Scenario#" + generateRandomString()
+                          : scenarioName,
                       scenario_desc: scenarioDesc,
                       is_using_target_ap:
                         selectedOption === "onDetail1" ? false : true,

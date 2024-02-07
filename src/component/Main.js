@@ -67,19 +67,33 @@ function Main({ selectedScenario }) {
     refetch: refetchLoadNodePreview,
   } = useQuery("nodePreview", loadNodePreview, { enabled: false });
 
-  const runScenario = useMutation((data) => {
-    return axios.post(
-      `http://127.0.0.1:8000/scenario/${selectedScenario}/simulation/run`,
-      data
-    );
-  });
+  const runScenario = useMutation(
+    (data) => {
+      return axios.post(
+        `http://127.0.0.1:8000/scenario/${selectedScenario}/simulation/run`,
+        data
+      );
+    },
+    {
+      onError: (error) => {
+        alert(error.response.data.detail);
+      },
+    }
+  );
 
-  const patchScenario = useMutation((data) => {
-    return axios.patch(
-      `http://127.0.0.1:8000/scenario/${selectedScenario}`,
-      data
-    );
-  });
+  const patchScenario = useMutation(
+    (data) => {
+      return axios.patch(
+        `http://127.0.0.1:8000/scenario/${selectedScenario}`,
+        data
+      );
+    },
+    {
+      onError: (error) => {
+        alert(error.response.data.detail);
+      },
+    }
+  );
 
   const {
     data: exportScenarioData,
@@ -174,13 +188,15 @@ function Main({ selectedScenario }) {
   }, [isExportClicked]);
 
   function generateRandomString() {
-    let result = '';
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-  
+    let result = "";
+    const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
     for (let i = 0; i < 4; i++) {
-      result += characters.charAt(Math.floor(Math.random() * characters.length));
+      result += characters.charAt(
+        Math.floor(Math.random() * characters.length)
+      );
     }
-  
+
     return result;
   }
 
@@ -544,7 +560,7 @@ function Main({ selectedScenario }) {
                 style={{ fontWeight: "bold" }}
                 onClick={() => {
                   runScenario.mutate({ title: testName });
-                  setTestName("" === "" ? "Test"+generateRandomString() : "");
+                  setTestName("" === "" ? "Test" + generateRandomString() : "");
                 }}
               >
                 Confirm
