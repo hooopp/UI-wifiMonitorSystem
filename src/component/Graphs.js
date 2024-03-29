@@ -41,13 +41,18 @@ function Graphs({ selectedScenario }) {
     "#8bd3c7",
   ];
 
-  const cancelSimulation = useMutation(() => {
-    return axios.post(
-      `http://127.0.0.1:8000/scenario/${selectedScenario}/simulation/${selectedGraph}/cancel`
-    );
-  },{
-    onError: (error) => {alert(error.response.data.detail);}
-  });
+  const cancelSimulation = useMutation(
+    () => {
+      return axios.post(
+        `http://127.0.0.1:8000/scenario/${selectedScenario}/simulation/${selectedGraph}/cancel`
+      );
+    },
+    {
+      onError: (error) => {
+        alert(error.response.data.detail);
+      },
+    }
+  );
 
   const loadGraph = async () => {
     const { data } = await axios.get(
@@ -68,7 +73,6 @@ function Graphs({ selectedScenario }) {
     const { data } = await axios.get(
       `http://localhost:8000/scenario/${selectedScenario}/simulation/${selectedGraph}`
     );
-    // console.log(data);
     return data;
   };
 
@@ -206,7 +210,7 @@ function Graphs({ selectedScenario }) {
               if (i < value3.length) {
                 if (isNumber(value3[i][1])) {
                   simulationDataApp1.PacketLoss[i][node] = Number(value3[i][1]);
-                }else{
+                } else {
                   simulationDataApp1.PacketLoss[i][node] = undefined;
                 }
               } else {
@@ -217,9 +221,9 @@ function Graphs({ selectedScenario }) {
           if (metric === "average_latency") {
             for (let i = 0; i < maxDataLength1; i++) {
               if (i < value3.length) {
-                if (isNumber(value3[i][1])){
+                if (isNumber(value3[i][1])) {
                   simulationDataApp1.Latency[i][node] = Number(value3[i][1]);
-                }else{
+                } else {
                   simulationDataApp1.Latency[i][node] = undefined;
                 }
               } else {
@@ -230,9 +234,11 @@ function Graphs({ selectedScenario }) {
           if (metric === "file_average_data_rates") {
             for (let i = 0; i < maxDataLength1; i++) {
               if (i < value3.length) {
-                if (isNumber(value3[i][1])){
-                  simulationDataApp1.DataRateFile[i][node] = Number(value3[i][1]/1000);
-                }else{
+                if (isNumber(value3[i][1])) {
+                  simulationDataApp1.DataRateFile[i][node] = Number(
+                    value3[i][1] / 1000
+                  );
+                } else {
                   simulationDataApp1.DataRateFile[i][node] = undefined;
                 }
               } else {
@@ -243,9 +249,11 @@ function Graphs({ selectedScenario }) {
           if (metric === "web_average_data_rates") {
             for (let i = 0; i < maxDataLength1; i++) {
               if (i < value3.length) {
-                if(isNumber(value3[i][1])){
-                  simulationDataApp1.DataRateWeb[i][node] = Number(value3[i][1]/1000);
-                }else{
+                if (isNumber(value3[i][1])) {
+                  simulationDataApp1.DataRateWeb[i][node] = Number(
+                    value3[i][1] / 1000
+                  );
+                } else {
                   simulationDataApp1.DataRateWeb[i][node] = undefined;
                 }
               } else {
@@ -262,9 +270,9 @@ function Graphs({ selectedScenario }) {
           if (metric === "lost_count") {
             for (let i = 0; i < maxDataLength2; i++) {
               if (i < value3.length) {
-                if(isNumber(value3[i][1])){
+                if (isNumber(value3[i][1])) {
                   simulationDataApp2.PacketLoss[i][node] = Number(value3[i][1]);
-                }else{
+                } else {
                   simulationDataApp2.PacketLoss[i][node] = undefined;
                 }
               } else {
@@ -275,9 +283,9 @@ function Graphs({ selectedScenario }) {
           if (metric === "average_latency") {
             for (let i = 0; i < maxDataLength2; i++) {
               if (i < value3.length) {
-                if(isNumber(value3[i][1])){
+                if (isNumber(value3[i][1])) {
                   simulationDataApp2.Latency[i][node] = Number(value3[i][1]);
-                }else{
+                } else {
                   simulationDataApp2.Latency[i][node] = undefined;
                 }
               } else {
@@ -288,9 +296,11 @@ function Graphs({ selectedScenario }) {
           if (metric === "file_average_data_rates") {
             for (let i = 0; i < maxDataLength2; i++) {
               if (i < value3.length) {
-                if(isNumber(value3[i][1])){
-                  simulationDataApp2.DataRateFile[i][node] = Number(value3[i][1]/1000);
-                }else{
+                if (isNumber(value3[i][1])) {
+                  simulationDataApp2.DataRateFile[i][node] = Number(
+                    value3[i][1] / 1000
+                  );
+                } else {
                   simulationDataApp2.DataRateFile[i][node] = undefined;
                 }
               } else {
@@ -301,9 +311,11 @@ function Graphs({ selectedScenario }) {
           if (metric === "web_average_data_rates") {
             for (let i = 0; i < maxDataLength2; i++) {
               if (i < value3.length) {
-                if(isNumber(value3[i][1])){
-                  simulationDataApp2.DataRateWeb[i][node] = Number(value3[i][1]/1000);
-                }else{
+                if (isNumber(value3[i][1])) {
+                  simulationDataApp2.DataRateWeb[i][node] = Number(
+                    value3[i][1] / 1000
+                  );
+                } else {
                   simulationDataApp2.DataRateWeb[i][node] = undefined;
                 }
               } else {
@@ -314,10 +326,6 @@ function Graphs({ selectedScenario }) {
         });
       });
     });
-    // console.log({
-    //   serverMonitoredByClient: simulationDataApp1,
-    //   clientMonitoredByServer: simulationDataApp2,
-    // });
     setSimulationDataApp({
       serverMonitoredByClient: simulationDataApp1,
       clientMonitoredByServer: simulationDataApp2,
@@ -334,89 +342,160 @@ function Graphs({ selectedScenario }) {
       RTT: [],
     };
     let maxDataLength = 0;
-    let startTime = Infinity;
     let listNode = [];
     let index = 0;
-    for (let ip in loadGraphDetailData.simulation_data) {
+    let firstKey = Object.keys(loadGraphDetailData.Tx_power)[0];
+    for (let ip in loadGraphDetailData.Tx_power[firstKey]) {
       simulationData.nodes.push(ip);
-      if (
-        loadGraphDetailData.simulation_data[ip]["Tx-Power"].length >
-        maxDataLength
-      ) {
-        maxDataLength =
-          loadGraphDetailData.simulation_data[ip]["Tx-Power"].length;
-      }
-      if (
-        loadGraphDetailData.simulation_data[ip]["Tx-Power"][0][0] < startTime
-      ) {
-        startTime = loadGraphDetailData.simulation_data[ip]["Tx-Power"][0][0];
-      }
       listNode.push({ node: ip, color: colors[index], checked: true });
       index += 1;
     }
+
     setListNode(listNode);
 
-    // setTimeZone
-    startTime = new Date(startTime * 1000).toISOString().slice(11, -5);
-    // startTime = new Date(startTime * 1000 + 25200*1000).toISOString().slice(11, -5);
-    
-    for (let i = 0; i < maxDataLength; i++) {
-      simulationData.TxPower.push({ timeStamp: startTime });
-      simulationData.Signal.push({ timeStamp: startTime });
-      simulationData.Noise.push({ timeStamp: startTime });
-      simulationData.BitRate.push({ timeStamp: startTime });
-      simulationData.RTT.push({ timeStamp: startTime });
-      let parts = startTime.split(":");
-      let date = new Date(0, 0, 0, parts[0], parts[1], parts[2]);
-      date.setSeconds(date.getSeconds() + 1);
-      startTime = date.toTimeString().split(" ")[0];
+    for (let key in loadGraphDetailData.Tx_power) {
+      simulationData.TxPower.push({ timeStamp: key });
+      simulationData.Signal.push({ timeStamp: key });
+      simulationData.Noise.push({ timeStamp: key });
+      simulationData.BitRate.push({ timeStamp: key });
+      simulationData.RTT.push({ timeStamp: key });
     }
-    for (let ip in loadGraphDetailData.simulation_data) {
-      var ipLength = loadGraphDetailData.simulation_data[ip]["Tx-Power"].length;
-      for (let i = 0; i < maxDataLength; i++) {
-        if (i < ipLength) {
-          if (isNumber(loadGraphDetailData.simulation_data[ip]["Tx-Power"][i][1])){
-            simulationData.TxPower[i][ip] =
-            Number(loadGraphDetailData.simulation_data[ip]["Tx-Power"][i][1]);
-          }else{
-            simulationData.TxPower[i][ip] = undefined;
-          }
-          if (isNumber(loadGraphDetailData.simulation_data[ip]["Signal"][i][1])){
-            simulationData.Signal[i][ip] =
-            Number(loadGraphDetailData.simulation_data[ip]["Signal"][i][1]);
-          }else{
-            simulationData.Signal[i][ip] = undefined;
-          }
-          if (isNumber(loadGraphDetailData.simulation_data[ip]["Noise"][i][1])){
-            simulationData.Noise[i][ip] =
-            Number(loadGraphDetailData.simulation_data[ip]["Noise"][i][1]);
-          }else{
-            simulationData.Noise[i][ip] = undefined;
-          }
-          if (isNumber(loadGraphDetailData.simulation_data[ip]["BitRate"][i][1])){ 
-            simulationData.BitRate[i][ip] =
-            Number(loadGraphDetailData.simulation_data[ip]["BitRate"][i][1]);
-          }else{
-            simulationData.BitRate[i][ip] = undefined;
-          }
-          if (loadGraphDetailData.simulation_data[ip].hasOwnProperty('ping_RTT') && isNumber(loadGraphDetailData.simulation_data[ip]["ping_RTT"][i][1])){
-            console.log(ip)
-            simulationData.RTT[i][ip] =
-            Number(loadGraphDetailData.simulation_data[ip]["ping_RTT"][i][1]);
-          }else{
-            console.log("+++"+ip)
-            simulationData.RTT[i][ip] = undefined;
-          }
+
+    console.log(simulationData)
+
+    let ipLength = Object.keys(loadGraphDetailData.Tx_power).length;
+    for (let ip in loadGraphDetailData.Tx_power[firstKey]) {
+      let i = 0;
+      for (let time in loadGraphDetailData.Tx_power) {
+        if (isNumber(loadGraphDetailData.Tx_power[time][ip])) {
+          simulationData.TxPower[i][ip] = Number(
+            loadGraphDetailData.Tx_power[time][ip]
+          );
         } else {
           simulationData.TxPower[i][ip] = undefined;
+        }
+        if (isNumber(loadGraphDetailData.Signal[time][ip])) {
+          simulationData.Signal[i][ip] = Number(
+            isNumber(loadGraphDetailData.Signal[time][ip])
+          );
+        } else {
           simulationData.Signal[i][ip] = undefined;
+        }
+        if (isNumber(loadGraphDetailData.Noise[time][ip])) {
+          simulationData.Noise[i][ip] = Number(
+            loadGraphDetailData.Noise[time][ip]
+          );
+        } else {
           simulationData.Noise[i][ip] = undefined;
+        }
+        if (isNumber(loadGraphDetailData.BitRate[time][ip])) {
+          simulationData.BitRate[i][ip] = Number(
+            loadGraphDetailData.BitRate[time][ip]
+          );
+        } else {
           simulationData.BitRate[i][ip] = undefined;
+        }
+        if (loadGraphDetailData.hasOwnProperty("ping_RTT")){
+          console.log("yes")
+        }
+        if (
+          loadGraphDetailData.ping_RTT !== null &&
+          isNumber(loadGraphDetailData.ping_RTT[time][ip])
+        ) {
+          simulationData.RTT[i][ip] = Number(
+            loadGraphDetailData.ping_RTT[time][ip]
+          );
+        } else {
+          console.log("yes")
           simulationData.RTT[i][ip] = undefined;
         }
+        i += 1;
       }
     }
-    console.log(simulationData)
+
+
+    
+    // let maxDataLength = 0;
+    // let startTime = Infinity;
+    // let listNode = [];
+    // let index = 0;
+    // for (let ip in loadGraphDetailData.simulation_data) {
+    //   simulationData.nodes.push(ip);
+    //   if (
+    //     loadGraphDetailData.simulation_data[ip]["Tx-Power"].length >
+    //     maxDataLength
+    //   ) {
+    //     maxDataLength =
+    //       loadGraphDetailData.simulation_data[ip]["Tx-Power"].length;
+    //   }
+    //   if (
+    //     loadGraphDetailData.simulation_data[ip]["Tx-Power"][0][0] < startTime
+    //   ) {
+    //     startTime = loadGraphDetailData.simulation_data[ip]["Tx-Power"][0][0];
+    //   }
+    //   listNode.push({ node: ip, color: colors[index], checked: true });
+    //   index += 1;
+    // }
+    // setListNode(listNode);
+
+    // // setTimeZone
+    // startTime = new Date(startTime * 1000).toISOString().slice(11, -5);
+    // // startTime = new Date(startTime * 1000 + 25200*1000).toISOString().slice(11, -5);
+
+    // for (let i = 0; i < maxDataLength; i++) {
+    //   simulationData.TxPower.push({ timeStamp: startTime });
+    //   simulationData.Signal.push({ timeStamp: startTime });
+    //   simulationData.Noise.push({ timeStamp: startTime });
+    //   simulationData.BitRate.push({ timeStamp: startTime });
+    //   simulationData.RTT.push({ timeStamp: startTime });
+    //   let parts = startTime.split(":");
+    //   let date = new Date(0, 0, 0, parts[0], parts[1], parts[2]);
+    //   date.setSeconds(date.getSeconds() + 1);
+    //   startTime = date.toTimeString().split(" ")[0];
+    // }
+    // for (let ip in loadGraphDetailData.simulation_data) {
+    //   var ipLength = loadGraphDetailData.simulation_data[ip]["Tx-Power"].length;
+    //   for (let i = 0; i < maxDataLength; i++) {
+    //     if (i < ipLength) {
+    //       if (isNumber(loadGraphDetailData.simulation_data[ip]["Tx-Power"][i][1])){
+    //         simulationData.TxPower[i][ip] =
+    //         Number(loadGraphDetailData.simulation_data[ip]["Tx-Power"][i][1]);
+    //       }else{
+    //         simulationData.TxPower[i][ip] = undefined;
+    //       }
+    //       if (isNumber(loadGraphDetailData.simulation_data[ip]["Signal"][i][1])){
+    //         simulationData.Signal[i][ip] =
+    //         Number(loadGraphDetailData.simulation_data[ip]["Signal"][i][1]);
+    //       }else{
+    //         simulationData.Signal[i][ip] = undefined;
+    //       }
+    //       if (isNumber(loadGraphDetailData.simulation_data[ip]["Noise"][i][1])){
+    //         simulationData.Noise[i][ip] =
+    //         Number(loadGraphDetailData.simulation_data[ip]["Noise"][i][1]);
+    //       }else{
+    //         simulationData.Noise[i][ip] = undefined;
+    //       }
+    //       if (isNumber(loadGraphDetailData.simulation_data[ip]["BitRate"][i][1])){
+    //         simulationData.BitRate[i][ip] =
+    //         Number(loadGraphDetailData.simulation_data[ip]["BitRate"][i][1]);
+    //       }else{
+    //         simulationData.BitRate[i][ip] = undefined;
+    //       }
+    //       if (loadGraphDetailData.simulation_data[ip].hasOwnProperty('ping_RTT') && isNumber(loadGraphDetailData.simulation_data[ip]["ping_RTT"][i][1])){
+    //         simulationData.RTT[i][ip] =
+    //         Number(loadGraphDetailData.simulation_data[ip]["ping_RTT"][i][1]);
+    //       }else{
+    //         simulationData.RTT[i][ip] = undefined;
+    //       }
+    //     } else {
+    //       simulationData.TxPower[i][ip] = undefined;
+    //       simulationData.Signal[i][ip] = undefined;
+    //       simulationData.Noise[i][ip] = undefined;
+    //       simulationData.BitRate[i][ip] = undefined;
+    //       simulationData.RTT[i][ip] = undefined;
+    //     }
+    //   }
+    // }
     setSimulationData(simulationData);
   };
 
