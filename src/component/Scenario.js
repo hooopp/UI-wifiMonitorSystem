@@ -109,7 +109,9 @@ function Scenario({
                   href="#"
                   style={{ color: "#c30022" }}
                   onClick={() => {
-                    deleteFuction();
+                    if (window.confirm("Are you sure you want to delete this scenario?")) {
+                      deleteFuction();
+                    }
                   }}
                 >
                   <div>

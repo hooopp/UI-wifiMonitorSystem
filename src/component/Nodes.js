@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import Node from "./Node";
 import styles from "./Nodes.module.css";
 import { IoMdAdd } from "react-icons/io";
-import { IoSearch } from "react-icons/io5";
 import NodePopUp from "./element/NodePopUp";
 import { useState } from "react";
 import axios from "axios";
@@ -12,6 +11,8 @@ import { FaArrowAltCircleLeft } from "react-icons/fa";
 import { FaArrowAltCircleRight } from "react-icons/fa";
 import NodePreview from "./element/NodePreview";
 import NNF from "../img/NNF.svg";
+import { IoSearch } from "react-icons/io5";
+import { IoMdRefresh } from "react-icons/io";
 
 function Nodes({
   selectedScenario,
@@ -90,6 +91,17 @@ function Nodes({
               <IoSearch style={{ fontSize: "1.5em" }} />
             </button>
           </div>
+            <button
+            role="button"
+            style={{ border: "none", background: "none", paddingLeft: "0.5em" }}
+            onClick={(e) => {
+              e.preventDefault();
+              refetchLoadNode();
+            }}
+            >
+            <IoMdRefresh style={{ fontSize: "1.5em" }} />
+            refresh
+            </button>
         </div>
         <div
           style={{
@@ -157,7 +169,9 @@ function Nodes({
         <div></div>
       </div>
       {/* Node */}
-      {loadNodeStatus !== "loading" && loadNodeData && loadNodeData.length > 0 ? (
+      {loadNodeStatus !== "loading" &&
+      loadNodeData &&
+      loadNodeData.length > 0 ? (
         <div className="listNode">
           {loadNodeData &&
             loadNodeData.map((data, i) => (
@@ -168,6 +182,7 @@ function Nodes({
                 mode={data.network_mode}
                 ssid={data.network_ssid}
                 id={data.id}
+                status={data.status}
                 selectedScenario={selectedScenario}
                 refetchLoadNode={refetchLoadNode}
                 setEditNodeId={setEditNodeId}
@@ -180,7 +195,7 @@ function Nodes({
               />
             ))}
         </div>
-      ) :  (
+      ) : (
         <div
           className="logo-container"
           style={{ marginLeft: "15em", marginTop: "-1em" }}

@@ -14,6 +14,8 @@ import axios from "axios";
 import { set } from "date-fns";
 import { TbFileExport } from "react-icons/tb";
 import { MdPreview } from "react-icons/md";
+import { RiScan2Fill } from "react-icons/ri";
+import { MdOutlineRefresh } from "react-icons/md";
 
 function Main({ selectedScenario }) {
   const [mode, setMode] = useState(0);
@@ -66,6 +68,19 @@ function Main({ selectedScenario }) {
     status: loadNodePreviewStatus,
     refetch: refetchLoadNodePreview,
   } = useQuery("nodePreview", loadNodePreview, { enabled: false });
+
+  const loadScan = async () => {
+    const { data } = await axios.get(
+      `http://localhost:8000/scenario/${selectedScenario}/node/keep_alive`
+    );
+    return data;
+  };
+
+  const {
+    data: loadScanData,
+    status: loadScanStatus,
+    refetch: refetchLoadScan,
+  } = useQuery("scan", loadScan, { enabled: false });
 
   const runScenario = useMutation(
     (data) => {
@@ -252,6 +267,23 @@ function Main({ selectedScenario }) {
             <button
               className="btn btn-dark"
               role="button"
+              data-bs-toggle="modal"
+              data-bs-target="#Scan"
+              style={{ marginLeft: "-6em" }}
+              onClick={() => {
+                refetchLoadScan();
+              }}
+            >
+              <div>
+                <RiScan2Fill style={{ fontSize: "1.25em" }} />
+                <span style={{ fontWeight: "bold", marginLeft: "0.25em" }}>
+                  Scan
+                </span>
+              </div>
+            </button>
+            <button
+              className="btn btn-dark"
+              role="button"
               style={{ marginLeft: "1em" }}
               onClick={() => {
                 setIsExportClicked(!isExportClicked);
@@ -379,6 +411,62 @@ function Main({ selectedScenario }) {
           />
         )}
         {mode === 2 && <Graphs selectedScenario={selectedScenario} />}
+      </div>
+      <div
+        className="modal fade"
+        id="Scan"
+        tabIndex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-dialog-scrollable">
+          <div class="modal-content">
+            <div
+              className="modal-header"
+              style={{ marginLeft: "0em", marginRight: "0em" }}
+            >
+              <h1 className="modal-title fs-5" id="exampleModalLabel">
+                <span style={{ fontWeight: "bold" }}>Scan</span>
+              </h1>
+              <button
+                role="button"
+                style={{
+                  border: "none",
+                  background: "none",
+                  paddingLeft: "0.5em",
+                }}
+                onClick={() => {
+                  refetchLoadScan();
+                }}
+              >
+                <MdOutlineRefresh style={{ fontSize: "1.5em" }} />
+              </button>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            {loadScanData &&
+              Object.entries(loadScanData).map(([network, info], index) => {
+                return (
+                  <div
+                    style={{
+                      fontWeight: "bold",
+                      marginTop: "0.5em",
+                      marginBottom: "0.5em",
+                    }}
+                  >
+                    {network}
+                  </div>
+                );
+              })}
+            <div class="modal-footer" style={{margin:"0em"}}>
+
+            </div>
+          </div>
+        </div>
       </div>
       <div
         className="modal fade"

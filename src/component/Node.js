@@ -22,7 +22,8 @@ function Node({
   setEditButtonClicked,
   loadNodeData,
   page,
-  setPage
+  setPage,
+  status,
 }) {
   const deleteNode = useMutation(
     () => {
@@ -32,13 +33,14 @@ function Node({
     },
     {
       onSuccess: () => {
-        refetchLoadNode().then(()=>{
+        refetchLoadNode().then(() => {
           if (loadNodeData.length === 1) {
             setPage(page - 1);
           }
-        });;
+        });
       },
-    },{
+    },
+    {
       onError: (error) => {
         alert(error.response.data.detail);
       },
@@ -49,18 +51,37 @@ function Node({
     <div>
       <div className={styles.Node} style={{ marginBottom: "0.5em" }}>
         <div style={{ textAlign: "left", width: "200px", marginLeft: "1em" }}>
-          {name &&
-              (name.length > 20
-                ? `${name.substring(0, 20)}...`
-                : name)}
+          {name && (name.length > 20 ? `${name.substring(0, 20)}...` : name)}
         </div>
         <div>{ip}</div>
         <div>{mode}</div>
-        <div>{ssid &&
-              (name > 18
-                ? `${ssid.substring(0, 18)}...`
-                : ssid)}</div>
+        <div>{ssid && (ssid > 18 ? `${ssid.substring(0, 18)}...` : ssid)}</div>
         <div className="btn-group">
+          {status === "active" ? (
+            <div
+              style={{
+                fontWeight: "bold",
+                marginLeft: "1em",
+                marginRight: "-5em",
+                width: "3em",
+                color: "green",
+              }}
+            >
+              active
+            </div>
+          ) : (
+            <div
+              style={{
+                fontWeight: "bold",
+                marginLeft: "1em",
+                marginRight: "-5em",
+                width: "3em",
+                color: "#c30022",
+              }}
+            >
+              deactive
+            </div>
+          )}
           <button
             className="button-2"
             type="button"
@@ -87,7 +108,7 @@ function Node({
                 data-bs-toggle="modal"
                 data-bs-target="#NodePreview"
                 onClick={() => {
-                  refetchLoadNodeDetail()
+                  refetchLoadNodeDetail();
                 }}
               >
                 <div>
@@ -128,7 +149,9 @@ function Node({
                 href="#"
                 style={{ color: "#c30022" }}
                 onClick={() => {
-                  deleteNode.mutate();
+                  if (window.confirm("Are you sure you want to delete this node?")) {
+                    deleteNode.mutate();
+                  }
                 }}
               >
                 <div>

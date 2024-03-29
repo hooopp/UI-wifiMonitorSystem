@@ -26,6 +26,7 @@ function Graphs({ selectedScenario }) {
     ["Signal", true],
     ["Noise", true],
     ["BitRate", true],
+    ["RTT", true],
   ]);
   const [simulationDataApp, setSimulationDataApp] = React.useState(null);
   const colors = [
@@ -330,6 +331,7 @@ function Graphs({ selectedScenario }) {
       Signal: [],
       Noise: [],
       BitRate: [],
+      RTT: [],
     };
     let maxDataLength = 0;
     let startTime = Infinity;
@@ -363,6 +365,7 @@ function Graphs({ selectedScenario }) {
       simulationData.Signal.push({ timeStamp: startTime });
       simulationData.Noise.push({ timeStamp: startTime });
       simulationData.BitRate.push({ timeStamp: startTime });
+      simulationData.RTT.push({ timeStamp: startTime });
       let parts = startTime.split(":");
       let date = new Date(0, 0, 0, parts[0], parts[1], parts[2]);
       date.setSeconds(date.getSeconds() + 1);
@@ -396,14 +399,24 @@ function Graphs({ selectedScenario }) {
           }else{
             simulationData.BitRate[i][ip] = undefined;
           }
+          if (loadGraphDetailData.simulation_data[ip].hasOwnProperty('ping_RTT') && isNumber(loadGraphDetailData.simulation_data[ip]["ping_RTT"][i][1])){
+            console.log(ip)
+            simulationData.RTT[i][ip] =
+            Number(loadGraphDetailData.simulation_data[ip]["ping_RTT"][i][1]);
+          }else{
+            console.log("+++"+ip)
+            simulationData.RTT[i][ip] = undefined;
+          }
         } else {
-          simulationData.TxPower[i][ip] = 0;
-          simulationData.Signal[i][ip] = 0;
-          simulationData.Noise[i][ip] = 0;
-          simulationData.BitRate[i][ip] = 0;
+          simulationData.TxPower[i][ip] = undefined;
+          simulationData.Signal[i][ip] = undefined;
+          simulationData.Noise[i][ip] = undefined;
+          simulationData.BitRate[i][ip] = undefined;
+          simulationData.RTT[i][ip] = undefined;
         }
       }
     }
+    console.log(simulationData)
     setSimulationData(simulationData);
   };
 
@@ -471,8 +484,9 @@ function Graphs({ selectedScenario }) {
                 borderBottomLeftRadius: "0",
                 border: "1px solid #dee2e6",
               }}
-              onClick={() => {
+              onClick={(e) => {
                 loadGraphRefetch();
+                e.preventDefault();
               }}
             >
               <IoSearch style={{ fontSize: "1.5em" }} />
@@ -481,8 +495,9 @@ function Graphs({ selectedScenario }) {
           <button
             role="button"
             style={{ border: "none", background: "none", paddingLeft: "0.5em" }}
-            onClick={() => {
+            onClick={(e) => {
               loadGraphRefetch();
+              e.preventDefault();
             }}
           >
             <IoMdRefresh style={{ fontSize: "1.5em" }} />

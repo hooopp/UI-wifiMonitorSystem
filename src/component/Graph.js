@@ -123,7 +123,9 @@ function Graph({
                 href="#"
                 style={{ color: "#c30022" }}
                 onClick={() => {
-                  deleteGraph.mutate();
+                  if (window.confirm("Are you sure you want to delete this report?")) {
+                    deleteGraph.mutate();
+                  }
                 }}
               >
                 <div>
