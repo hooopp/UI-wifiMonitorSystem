@@ -80,6 +80,7 @@ function Graphs({ selectedScenario }) {
     return !isNaN(parseFloat(str)) && isFinite(str);
   }
 
+  //แปลงข้อมูลจาก server ให้เป็นข้อมูลที่ใช้ในการวาดกราฟในส่าวน application layer
   const transformDataApp = (data) => {
     let simulationDataApp1 = {
       ssid: [],
@@ -332,6 +333,7 @@ function Graphs({ selectedScenario }) {
     });
   };
 
+  //แปลงข้อมูลจาก server ให้เป็นข้อมูลที่ใช้ในการวาดกราฟในส่วน physical layer
   const transformData = (loadGraphDetailData) => {
     let simulationData = {
       nodes: [],

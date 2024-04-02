@@ -13,6 +13,8 @@ const queryClient = new QueryClient();
 function App() {
   const storedScenario = localStorage.getItem("selectedScenario");
   const [selectedScenario, setSelectedScenario] = useState(storedScenario || "");
+
+  //เรียกข้อมูล Scenario ที่เก็บไว้ Local Storage มาแสดง
   useEffect(() => {
     const storedScenario = localStorage.getItem("selectedScenario");
     if (storedScenario) {
@@ -20,7 +22,7 @@ function App() {
     }
   }, []);
 
-  // Save the value to localStorage whenever it changes
+  //บันทึก Scenario ที่เลือกไว้ใน Local Storage
   useEffect(() => {
     localStorage.setItem("selectedScenario", selectedScenario);
   }, [selectedScenario]);

@@ -38,6 +38,7 @@ function Main({ selectedScenario }) {
     return data;
   };
 
+  //ฟังก์ชันสำหรับ export ข้อมูล
   function exportScenario(data) {
     const json = JSON.stringify(data);
     const blob = new Blob([json], { type: "application/json" });

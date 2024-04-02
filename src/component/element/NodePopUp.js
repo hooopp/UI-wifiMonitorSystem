@@ -55,6 +55,7 @@ function NodePopUp({
     return ipRegex.test(ip);
   };
 
+  //สุ่ม string 4 ตัว
   function generateRandomString() {
     let result = '';
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';

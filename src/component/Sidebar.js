@@ -117,6 +117,7 @@ const Sidebar = ({ setSelectedScenario, selectedScenario }) => {
     return ipRegex.test(ip);
   };
 
+  //ในการ import ไฟล์ json จะต้องมีโครงสร้างดังนี้
   const checkFileStructure = () => {
     let message = "";
     if (fileContent.hasOwnProperty("scenarioType")) {
@@ -358,6 +359,7 @@ const Sidebar = ({ setSelectedScenario, selectedScenario }) => {
     }
   };
 
+  //ไว้สร้าง string สุ่ม
   function generateRandomString() {
     let result = "";
     const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -379,6 +381,7 @@ const Sidebar = ({ setSelectedScenario, selectedScenario }) => {
     return axios.post(`http://127.0.0.1:8000/scenario/${loopNode}/node`, data);
   },{onError: (error) => {alert(error.response.data.detail);}});
 
+  //สำหรับ import ไฟล์ json ถ้าผ่าน checkFileStructure จะทำการ import ข้อมูลลง database
   const importScenario = () => {
     addScenario.mutate(
       {
@@ -402,6 +405,7 @@ const Sidebar = ({ setSelectedScenario, selectedScenario }) => {
     );
   };
 
+  //สำหรับ download ไฟล์ json ที่เป็น template
   function downloadData(data) {
     const json = JSON.stringify(data);
     const blob = new Blob([json], { type: "application/json" });
